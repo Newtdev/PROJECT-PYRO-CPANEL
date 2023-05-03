@@ -1,26 +1,66 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import "./App.css";
+import { Suspense, lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import { APP_ROUTE } from "./helpers/Routes";
+import { Dashboard } from "./screens";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "./features/auth/authSlice";
+
+const Entry = lazy(() => import("./screens/protected"));
+const Login = lazy(() => import("./screens/authentication/Login"));
+const ManageBranch = lazy(
+	() => import("./screens/dashboard/pages/ManageBranch")
+);
+const ManageHQ = lazy(() => import("./screens/dashboard/pages/ManageHQ"));
+const SinglePage = lazy(() => import("./screens/dashboard/pages/SinglePage"));
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	type saveUserTypes = {
+		token: string | null;
+		user: string | null;
+	};
+	const dispatch = useDispatch();
+
+	const getUserInfo: string | null = sessionStorage.getItem(
+		"fuleap-user-info"
+	) as string;
+	const parseData: saveUserTypes = JSON.parse(getUserInfo);
+
+	useEffect(() => {
+		if (!parseData) return;
+		dispatch(setCredentials(parseData));
+	}, [dispatch, parseData]);
+
+	return (
+		<div className="App">
+			<Suspense fallback="loading...">
+				<Routes>
+					<Route path={APP_ROUTE.LOGIN} element={<Login />} />
+					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
+						<Route path={APP_ROUTE.DASHBOARD} index element={<Dashboard />} />
+						<Route path={APP_ROUTE.BRANCH} element={<ManageBranch />} />
+						{/* <Route path={APP_ROUTE.BRANCH} element={<AddBranch />} /> */}
+						<Route path={APP_ROUTE.MANAGEHQ} element={<ManageHQ />} />
+						<Route
+							path={APP_ROUTE.MANAGE_SINGLE_BRANCH}
+							element={<SinglePage />}
+						/>
+						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<SinglePage />} />
+					</Route>
+				</Routes>
+			</Suspense>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				closeOnClick
+				pauseOnHover
+				theme="colored"
+			/>
+		</div>
+	);
 }
 
 export default App;
