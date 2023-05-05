@@ -27,9 +27,9 @@ const Dashboard = () => {
 		<section>
 			{/* <LoaderContainer /> */}
 			<article className="w-full h-full flex flex-col justify-between overflow-y-scroll ">
-				<div className="grid grid-cols-1 lg:grid-cols-2 py-3 ">
+				<div className="grid grid-cols-1 lg:grid-cols-2 py-3">
 					<div className="h-full">
-						<div className="h-[432px]  flex flex-col justify-between  shadow-md rounded-2xl p-6">
+						<div className="h-[432px] bg-white flex flex-col justify-between  shadow-md rounded-2xl p-6">
 							<div>
 								<div>
 									<h1 className="text-start text-[18px] font-bold text-[#252733]">

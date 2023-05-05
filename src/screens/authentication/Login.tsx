@@ -67,10 +67,10 @@ const Login = () => {
 						onSubmit={Formik.handleSubmit}
 						className="w-full flex flex-col justify-around items-center mt-10 h-[23rem]">
 						<FormInput
+							width="70%"
 							id="email"
 							name="Email"
 							type="text"
-							styles="h-full w-full"
 							onChange={Formik.handleChange}
 							value={Formik.values.email}
 							onBlur={Formik.handleBlur}

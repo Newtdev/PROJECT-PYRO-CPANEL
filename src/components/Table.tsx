@@ -95,15 +95,17 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 		<TableHead>
 			<TableRow>
 				<TableCell padding="checkbox">
-					<Checkbox
-						color="primary"
-						indeterminate={numSelected > 0 && numSelected < rowCount}
-						checked={rowCount > 0 && numSelected === rowCount}
-						onChange={onSelectAllClick}
-						inputProps={{
-							"aria-label": "select all desserts",
-						}}
-					/>
+					{showFlag ? (
+						<Checkbox
+							color="primary"
+							indeterminate={numSelected > 0 && numSelected < rowCount}
+							checked={rowCount > 0 && numSelected === rowCount}
+							onChange={onSelectAllClick}
+							inputProps={{
+								"aria-label": "select all desserts",
+							}}
+						/>
+					) : null}
 				</TableCell>
 				{props.headCells?.map((headCell: any) => (
 					<TableCell
@@ -218,15 +220,17 @@ export default function EnhancedTable({
 										selected={isItemSelected}
 										sx={{ cursor: "pointer" }}>
 										<TableCell padding="checkbox">
-											<Checkbox
-												color="primary"
-												onClick={(event) => handleClick(event, row.name)}
-												// onClick={() => console.log(isItemSelected)}
-												checked={isItemSelected}
-												inputProps={{
-													"aria-labelledby": labelId,
-												}}
-											/>
+											{showFlag ? (
+												<Checkbox
+													color="primary"
+													onClick={(event) => handleClick(event, row.name)}
+													// onClick={() => console.log(isItemSelected)}
+													checked={isItemSelected}
+													inputProps={{
+														"aria-labelledby": labelId,
+													}}
+												/>
+											) : null}
 										</TableCell>
 										{headCells.map((column: any) => {
 											const value = row[column.id];

@@ -69,6 +69,46 @@ const DashboardHeader = (props: { header: string }) => {
 	);
 };
 
+interface propstype {
+	[index: string]: any;
+}
+export const DropDownComponent = (props: propstype) => {
+	// const [expanded, setExpanded] = useState<boolean>(false);
+
+	// const handleExpandClick = () => {
+	// 	setExpanded(!expanded);
+	// };
+
+	interface ExpandMoreProps extends IconButtonProps {
+		expand: boolean;
+	}
+	const ExpandMore = styled((props: ExpandMoreProps) => {
+		const { expand, ...other } = props;
+		return <IconButton {...other} />;
+	})(({ theme, expand }) => ({
+		transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+		marginLeft: "auto",
+	}));
+
+	return (
+		<div className="flex items-center justify-center w-fit">
+			{props.text ? (
+				<p className="text-[12px] text-black">{props.text}</p>
+			) : null}
+			<ExpandMore
+				expand={props.expanded}
+				onClick={props.handleExpandClick}
+				aria-expanded={props.expanded}
+				aria-label="show more">
+				<ExpandMoreIcon />
+			</ExpandMore>
+			<Collapse in={props.expanded} timeout="auto" unmountOnExit>
+				{props.children}
+			</Collapse>
+		</div>
+	);
+};
+
 const Main = ({ children }: { children: ReactNode }) => {
 	const location = useLocation();
 	const headerName = location.state || "Dashboard";

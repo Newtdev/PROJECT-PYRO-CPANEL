@@ -1,4 +1,11 @@
-import { ChangeEventHandler, FocusEventHandler, ReactElement } from "react";
+import { MouseEventHandler } from "react";
+import {
+	ChangeEventHandler,
+	Dispatch,
+	FocusEventHandler,
+	ReactElement,
+	SetStateAction,
+} from "react";
 
 export type stringOrNumber = string | number;
 
@@ -20,6 +27,10 @@ export type cardBtnType = {
 	name: string;
 	link: string;
 	height?: number | string;
+
+	onClick?: MouseEventHandler<HTMLDivElement> | undefined;
+	// setShowCard?: Dispatch<SetStateAction<boolean>>;
+	showCard?: boolean;
 };
 export type loginResponseType = {
 	user: {
@@ -39,6 +50,10 @@ export interface Data {
 	flag?: string | ReactElement;
 	hq?: string;
 	state?: string;
+	amount?: string | number;
+	type?: string;
+	status?: string | ReactElement;
+	referenceId?: string | number;
 }
 
 // export interface HeadCell {
@@ -61,7 +76,14 @@ export type inputType = {
 	error?: string | undefined;
 	touched?: boolean | undefined;
 	labelStyles?: string | undefined;
+	width?: string;
 };
+
+export type ProfiledataType = {
+	id: number | string;
+	name: string;
+	value: string;
+}[];
 
 export const passwordRegex = new RegExp(
 	"^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})"

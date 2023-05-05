@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./features/auth/authSlice";
+import AttendantRating from "./screens/dashboard/pages/AttendantInfo";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Login = lazy(() => import("./screens/authentication/Login"));
@@ -16,6 +17,13 @@ const ManageBranch = lazy(
 );
 const ManageHQ = lazy(() => import("./screens/dashboard/pages/ManageHQ"));
 const SinglePage = lazy(() => import("./screens/dashboard/pages/SinglePage"));
+const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
+const AttendantProfile = lazy(
+	() => import("./screens/dashboard/pages/AttendantProfile")
+);
+const BranchReview = lazy(
+	() => import("./screens/dashboard/pages/BranchReview")
+);
 
 function App() {
 	type saveUserTypes = {
@@ -49,6 +57,19 @@ function App() {
 							element={<SinglePage />}
 						/>
 						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<SinglePage />} />
+						<Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} />
+						<Route
+							path={APP_ROUTE.ATTENDANT_PROFILE}
+							element={<AttendantProfile />}
+						/>
+						<Route
+							path={APP_ROUTE.ATTENDANT_REVIEW}
+							element={<BranchReview />}
+						/>
+						{/* <Route
+							path={APP_ROUTE.ATTENDANT_INFO}
+							element={<AttendantRating />}
+						/> */}
 					</Route>
 				</Routes>
 			</Suspense>

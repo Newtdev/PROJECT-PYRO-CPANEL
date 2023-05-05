@@ -14,6 +14,10 @@ import { FlagModal, Modal } from "src/components/ModalComp";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { Lines } from "src/components/Icons";
 import { useNavigate } from "react-router-dom";
+import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
+import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
+import useHandleRowClick from "src/hooks/useHandleRowClick";
+import useIsSelected from "src/hooks/useIsSelected";
 
 interface Data {
 	id: string | number;
@@ -107,11 +111,17 @@ const headCells: readonly HeadCell[] = [
 
 const ManageHQ = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
-	const [selected, setSelected] = React.useState<readonly string[]>([]);
+	// const [selected, setSelected] = React.useState<readonly string[]>([]);
 	const [value, setValue] = React.useState<string>("one");
-	const [showModal, setShowModal] = useState<boolean>(false);
+	// const [showModal, setShowModal] = useState<boolean>(false);
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const navigate = useNavigate();
+
+	const { handleSelectAllClick, selected, setSelected } =
+		useHandleSelectAllClick(rows);
+	const { handleClick } = useHandleSingleSelect(selected, setSelected);
+	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
+	const { isSelected } = useIsSelected(selected);
 	// console.log(filteredValue);
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -123,55 +133,9 @@ const ManageHQ = () => {
 		{ id: 1, value: "one", label: "All" },
 		{ id: 1, value: "two", label: "Most popular" },
 	];
-
-	// CLICKING ON THE ROW OF A TABLE
-	const handleRowClick = (
-		event: React.MouseEvent<HTMLElement>,
-		name: any
-	): void => {
-		if (event.currentTarget) {
-			if (event.currentTarget.textContent === "") setShowModal(!showModal);
-			else navigate(`/manageHQ/${name}`, { state: name });
-
-			// TODO: make API request to handle submission
-			// for single and multiple
-		}
-	};
-
-	// SELECT ALL THE ROWS ON THE FUNCTION
-	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (event.target.checked) {
-			const newSelected = rows.map((n: any) => n.name) as any;
-			setSelected(newSelected);
-			return;
-		}
-		setSelected([]);
-	};
-
-	// SELECT A SINGLE ROW ON TABLE
-	const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-		const selectedIndex = selected.indexOf(name);
-		let newSelected: readonly string[] = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
-	};
-
-	// CONFIRMATION OF WHAT IS SELECTED
-	const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
+	function fn(name: string) {
+		navigate(`/manageHQ/${name}`, { state: name });
+	}
 	let dataToChildren: any = {
 		rows,
 		headCells,

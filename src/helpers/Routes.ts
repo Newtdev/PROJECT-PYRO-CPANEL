@@ -17,6 +17,8 @@ export enum APP_ROUTE {
 	MANAGE_SINGLE_BRANCH = "/branch/:id",
 	BRANCHES = "/branches",
 	VIEW_WALLET = "/view/wallet",
+	ATTENDANT_PROFILE = "branch/:id/attendant",
+	ATTENDANT_REVIEW = "branch/:id/reviews",
 }
 
 export enum PERMISSION {

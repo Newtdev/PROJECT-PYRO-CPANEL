@@ -35,9 +35,10 @@ export const FormInput = (props: inputType) => {
 			props.error && props.touched ? "border-red-500" : "border-gray-300"
 		} bg-[#D9D9D9]`,
 		labelStyles = "block mb-[6px] text-black text-start font-normal text-[20px] text-gray-700 ml-5",
+		width = "80%",
 	} = props;
 	return (
-		<div className="w-[80%]">
+		<div style={{ width: width }}>
 			<Label name={name} styles={labelStyles} />
 			<input
 				name={id}
