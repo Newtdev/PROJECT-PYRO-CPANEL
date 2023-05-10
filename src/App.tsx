@@ -8,21 +8,25 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./features/auth/authSlice";
-import AttendantRating from "./screens/dashboard/pages/AttendantInfo";
+import HQPage from "./screens/dashboard/pages/Manage-HQ/HQPage";
+import ViewHQWallet from "./screens/dashboard/pages/Manage-HQ/ViewHQWallet";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Login = lazy(() => import("./screens/authentication/Login"));
 const ManageBranch = lazy(
-	() => import("./screens/dashboard/pages/ManageBranch")
+	() => import("./screens/dashboard/pages/Manage-branch/ManageBranch")
 );
 const ManageHQ = lazy(() => import("./screens/dashboard/pages/ManageHQ"));
 const SinglePage = lazy(() => import("./screens/dashboard/pages/SinglePage"));
 const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
 const AttendantProfile = lazy(
-	() => import("./screens/dashboard/pages/AttendantProfile")
+	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfile")
 );
 const BranchReview = lazy(
-	() => import("./screens/dashboard/pages/BranchReview")
+	() => import("./screens/dashboard/pages/Manage-branch/BranchReview")
+);
+const AttendantProfileInfo = lazy(
+	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfileInfo")
 );
 
 function App() {
@@ -56,7 +60,7 @@ function App() {
 							path={APP_ROUTE.MANAGE_SINGLE_BRANCH}
 							element={<SinglePage />}
 						/>
-						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<SinglePage />} />
+						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<HQPage />} />
 						<Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} />
 						<Route
 							path={APP_ROUTE.ATTENDANT_PROFILE}
@@ -66,10 +70,12 @@ function App() {
 							path={APP_ROUTE.ATTENDANT_REVIEW}
 							element={<BranchReview />}
 						/>
-						{/* <Route
-							path={APP_ROUTE.ATTENDANT_INFO}
-							element={<AttendantRating />}
-						/> */}
+						<Route
+							path={APP_ROUTE.ATTENDANT_PROFILE_INFO}
+							element={<AttendantProfileInfo />}
+						/>
+						<Route path={APP_ROUTE.VIEW_HQ_WALLET} element={<ViewHQWallet />} />
+						<Route path={APP_ROUTE.VIEW_HQ_BRANCH} element={<ManageBranch />} />
 					</Route>
 				</Routes>
 			</Suspense>

@@ -30,14 +30,14 @@ const DashboardHeader = (props: { header: string }) => {
 	}));
 
 	return (
-		<div className="w-full flex justify-between mb-2 ">
-			<h1 className="text-start text-[#002E66] text-[30px] font-[700] leading-[45px] w-full">
+		<div className="w-full flex justify-between items-center mb-2 ">
+			<h1 className="text-start text-[#002E66] text-base md:text-lg lg:text-[30px] font-[700] leading-[45px] w-full">
 				{props.header}
 			</h1>
 			<div className="w-full flex items-center justify-end gap-4 pr-[20.33px]">
-				<div className="flex items-center justify-between w-[70%] max-w-fit relative ">
-					<p className="font-normal text-[18px] text-[#393939] w-full ">
-						Hello, {user?.firstName} {user?.lastName}
+				<div className="flex items-center justify-between lg:w-[70%] max-w-full relative ">
+					<p className="font-normal text-sm lg:text-[18px] text-[#393939] w-full ">
+						{user?.firstName} {user?.lastName}
 					</p>
 					<Image
 						image={Img}

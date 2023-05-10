@@ -232,31 +232,33 @@ export default function EnhancedTable({
 												/>
 											) : null}
 										</TableCell>
-										{headCells.map((column: any) => {
-											const value = row[column.id];
-											return (
-												<>
-													<TableCell
-														component="th"
-														id={labelId}
-														scope="row"
-														padding="normal"
-														key={column.id}
-														onClick={(e) => handleRowClick(e, row.name)}
-														// align={column.align}
-														style={{
-															color: "#002E66",
-															fontFamily: "Poppins",
-															fontSize: "14px",
-															fontWeight: "400",
+										{headCells.map(
+											(column: { [index: string]: string | number }) => {
+												const value = row[column.id];
+												return (
+													<>
+														<TableCell
+															component="th"
+															id={labelId}
+															scope="row"
+															padding="normal"
+															key={column.id}
+															onClick={(e) => handleRowClick(e, row)}
+															// align={column.align}
+															style={{
+																color: "#002E66",
+																fontFamily: "Poppins",
+																fontSize: "14px",
+																fontWeight: "400",
 
-															minWidth: column.minWidth,
-														}}>
-														{value}
-													</TableCell>
-												</>
-											);
-										})}
+																minWidth: column.minWidth,
+															}}>
+															{value}
+														</TableCell>
+													</>
+												);
+											}
+										)}
 										{showFlag ? (
 											<>
 												<TableCell

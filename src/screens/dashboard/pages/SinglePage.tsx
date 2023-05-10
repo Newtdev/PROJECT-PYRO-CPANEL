@@ -74,7 +74,7 @@ export default function SinglePage() {
 	const ViewProfileData: ProfiledataType = [
 		{
 			id: 1,
-			name: "Branch Name",
+			name: "Full Name",
 			value: "Aliko, Zaria Road II",
 		},
 		{
@@ -103,7 +103,6 @@ export default function SinglePage() {
 			value: "Abdulsamad Auwall",
 		},
 	];
-
 	return (
 		<section>
 			{/* <LoaderContainer /> */}
@@ -154,21 +153,8 @@ export default function SinglePage() {
 					) : null}
 				</div>
 				{showCard ? (
-					<ProfileCard data={ViewProfileData} />
-				) : // <div className="w-full h-[295px] bg-white shadow-lg rounded-lg text-[14px] py-6">
-				// 	<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 py-4 md:gap-x-2 text-start px-4 lg:px-16">
-				// 		{ViewProfileData.map((dt) => {
-				// 			return (
-				// 				<div key={dt.id}>
-				// 					<h2 className="text-black">{dt.name}</h2>
-				// 					<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg"></span>
-				// 					<h2 className="text-[#002E66]">{dt.value}</h2>
-				// 				</div>
-				// 			);
-				// 		})}
-				// 	</div>
-				// </div>
-				null}
+					<ProfileCard data={ViewProfileData} showImage={false} />
+				) : null}
 			</article>
 		</section>
 	);

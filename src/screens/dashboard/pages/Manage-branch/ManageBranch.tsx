@@ -1,6 +1,5 @@
 import { Flag } from "@mui/icons-material";
 import { useState } from "react";
-import { ReactElement } from "react";
 import { FormInput, SearchInput } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
 import * as React from "react";
@@ -15,7 +14,6 @@ import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { Lines } from "src/components/Icons";
 import { Data } from "src/helpers/alias";
 import { useNavigate } from "react-router-dom";
-import { APP_ROUTE } from "src/helpers/Routes";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
@@ -127,7 +125,7 @@ const ManageBranch = () => {
 		{ id: 1, value: "two", label: "Most popular" },
 	];
 
-	function fn(name: string) {
+	function fn(name: { [index: string]: string | number }) {
 		navigate(`/branch/${name}`, { state: name });
 	}
 

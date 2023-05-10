@@ -133,8 +133,8 @@ const ManageHQ = () => {
 		{ id: 1, value: "one", label: "All" },
 		{ id: 1, value: "two", label: "Most popular" },
 	];
-	function fn(name: string) {
-		navigate(`/manageHQ/${name}`, { state: name });
+	function fn(data: { [index: string]: string | number }) {
+		navigate(`/manageHQ/${data?.name}`, { state: data?.name });
 	}
 	let dataToChildren: any = {
 		rows,

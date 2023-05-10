@@ -1,11 +1,5 @@
 import { MouseEventHandler } from "react";
-import {
-	ChangeEventHandler,
-	Dispatch,
-	FocusEventHandler,
-	ReactElement,
-	SetStateAction,
-} from "react";
+import { ChangeEventHandler, FocusEventHandler, ReactElement } from "react";
 
 export type stringOrNumber = string | number;
 
@@ -54,6 +48,7 @@ export interface Data {
 	type?: string;
 	status?: string | ReactElement;
 	referenceId?: string | number;
+	doneby?: string;
 }
 
 // export interface HeadCell {
@@ -83,6 +78,13 @@ export type ProfiledataType = {
 	id: number | string;
 	name: string;
 	value: string;
+	[key: string]: string | number;
+}[];
+
+export type ReviewDataType = {
+	id: number;
+	value: number | string;
+	star: number | string;
 }[];
 
 export const passwordRegex = new RegExp(

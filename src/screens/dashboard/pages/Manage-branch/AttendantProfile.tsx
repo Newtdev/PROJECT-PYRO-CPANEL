@@ -1,8 +1,7 @@
 import { Flag } from "@mui/icons-material";
 import { Checkbox } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "src/components/Button";
 import { Lines, Star, Trash } from "src/components/Icons";
 import { FlagModal, Modal } from "src/components/ModalComp";
@@ -12,6 +11,8 @@ import * as Yup from "yup";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useIsSelected from "src/hooks/useIsSelected";
+import { useNavigate } from "react-router-dom";
+import useCustomLocation from "src/hooks/useCustomLocation";
 
 interface dataType {
 	id: number | string;
@@ -109,6 +110,9 @@ export default function AttendantProfile() {
 	const [showFlagModal, setShowFlagModal] = useState<boolean>(false);
 	const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 	const { isSelected } = useIsSelected(selected);
+	const navigate = useNavigate();
+
+	const { slicedPath } = useCustomLocation();
 
 	const Formik = useFormik<addAttendantTypes>({
 		initialValues: {
@@ -191,7 +195,13 @@ export default function AttendantProfile() {
 				<div className="w-full grid lg:grid-cols-3 md:grid-cols-2 gap-x-4 gap-y-4 mt-6">
 					{data?.map((v) => (
 						<div key={v?.id}>
-							<div className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66] ">
+							<div
+								className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66]"
+								onClick={() =>
+									navigate(`/branch/${slicedPath[2]}/attendant/${v.id}`, {
+										state: `${v?.firstName} ${v?.lastName}`,
+									})
+								}>
 								<div className="basis-[40%] flex items-start justify-start">
 									<Checkbox
 										color="primary"
@@ -213,12 +223,6 @@ export default function AttendantProfile() {
 									<p className="text-[#1E1E1E] text-[14px]">{v?.phoneNumber}</p>
 									<p className="text-[#4E8280] text-[12px]">1093 Orders</p>
 								</div>
-								{/* <div className="basic-[20%]">
-									<div className="w-full flex items-center justify-center px-4 pt-6">
-										<Star />
-										<p className="text-[16px] ml-2">4.8</p>
-									</div>
-								</div> */}
 							</div>
 						</div>
 					))}
