@@ -1,4 +1,4 @@
 export default function useIsSelected(selected: string[]) {
-	const isSelected = (name: string) => selected.indexOf(name) !== -1;
+	const isSelected = (id: string) => selected.indexOf(id) !== -1;
 	return { isSelected };
 }

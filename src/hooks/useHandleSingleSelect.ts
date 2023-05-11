@@ -1,10 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { useCallback } from "react";
 
-// type propsType = {
-// 	name?: string;
-// 	selected?: string[];
-// };
 export default function useHandleSingleSelect(
 	selected: string[],
 	setSelected: Dispatch<SetStateAction<string[]>>
@@ -13,7 +9,6 @@ export default function useHandleSingleSelect(
 		(event: React.MouseEvent<unknown>, name: string) => {
 			const selectedIndex = selected.indexOf(name);
 			let newSelected: string[] = [];
-
 			if (selectedIndex === -1) {
 				newSelected = newSelected.concat(selected, name);
 			} else if (selectedIndex === 0) {
@@ -32,7 +27,4 @@ export default function useHandleSingleSelect(
 		[selected, setSelected]
 	);
 	return { handleClick };
-	// const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-
-	// 	};
 }

@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from "react";
 import { cardBtnType, ProfiledataType } from "src/helpers/alias";
 import { APP_ROUTE } from "src/helpers/Routes";
-import walletBtn from "src/assets/walletbtn.svg";
-import User from "src/assets/User.svg";
-import Attendant from "src/assets/Attendanticon.svg";
-import Rating from "src/assets/Ratings.svg";
+import walletBtn from "src/assets/img/walletbtn.svg";
+import User from "src/assets/img/User.svg";
+import Attendant from "src/assets/img/Attendanticon.svg";
+import Rating from "src/assets/img/Ratings.svg";
 import { CardButton } from "src/components/Card";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
@@ -13,7 +13,7 @@ import ProfileCard from "src/components/ProfileCard";
 export default function SinglePage() {
 	const path = useLocation();
 	const navigate = useNavigate();
-	const [showCard, setShowCard] = useState<boolean>(false);
+	const [showCard, setShowCard] = useState<boolean>(true);
 
 	const routeData = useMemo(() => {
 		let from = path.pathname.split("/")[1];

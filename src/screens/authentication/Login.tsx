@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "src/api/authApiSlice";
-import Logo from "src/assets/logo.svg";
+import Logo from "src/assets/img/logo.svg";
 import { Button } from "src/components/Button";
 import Image from "src/components/Image";
 import { passwordRegex, Values } from "src/helpers/alias";

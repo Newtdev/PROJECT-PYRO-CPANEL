@@ -104,9 +104,6 @@ export default function BranchReview() {
 							<p className="text-[12px]">273 Reviews</p>
 						</div>
 					</div>
-
-					{/* <ReviewCard reviewData={reviewData} /> */}
-					{/* <ReviewCommentCard reviewData={reviewData} /> */}
 				</div>
 			</article>
 		</section>

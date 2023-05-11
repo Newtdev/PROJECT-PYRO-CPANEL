@@ -111,18 +111,16 @@ const headCells: readonly HeadCell[] = [
 
 const ManageHQ = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
-	// const [selected, setSelected] = React.useState<readonly string[]>([]);
 	const [value, setValue] = React.useState<string>("one");
-	// const [showModal, setShowModal] = useState<boolean>(false);
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const navigate = useNavigate();
 
 	const { handleSelectAllClick, selected, setSelected } =
 		useHandleSelectAllClick(rows);
+
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
-	// console.log(filteredValue);
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
 		setValue(newValue);

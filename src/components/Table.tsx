@@ -189,14 +189,14 @@ export default function EnhancedTable({
 
 	return (
 		<Box sx={{ width: "100%" }}>
-			<Paper sx={{ width: "100%", mb: 2, paddingX: 4 }}>
+			<Paper sx={{ width: "100%", mb: 2, paddingX: 2 }}>
 				<TableContainer>
 					<Table
 						sx={{ minWidth: 750 }}
 						aria-labelledby="tableTitle"
 						size={"medium"}>
 						<EnhancedTableHead
-							numSelected={selected.length}
+							numSelected={selected?.length}
 							order={order}
 							orderBy={orderBy}
 							onSelectAllClick={handleSelectAllClick}
@@ -207,7 +207,7 @@ export default function EnhancedTable({
 						/>
 						<TableBody>
 							{visibleRows.map((row: any, index: number) => {
-								const isItemSelected = isSelected(row.name);
+								const isItemSelected = isSelected(row.id);
 								const labelId = `enhanced-table-checkbox-${index}`;
 
 								return (
@@ -216,15 +216,14 @@ export default function EnhancedTable({
 										role="checkbox"
 										aria-checked={isItemSelected}
 										tabIndex={-1}
-										key={row.name}
+										key={row.id}
 										selected={isItemSelected}
 										sx={{ cursor: "pointer" }}>
 										<TableCell padding="checkbox">
 											{showFlag ? (
 												<Checkbox
 													color="primary"
-													onClick={(event) => handleClick(event, row.name)}
-													// onClick={() => console.log(isItemSelected)}
+													onClick={(event) => handleClick(event, row.id)}
 													checked={isItemSelected}
 													inputProps={{
 														"aria-labelledby": labelId,
@@ -266,9 +265,7 @@ export default function EnhancedTable({
 													id={labelId}
 													scope="row"
 													padding="normal"
-													// key={column.id}
 													onClick={(e) => handleRowClick(e, row.name)}
-													// align={column.align}
 													style={{
 														color: "#002E66",
 														fontFamily: "Poppins",

@@ -87,6 +87,10 @@ export type ReviewDataType = {
 	star: number | string;
 }[];
 
+// type ReadOnlyProps<T> = {
+// 	readonly [P in typeOf T]:T[P]
+// }
+
 export const passwordRegex = new RegExp(
 	"^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})"
 );

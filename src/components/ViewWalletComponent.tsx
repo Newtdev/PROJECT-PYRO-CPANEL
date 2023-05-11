@@ -8,6 +8,8 @@ import { Data } from "src/helpers/alias";
 import { CurrencyFormatter } from "src/helpers/helperFunction";
 import { DropDownComponent } from "src/screens/dashboard/layout/main";
 
+type TabType = { id: string | number; value: string; label: string };
+
 export interface HeadCellTypes {
 	id: keyof Data;
 	label: string;
@@ -53,6 +55,8 @@ const rows: Data[] | null = [
 interface WalletProps {
 	rows: Data[];
 	headCells: readonly HeadCellTypes[];
+	showCard?: boolean;
+	tabData?: TabType[];
 	handleRowClick: (
 		e: React.MouseEvent<HTMLElement>,
 		name: { [index: string]: string | number }
@@ -66,11 +70,6 @@ interface WalletProps {
 
 export default function ViewWalletComp(props: WalletProps) {
 	const [selected, setSelected] = React.useState<readonly string[]>([]);
-	const [value, setValue] = React.useState<string>("one");
-	const [showModal, setShowModal] = useState<boolean>(false);
-	const [filteredValue, setFilteredValue] = useState<string>("");
-	const navigate = useNavigate();
-
 	const addCellToRow = (): Data[] => {
 		return props.rows?.map((dt) => {
 			return {
@@ -91,59 +90,38 @@ export default function ViewWalletComp(props: WalletProps) {
 		});
 	};
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue(newValue);
-	};
-
 	// TABLE FILTER TAB
-	const tabData: { id: string | number; value: string; label: string }[] = [
-		{ id: 1, value: "one", label: "Recent Transactions" },
-	];
-
-	// CLICKING ON THE ROW OF A TABLE
-	// const handleRowClick = (
-	// 	event: React.MouseEvent<HTMLElement>,
-	// 	name: any
-	// ): void => {
-	// 	if (event.currentTarget) {
-	// 		if (event.currentTarget.textContent === "") setShowModal(!showModal);
-	// 		else navigate(`/branch/${name}`, { state: name });
-
-	// 		// TODO: make API request to handle submission
-	// 		// for single and multiple
-	// 	}
-	// };
 
 	// SELECT ALL THE ROWS ON THE FUNCTION
-	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (event.target.checked) {
-			const newSelected = rows?.map((n) => n.name) as [];
-			setSelected(newSelected);
-			return;
-		}
-		setSelected([]);
-	};
+	// const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 	if (event.target.checked) {
+	// 		const newSelected = rows?.map((n) => n.name) as [];
+	// 		setSelected(newSelected);
+	// 		return;
+	// 	}
+	// 	setSelected([]);
+	// };
 
 	// SELECT A SINGLE ROW ON TABLE
-	const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-		const selectedIndex = selected.indexOf(name);
-		let newSelected: readonly string[] = [];
+	// const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+	// 	const selectedIndex = selected.indexOf(name);
+	// 	let newSelected: readonly string[] = [];
 
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
+	// 	if (selectedIndex === -1) {
+	// 		newSelected = newSelected.concat(selected, name);
+	// 	} else if (selectedIndex === 0) {
+	// 		newSelected = newSelected.concat(selected.slice(1));
+	// 	} else if (selectedIndex === selected.length - 1) {
+	// 		newSelected = newSelected.concat(selected.slice(0, -1));
+	// 	} else if (selectedIndex > 0) {
+	// 		newSelected = newSelected.concat(
+	// 			selected.slice(0, selectedIndex),
+	// 			selected.slice(selectedIndex + 1)
+	// 		);
+	// 	}
 
-		setSelected(newSelected);
-	};
+	// 	setSelected(newSelected);
+	// };
 
 	// CONFIRMATION OF WHAT IS SELECTED
 	const isSelected = (name: string) => selected.indexOf(name) !== -1;
@@ -154,58 +132,22 @@ export default function ViewWalletComp(props: WalletProps) {
 		handleRowClick: props.handleRowClick,
 		showFlag: false,
 		isSelected,
-		handleClick,
-		handleSelectAllClick,
+		// handleClick,
+		// handleSelectAllClick,
 		selected,
 	};
 
 	return (
-		<section className="h-screen w-full">
+		<section className="h-full w-full">
 			<article className="w-full">
-				<div className="w-full flex flex-col gap-6 lg:flex-row">
-					<BalanceCard {...props.accountInformation} />
-					<InflowCard {...props.accountInformation} />
-				</div>
-				<div className="h-fit w-full bg-white mt-6">
-					<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg px-3">
-						<div>
-							<Box sx={{ width: "100%" }}>
-								<Tabs
-									value={value}
-									onChange={handleChange}
-									textColor="secondary"
-									indicatorColor="secondary"
-									className="px-4"
-									aria-label="secondary tabs example">
-									{tabData?.map((dt) => {
-										return (
-											<Tab
-												sx={{
-													fontSize: 14,
-												}}
-												key={dt.id}
-												value={dt.value}
-												label={dt.label}
-											/>
-										);
-									})}
-								</Tabs>
-							</Box>
-						</div>
-
-						<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
-							<SearchInput
-								name="branch-search"
-								placeholder="Search for names, branches, category"
-								value={filteredValue}
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-									const target = e.target;
-									setFilteredValue(target.value);
-								}}
-							/>
-						</div>
+				{props.showCard ? (
+					<div className="w-full flex flex-col gap-6 lg:flex-row">
+						<BalanceCard {...props.accountInformation} />
+						<InflowCard {...props.accountInformation} />
 					</div>
-					<div className="relative">
+				) : null}
+				<div className="h-fit w-full">
+					<div>
 						<EnhancedTable {...dataToChildren} />
 					</div>
 
@@ -216,7 +158,7 @@ export default function ViewWalletComp(props: WalletProps) {
 	);
 }
 
-const BalanceCard = (props: { balance: number }) => {
+export const BalanceCard = (props: { balance: number }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const handleClickShowPassword = () => {
@@ -228,6 +170,7 @@ const BalanceCard = (props: { balance: number }) => {
 	) => {
 		event.preventDefault();
 	};
+
 	return (
 		<div className="bg-[#636685] h-[152px] w-[50%] max-w-[442px] rounded-[20px]">
 			<div className="flex flex-row p-6 items-center h-full">
@@ -262,7 +205,7 @@ const BalanceCard = (props: { balance: number }) => {
 	);
 };
 
-const InflowCard = (props: { amountIn: number; amountOut: number }) => {
+export const InflowCard = (props: { amountIn: number; amountOut: number }) => {
 	const [expanded, setExpanded] = useState<boolean>(false);
 	const [selectText, setSelectedText] = useState<string>("This month");
 

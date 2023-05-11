@@ -8,5 +8,5 @@ export { default as ProtectedRoute } from "src/screens/protected";
 export { default as LandingPage } from "src/screens/landing-page";
 export { default as Layout } from "src/screens/dashboard/layout";
 export { default as Dashboard } from "src/screens/dashboard/pages/Dashboard";
-export { default as ManageHQ } from "src/screens/dashboard/pages/ManageHQ";
+export { default as ManageHQ } from "src/screens/dashboard/pages/Manage-HQ/ManageHQ";
 export { default as ManageBranch } from "src/screens/dashboard/pages/Manage-branch/ManageBranch";

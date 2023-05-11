@@ -10,13 +10,16 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./features/auth/authSlice";
 import HQPage from "./screens/dashboard/pages/Manage-HQ/HQPage";
 import ViewHQWallet from "./screens/dashboard/pages/Manage-HQ/ViewHQWallet";
+import AllTransactions from "./screens/dashboard/pages/Transactions/AllTransactions";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Login = lazy(() => import("./screens/authentication/Login"));
 const ManageBranch = lazy(
 	() => import("./screens/dashboard/pages/Manage-branch/ManageBranch")
 );
-const ManageHQ = lazy(() => import("./screens/dashboard/pages/ManageHQ"));
+const ManageHQ = lazy(
+	() => import("./screens/dashboard/pages/Manage-HQ/ManageHQ")
+);
 const SinglePage = lazy(() => import("./screens/dashboard/pages/SinglePage"));
 const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
 const AttendantProfile = lazy(
@@ -76,6 +79,10 @@ function App() {
 						/>
 						<Route path={APP_ROUTE.VIEW_HQ_WALLET} element={<ViewHQWallet />} />
 						<Route path={APP_ROUTE.VIEW_HQ_BRANCH} element={<ManageBranch />} />
+						<Route
+							path={APP_ROUTE.TRANSACTIONS}
+							element={<AllTransactions />}
+						/>
 					</Route>
 				</Routes>
 			</Suspense>

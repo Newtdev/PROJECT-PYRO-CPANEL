@@ -1,5 +1,5 @@
 import Image from "src/components/Image";
-import Img from "src/assets/image.png";
+import Img from "src/assets/img/image.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 

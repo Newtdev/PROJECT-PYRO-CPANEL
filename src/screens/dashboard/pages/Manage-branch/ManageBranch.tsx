@@ -109,6 +109,7 @@ const ManageBranch = () => {
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const { handleSelectAllClick, selected, setSelected } =
 		useHandleSelectAllClick(rows);
+
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
@@ -125,12 +126,12 @@ const ManageBranch = () => {
 		{ id: 1, value: "two", label: "Most popular" },
 	];
 
-	function fn(name: { [index: string]: string | number }) {
-		navigate(`/branch/${name}`, { state: name });
+	function fn(data: { [index: string]: string | number }) {
+		navigate(`/branch/${data.name}`, { state: data.name });
 	}
 
 	// CONFIRMATION OF WHAT IS SELECTED
-	// const isSelected = (name: string) => selected.indexOf(name) !== -1;
+	// const isSelected = (data: string) => selected.indexOf(name) !== -1;
 
 	let dataToChildren: any = {
 		rows,

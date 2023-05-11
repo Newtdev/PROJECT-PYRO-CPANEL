@@ -2,8 +2,8 @@ import { BarChartComp, Chart } from "src/components/Chart";
 import { cardData, data, datas } from "src/helpers/data";
 import { Fragment } from "react";
 import { CardButton, DashboardCards } from "src/components/Card";
-import branchBtn from "src/assets/branchbtn.svg";
-import walletBtn from "src/assets/walletbtn.svg";
+import branchBtn from "src/assets/img/branchbtn.svg";
+import walletBtn from "src/assets/img/walletbtn.svg";
 import { cardBtnType } from "src/helpers/alias";
 import { APP_ROUTE } from "src/helpers/Routes";
 

@@ -1,21 +1,19 @@
 import React, { Fragment, useState } from "react";
 import { cardBtnType, ProfiledataType } from "src/helpers/alias";
 import { APP_ROUTE } from "src/helpers/Routes";
-import walletBtn from "src/assets/walletbtn.svg";
-import User from "src/assets/User.svg";
-import Attendant from "src/assets/Attendanticon.svg";
-import Rating from "src/assets/Ratings.svg";
+import walletBtn from "src/assets/img/walletbtn.svg";
+import User from "src/assets/img/User.svg";
+import Attendant from "src/assets/img/Attendanticon.svg";
 import { CardButton } from "src/components/Card";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import ProfileCard from "src/components/ProfileCard";
 import useCustomLocation from "src/hooks/useCustomLocation";
 
 export default function HQPage() {
 	const navigate = useNavigate();
-	const { slicedPath, routePath } = useCustomLocation();
+	const { routePath } = useCustomLocation();
 
-	const [showCard, setShowCard] = useState<boolean>(false);
+	const [showCard, setShowCard] = useState<boolean>(true);
 
 	const HQData: cardBtnType[] = [
 		{
@@ -35,7 +33,7 @@ export default function HQPage() {
 			id: 3,
 			icon: Attendant,
 			name: "Branches",
-			link: APP_ROUTE.VIEW_WALLET,
+			link: `/view/${routePath}/branch`,
 		},
 	];
 	const ViewProfileData: ProfiledataType = [

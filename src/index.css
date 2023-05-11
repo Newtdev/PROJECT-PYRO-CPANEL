@@ -16,7 +16,7 @@ body {
 } */
 
 .backgroundImage {
-	background-image: url(../src/assets/background.svg);
+	background-image: url(../src/assets/img/background.svg);
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

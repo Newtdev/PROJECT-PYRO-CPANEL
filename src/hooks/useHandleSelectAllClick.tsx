@@ -8,9 +8,7 @@ export default function useHandleSelectAllClick(data: Data[]) {
 	const handleSelectAllClick = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			if (event.target.checked) {
-				const newSelected = data?.map(
-					(n: Data | any) => n.name || n.firstName
-				) as string[];
+				const newSelected = data?.map((n: Data) => n.id) as string[];
 
 				setSelected(newSelected);
 				return;

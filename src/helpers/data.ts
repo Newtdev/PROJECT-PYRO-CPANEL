@@ -1,11 +1,11 @@
 import { type } from "os";
 import { ReactElement, ReactNode } from "react";
-import revenue from "src/assets/revenue.svg";
-import totalTransactions from "src/assets/totalTransactions.svg";
-import attendant from "src/assets/attendant.svg";
-import branches from "src/assets/branches.svg";
-import branchBtn from "src/assets/branchbtn.svg";
-import walletBtn from "src/assets/walletbtn.svg";
+import revenue from "src/assets/img/revenue.svg";
+import totalTransactions from "src/assets/img/totalTransactions.svg";
+import attendant from "src/assets/img/attendant.svg";
+import branches from "src/assets/img/branches.svg";
+import branchBtn from "src/assets/img/branchbtn.svg";
+import walletBtn from "src/assets/img/walletbtn.svg";
 import { cardType } from "./alias";
 import { CurrencyFormatter } from "./helperFunction";
 
