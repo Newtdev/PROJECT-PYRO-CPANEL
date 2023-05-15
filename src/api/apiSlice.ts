@@ -20,7 +20,6 @@ const baseQuery = fetchBaseQuery({
 const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 	// eslint-disable-next-line no-undef
 	let result = await baseQuery(args, api, extraOptions);
-
 	if (result?.error?.status === 401) {
 		// eslint-disable-next-line no-undef
 		const refreshResult = await baseQuery("api", api, extraOptions);
@@ -39,5 +38,6 @@ const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 export const apiSlice = createApi({
 	reducerPath: "api",
 	baseQuery: customBaseQuery,
+	tagTypes: ["MANAGE_HQ"],
 	endpoints: (builder) => ({}),
 });

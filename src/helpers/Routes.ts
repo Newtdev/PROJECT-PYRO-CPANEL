@@ -1,6 +1,7 @@
 export enum API_ROUTE {
 	LOGIN = "auth/system-admin/login-email",
 	GET_ALL_HQ = "/system-admin/station-hq",
+	ADD_NEW_HQ = "system-admin/station-hq",
 }
 
 export enum APP_ROUTE {
@@ -35,4 +36,8 @@ export enum APP_ROUTE {
 export enum PERMISSION {
 	HQ = "hq_admin",
 	SYSTEM_ADMIN = "engineer",
+}
+
+export enum RTKTAG {
+	MANAGE_HQ = "MANAGE_HQ",
 }
