@@ -125,18 +125,6 @@ export function ReviewCard({
 			<div className="px-6 h-[25%] mt-5 flex justify-between items-center">
 				<div className="basis-[60%]">
 					<ReviewComponents reviewData={reviewData} />
-					{/* {reviewData.map((d) => (
-						<div className="flex gap-4 items-center justify-between">
-							<p>{d.star}</p>
-							<div key={d.id} className="w-full my-3">
-								<BorderLinearProgress
-									variant="determinate"
-									value={Number(d?.value)}
-									className="py-2"
-								/>
-							</div>
-						</div>
-					))} */}
 				</div>
 
 				<div className="basis-[40%] ">

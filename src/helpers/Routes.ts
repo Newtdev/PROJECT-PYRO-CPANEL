@@ -12,6 +12,9 @@ export enum APP_ROUTE {
 	NOTIFICATION = "/notification",
 	SELF_HELP = "/self-help",
 	SETTINGS = "/settings",
+	USER = "/USER",
+	USER_PROFILE = "/user/:name",
+	USER_WALLET = "/user/:name/wallet",
 	MANAGEHQ = "/manageHQ",
 	MANAGE_SINGLE_HQ = "/manageHQ/:id",
 	MANAGE_SINGLE_BRANCH = "/branch/:id",
@@ -22,6 +25,10 @@ export enum APP_ROUTE {
 	ATTENDANT_REVIEW = "branch/:id/reviews",
 	VIEW_HQ_WALLET = "view/:id/wallet",
 	VIEW_HQ_BRANCH = "view/:id/branch",
+	ADMIN_PROFILE = "/admin/profile",
+	MANAGE_ADMIN = "/manage/admin",
+	MANAGE_WEBSITE = "/manage/website",
+	RESET_PASSWORD = "/reset/password",
 }
 
 export enum PERMISSION {

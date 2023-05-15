@@ -1,26 +1,13 @@
-import { ChangeEventHandler, ReactElement } from "react";
 import React, { useState } from "react";
 import { Button } from "src/components/Button";
-import useHandleRowClick from "src/hooks/useHandleRowClick";
-import ViewWalletComp from "src/components/ViewWalletComponent";
-import { CurrencyFormatter } from "src/helpers/helperFunction";
-import { Data } from "src/helpers/alias";
 import { SearchInput } from "src/components/inputs";
-import { FilterList } from "@mui/icons-material";
 import ReceiptCard from "src/components/ReceiptCard";
 import { SelectInput, SelectType } from "src/components/SelectInput";
-
-interface HeadCellTypes {
-	id: keyof Data;
-	label: string;
-	numeric?: boolean | null;
-	minWidth: number;
-	amount?: string | number;
-	type?: string;
-	status?: string | ReactElement | any;
-	referenceId?: string | number;
-	doneby?: string;
-}
+import ViewWalletComp from "src/components/ViewWalletComponent";
+import { Data } from "src/helpers/alias";
+import { CurrencyFormatter } from "src/helpers/helperFunction";
+import useHandleRowClick from "src/hooks/useHandleRowClick";
+import { HeadCellTypes } from "../ViewWallet";
 
 const rows: Data[] = [
 	{
@@ -141,24 +128,7 @@ const headCells: readonly HeadCellTypes[] = [
 	},
 ];
 
-const data = {
-	ref: "1234567890",
-	accountNumber: 1234567890,
-	accountName: "Thomas Ejembi",
-	bank: "Polaris Bank",
-	category: "Branch",
-	amount: "2000",
-	vat: "3000",
-	status: "pending",
-	transactionTime: "2/3/2023",
-};
-
-// const useGetSelectedData = (data) => {
-// 	const [transactionData, setTransactionData] = useState<{}>(data || {});
-
-// 	return
-// };
-const Transactions = () => {
+export default function UserWallet() {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 
 	const [transactionData, setTransactionData] = useState<{}>({});
@@ -176,9 +146,6 @@ const Transactions = () => {
 	// TABLE FILTER TAB
 	const tabData: SelectType[] = [
 		{ id: 1, value: "Pending", label: "Pending " },
-		{ id: 2, value: "HQ", label: "HQ" },
-		{ id: 3, value: "Branch", label: "Branch " },
-		{ id: 4, value: "Users", label: "Users " },
 		{ id: 5, value: "Success", label: "Success" },
 		{ id: 6, value: "Failed", label: "Failed" },
 	];
@@ -239,6 +206,4 @@ const Transactions = () => {
 			</article>
 		</section>
 	);
-};
-
-export default Transactions;
+}

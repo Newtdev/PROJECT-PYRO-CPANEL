@@ -1,15 +1,9 @@
-import { HighlightOffOutlined } from "@mui/icons-material";
 import React, { ReactElement, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Lines } from "src/components/Icons";
-import { Modal } from "src/components/ModalComp";
 import ReceiptCard from "src/components/ReceiptCard";
 import ViewWalletComp from "src/components/ViewWalletComponent";
 import { Data } from "src/helpers/alias";
 import { CurrencyFormatter } from "src/helpers/helperFunction";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
-import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
-import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 
 interface HeadCellTypes {
 	id: keyof Data;
@@ -88,12 +82,11 @@ const headCells: readonly HeadCellTypes[] = [
 
 export default function ViewHQWallet() {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
-	const { handleSelectAllClick, selected, setSelected } =
-		useHandleSelectAllClick(rows);
-	const { handleClick } = useHandleSingleSelect(selected, setSelected);
+	const [transactionData, setTransactionData] = useState<{}>({});
 
-	function fn(name: { [index: string]: string | number }) {
+	function fn(data: { [index: string]: string | number }) {
 		setShowModal((prev) => !prev);
+		setTransactionData(data);
 	}
 	const props = {
 		rows,
@@ -120,26 +113,7 @@ export default function ViewHQWallet() {
 		<>
 			<ViewWalletComp {...props} />;
 			{showModal ? (
-				<Modal>
-					<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-						<div className="w-[70%] mx-auto flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-							<div className="w-full px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-								<h1>Transaction</h1>
-								<button onClick={() => setShowModal(false)} disabled={false}>
-									<HighlightOffOutlined
-										fontSize="large"
-										className="text-black cursor-pointer"
-									/>
-								</button>
-							</div>
-							<div>
-								<hr />
-							</div>
-
-							<ReceiptCard data={data} />
-						</div>
-					</div>
-				</Modal>
+				<ReceiptCard data={transactionData} setShowModal={setShowModal} />
 			) : null}
 		</>
 	);

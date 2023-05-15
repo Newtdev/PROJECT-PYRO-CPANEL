@@ -8,11 +8,25 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./features/auth/authSlice";
-import HQPage from "./screens/dashboard/pages/Manage-HQ/HQPage";
-import ViewHQWallet from "./screens/dashboard/pages/Manage-HQ/ViewHQWallet";
-import AllTransactions from "./screens/dashboard/pages/Transactions/AllTransactions";
 
 const Entry = lazy(() => import("./screens/protected"));
+const Settings = lazy(() => import("./screens/dashboard/pages/Settings"));
+const SelfHelp = lazy(() => import("./screens/dashboard/pages/self-help"));
+const HQPage = lazy(() => import("./screens/dashboard/pages/Manage-HQ/HQPage"));
+const UserWallet = lazy(
+	() => import("./screens/dashboard/pages/User/UserWallet")
+);
+const ViewHQWallet = lazy(
+	() => import("./screens/dashboard/pages/Manage-HQ/ViewHQWallet")
+);
+const AllTransactions = lazy(
+	() => import("./screens/dashboard/pages/Transactions/AllTransactions")
+);
+const Users = lazy(() => import("./screens/dashboard/pages/User"));
+const UserProfile = lazy(
+	() => import("./screens/dashboard/pages/User/UserProfile")
+);
+
 const Login = lazy(() => import("./screens/authentication/Login"));
 const ManageBranch = lazy(
 	() => import("./screens/dashboard/pages/Manage-branch/ManageBranch")
@@ -31,6 +45,10 @@ const BranchReview = lazy(
 const AttendantProfileInfo = lazy(
 	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfileInfo")
 );
+
+const AppRoute = [
+	{ path: APP_ROUTE.LOGIN, component: <Login />, permissions: "" },
+];
 
 function App() {
 	type saveUserTypes = {
@@ -83,6 +101,11 @@ function App() {
 							path={APP_ROUTE.TRANSACTIONS}
 							element={<AllTransactions />}
 						/>
+						<Route path={APP_ROUTE.USER} element={<Users />} />
+						<Route path={APP_ROUTE.USER_PROFILE} element={<UserProfile />} />
+						<Route path={APP_ROUTE.USER_WALLET} element={<UserWallet />} />
+						<Route path={APP_ROUTE.SELF_HELP} element={<SelfHelp />} />
+						<Route path={APP_ROUTE.SETTINGS} element={<Settings />} />
 					</Route>
 				</Routes>
 			</Suspense>

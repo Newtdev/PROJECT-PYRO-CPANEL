@@ -49,6 +49,8 @@ export interface Data {
 	status?: string | ReactElement;
 	referenceId?: string | number;
 	doneby?: string;
+	usage?: string;
+	lastUsed?: string;
 }
 
 // export interface HeadCell {

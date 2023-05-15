@@ -35,7 +35,7 @@ export default function ReceiptCard(props: any) {
 								return (
 									<div key={dt.id}>
 										<h2 className="text-black">{splitByUpperCase(dt[0])}</h2>
-										<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg"></span>
+										<span className="block  w-20 my-0.5 rounded-lg"></span>
 										<h2 className="text-[#002E66]">{dt[1]}</h2>
 									</div>
 								);
@@ -43,7 +43,7 @@ export default function ReceiptCard(props: any) {
 						</div>
 						<div className=" w-32 pr-4 flex justify-between ml-14 mt-16 items-center ">
 							<Print />
-							<h1>Print Recipt</h1>
+							<h1 className="text-blue-600">Print Recipt</h1>
 						</div>
 					</div>
 					{/* <ReceiptCard data={transactionData} /> */}

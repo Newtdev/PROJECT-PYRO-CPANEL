@@ -74,6 +74,7 @@ interface EnhancedTableProps {
 	rowCount: number;
 	headCells: HeadCell[];
 	showFlag?: boolean | undefined;
+	showCheckBox?: boolean | undefined;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -85,6 +86,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 		rowCount,
 		onRequestSort,
 		showFlag,
+		showCheckBox,
 	} = props;
 	const createSortHandler =
 		(property: keyof Data) => (event: React.MouseEvent<unknown>) => {
@@ -95,7 +97,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 		<TableHead>
 			<TableRow>
 				<TableCell padding="checkbox">
-					{showFlag ? (
+					{showCheckBox ? (
 						<Checkbox
 							color="primary"
 							indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -148,6 +150,7 @@ export default function EnhancedTable({
 	selected,
 	handleSelectAllClick,
 	handleClick,
+	showCheckBox,
 }: any) {
 	const [order, setOrder] = React.useState<Order>("asc");
 	const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
@@ -204,6 +207,7 @@ export default function EnhancedTable({
 							rowCount={rows.length}
 							headCells={headCells}
 							showFlag={showFlag}
+							showCheckBox={showCheckBox}
 						/>
 						<TableBody>
 							{visibleRows.map((row: any, index: number) => {
@@ -220,7 +224,7 @@ export default function EnhancedTable({
 										selected={isItemSelected}
 										sx={{ cursor: "pointer" }}>
 										<TableCell padding="checkbox">
-											{showFlag ? (
+											{showCheckBox ? (
 												<Checkbox
 													color="primary"
 													onClick={(event) => handleClick(event, row.id)}

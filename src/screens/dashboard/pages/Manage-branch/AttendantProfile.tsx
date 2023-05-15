@@ -114,21 +114,6 @@ export default function AttendantProfile() {
 
 	const { slicedPath } = useCustomLocation();
 
-	const Formik = useFormik<addAttendantTypes>({
-		initialValues: {
-			firstName: "",
-			lastName: "",
-			phoneNumber: "",
-			password: "",
-		},
-		validateOnChange: true,
-		validateOnBlur: true,
-		validationSchema: AddAttendantValidation,
-		onSubmit: (values) => {
-			console.log(values);
-		},
-	});
-
 	// INDIVIDUAL PROFILE
 	const styles =
 		"h-[38px] py-2 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
@@ -205,8 +190,10 @@ export default function AttendantProfile() {
 								<div className="basis-[40%] flex items-start justify-start">
 									<Checkbox
 										color="primary"
-										onClick={(event) => handleClick(event, v.firstName)}
-										// onClick={() => console.log(isItemSelected)}
+										onClick={(event) => {
+											event.stopPropagation();
+											handleClick(event, v.firstName);
+										}}
 										checked={isSelected(v.firstName)}
 									/>
 									<div className="w-[90px] h-[90px] rounded-full self-center object-fit bg-[#D9D9D9] flex justify-center items-center">
@@ -246,114 +233,6 @@ export default function AttendantProfile() {
 						/>
 					</Modal>
 				)}
-				{showAddModal ? (
-					<Modal>
-						<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-							<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-								<div className="w-full  px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-									<h1>Add attendant</h1>
-									<button
-										onClick={() => setShowAddModal(false)}
-										disabled={false}>
-										<HighlightOffOutlinedIcon
-											fontSize="large"
-											className="text-black cursor-pointer"
-										/>
-									</button>
-								</div>
-								<div className="w-full">
-									<Lines />
-								</div>
-
-								{/* <Divider /> */}
-								<form
-									// onSubmit={Formik.handleSubmit}
-									className="w-full flex flex-col justify-around items-center">
-									<FormInput
-										id="firstName"
-										name="First name"
-										type="text"
-										styles={`${styles} ${
-											Formik.errors.firstName && Formik.touched.firstName
-												? "border-red-500"
-												: "border-gray-300"
-										}`}
-										labelStyles={labelStyles}
-										onChange={Formik.handleChange}
-										value={Formik.values.firstName}
-										onBlur={Formik.handleBlur}
-										// disabled={loginResult.isLoading}
-										error={Formik.errors.firstName}
-										touched={Formik.touched.firstName}
-									/>
-
-									<FormInput
-										id="lastName"
-										name="Last name"
-										type="text"
-										styles={`${styles} ${
-											Formik.errors.lastName && Formik.touched.lastName
-												? "border-red-500"
-												: "border-gray-300"
-										}`}
-										labelStyles={labelStyles}
-										onChange={Formik.handleChange}
-										value={Formik.values.lastName}
-										onBlur={Formik.handleBlur}
-										// disabled={loginResult.isLoading}
-										error={Formik.errors.lastName}
-										touched={Formik.touched.lastName}
-									/>
-
-									<FormInput
-										id="phoneNumber"
-										name="Phone number"
-										type="text"
-										styles={`${styles} ${
-											Formik.errors.phoneNumber && Formik.touched.phoneNumber
-												? "border-red-500"
-												: "border-gray-300"
-										}`}
-										labelStyles={labelStyles}
-										onChange={Formik.handleChange}
-										value={Formik.values.phoneNumber}
-										onBlur={Formik.handleBlur}
-										// disabled={loginResult.isLoading}
-										error={Formik.errors.phoneNumber}
-										touched={Formik.touched.phoneNumber}
-									/>
-									<FormInput
-										id="password"
-										name="Password"
-										type="text"
-										styles={`${styles} ${
-											Formik.errors.password && Formik.touched.password
-												? "border-red-500"
-												: "border-gray-300"
-										}`}
-										labelStyles={labelStyles}
-										onChange={Formik.handleChange}
-										value={Formik.values.password}
-										onBlur={Formik.handleBlur}
-										// disabled={loginResult.isLoading}
-										error={Formik.errors.password}
-										touched={Formik.touched.password}
-									/>
-
-									<div className="w-[80%]">
-										<Button
-											text="Add Attendant"
-											// disabled={loginResult.isLoading}
-											// showModal={loginResult.isLoading}
-											className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-											type="submit"
-										/>
-									</div>
-								</form>
-							</div>
-						</div>
-					</Modal>
-				) : null}
 			</article>
 		</section>
 	);

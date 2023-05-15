@@ -1,6 +1,7 @@
+import { ArrowBack, ArrowBackIosNewSharp } from "@mui/icons-material";
 import { useMemo } from "react";
 import { ReactElement } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
 	Branch,
 	Help,
@@ -50,6 +51,13 @@ const linksData = [
 		link: APP_ROUTE.TRANSACTIONS,
 	},
 	{
+		id: 8,
+		name: "Users",
+		route: "Users",
+		Icon: <Transactions />,
+		link: APP_ROUTE.USER,
+	},
+	{
 		id: 4,
 		name: "Support",
 		route: "Support",
@@ -90,17 +98,18 @@ const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 		return routePath === searchPath;
 	}, [name, routePath, searchPath]);
 
-	const activeLink = active ? "font-[600]" : "font-normal";
+	// console.log(name);
+	// console.log(path.pathname.toLowerCase().split("/"));
 
-	console.log(routePath);
+	const activeLink = active ? "font-[600]" : "font-normal";
 	return (
-		<div className=" hover:bg-[#040128] flex items-center ">
+		<div className=" flex items-center ">
 			{active ? <Indicator /> : false}
 
 			<Link
 				to={link}
 				state={name}
-				className={`${activeLink} text-white text-[14px] flex w-full px-4 ml-4 h-20 items-center `}>
+				className={`${activeLink} text-white text-[14px] flex w-full px-4 ml-4 h-16 items-center `}>
 				{Icon}
 				<p className="ml-4">{name}</p>
 			</Link>
@@ -109,9 +118,14 @@ const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 };
 
 const SideBar = () => {
+	const navigate = useNavigate();
 	return (
 		<aside className="h-full flex flex-col justify-center w-[260px]">
 			<div className=" w-[217px] h-[95%] rounded-[20px] bg-[#002E66] ml-6">
+				<div className="w-full pt-4 text-start px-7 text-white">
+					<ArrowBack color="inherit" onClick={() => navigate(-1)} />
+				</div>
+
 				{linksData?.map((dt, i) => {
 					return (
 						<DashboardLink name={dt?.name} link={dt?.link} Icon={dt.Icon} />
