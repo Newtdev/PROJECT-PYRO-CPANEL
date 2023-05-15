@@ -6,8 +6,8 @@ import { APP_ROUTE } from "./helpers/Routes";
 import { Dashboard } from "./screens";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
 import { setCredentials } from "./features/auth/authSlice";
+import { useAppDispatch } from "./hooks/reduxhooks";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Settings = lazy(() => import("./screens/dashboard/pages/Settings"));
@@ -55,13 +55,12 @@ function App() {
 		token: string | null;
 		user: string | null;
 	};
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const getUserInfo: string | null = sessionStorage.getItem(
 		"fuleap-user-info"
 	) as string;
 	const parseData: saveUserTypes = JSON.parse(getUserInfo);
-
 	useEffect(() => {
 		if (!parseData) return;
 		dispatch(setCredentials(parseData));

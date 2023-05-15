@@ -6,13 +6,17 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { Collapse } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "src/hooks/useAuth";
 import { ReactNode } from "react";
+import { useAppDispatch } from "src/hooks/reduxhooks";
+import { logOut } from "src/features/auth/authSlice";
 
 const DashboardHeader = (props: { header: string }) => {
 	const { user } = useAuth();
 	const [expanded, setExpanded] = useState<boolean>(false);
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
@@ -28,6 +32,11 @@ const DashboardHeader = (props: { header: string }) => {
 		transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
 		marginLeft: "auto",
 	}));
+
+	function onLogOut() {
+		dispatch(logOut());
+		navigate("/");
+	}
 
 	return (
 		<div className="w-full flex justify-between items-center mb-2 ">
@@ -57,9 +66,11 @@ const DashboardHeader = (props: { header: string }) => {
 							<div className="text-start w-full py-2 transition-all hover:bg-[#D9D9D9] hover:scale-[1.1] p-4">
 								<Link to="/">View Profile</Link>
 							</div>
-							<div className="text-start p-4  transition-all hover:bg-[#D9D9D9] hover:scale-[1.1]">
+							<button
+								onClick={onLogOut}
+								className="text-start px-4 py-2 block w-full transition-all hover:bg-[#D9D9D9] hover:scale-[1.1]">
 								<p>Log out</p>
-							</div>
+							</button>
 							{/* <Button /> */}
 						</div>
 					</Collapse>

@@ -24,9 +24,11 @@ const Login = () => {
 			// )
 			.required(),
 	});
+
 	const handleRequst = async (values: Values) => {
 		try {
-			await login(values).unwrap();
+			const res = await login(values).unwrap();
+			console.log(res);
 			navigate("/");
 		} catch (error: any) {
 			if (error.status === "FETCH_ERROR") {

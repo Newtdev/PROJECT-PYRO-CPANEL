@@ -7,13 +7,13 @@ import Layout from "../dashboard/layout";
 const ProtectedRoute = (): ReactElement => {
 	const location = useLocation();
 	const user = useAuth();
+	console.log(user);
 	const token = useToken();
 	const accessToken = token?.token?.accessToken;
 	const role = user?.user?.role;
-
 	// THE ENTRY PAGE TO THE APP.
 	// HANDLE SWITCH BETWEEN THE LOGIN AND DASHBOARD
-	return role === PERMISSION.HQ && accessToken ? (
+	return role === PERMISSION.SYSTEM_ADMIN && accessToken ? (
 		<Layout>
 			<Outlet />
 		</Layout>

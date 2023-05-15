@@ -12,5 +12,6 @@ export const useAuth = () => {
 
 export const useToken = () => {
 	const token = useAppSelector(selectCurrentLoginToken);
+
 	return useMemo(() => ({ token }), [token]);
 };

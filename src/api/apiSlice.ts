@@ -6,13 +6,14 @@ import { RootState } from "src/store/store";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: process.env.REACT_APP_API_URL,
-	//   credentials: "include",
 	prepareHeaders: (headers, { getState }) => {
-		// const token = getState() as RootState;
-		// if (token) {
-		// 	// headers.set("Authorization", token);
-		// }
-		// return headers;
+		const appState = getState() as RootState;
+		const token = appState?.authSlice?.token?.accessToken;
+
+		if (token) {
+			headers.set("Authorization", `Bearer ${token}`);
+		}
+		return headers;
 	},
 });
 
@@ -23,6 +24,7 @@ const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 	if (result?.error?.status === 401) {
 		// eslint-disable-next-line no-undef
 		const refreshResult = await baseQuery("api", api, extraOptions);
+		console.log(refreshResult);
 
 		if (refreshResult?.data) {
 			// const user = api.getState().auth.user;

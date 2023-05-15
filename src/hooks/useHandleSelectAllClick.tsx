@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Data } from "src/helpers/alias";
 
-export default function useHandleSelectAllClick(data: Data[]) {
+export default function useHandleSelectAllClick(data: Data[] | any) {
 	const [selected, setSelected] = useState<string[]>([]);
 
 	const handleSelectAllClick = useCallback(

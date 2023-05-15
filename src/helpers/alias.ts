@@ -27,7 +27,7 @@ export type cardBtnType = {
 	showCard?: boolean;
 };
 export type loginResponseType = {
-	user: {
+	systemAdmin: {
 		role: null;
 		firstName: string | null;
 		lastName: string | null;
@@ -51,6 +51,9 @@ export interface Data {
 	doneby?: string;
 	usage?: string;
 	lastUsed?: string;
+	email?: string;
+	hqAddress?: string;
+	phoneNumber?: string | number;
 }
 
 // export interface HeadCell {

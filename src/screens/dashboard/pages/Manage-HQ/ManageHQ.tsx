@@ -1,9 +1,8 @@
-import { Flag } from "@mui/icons-material";
-import { useState } from "react";
+import { Flag, RecentActorsOutlined } from "@mui/icons-material";
+import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
 import { FormInput, SearchInput } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
-import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -18,72 +17,8 @@ import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
-
-interface Data {
-	id: string | number;
-	name?: string;
-	branch?: number | string;
-	category?: string;
-	flag?: string | ReactElement;
-}
-const rows: Data[] | null = [
-	{
-		id: 1,
-		name: "Aliko Petroleaum",
-		branch: 305,
-		category: "Disel",
-	},
-	{
-		id: 2,
-		name: "A Y M Shafa",
-		branch: 305,
-		category: "Disel",
-	},
-	{
-		id: 3,
-		name: "Nigerian National Petroleum Commission",
-		branch: 305,
-		category: "Disel",
-	},
-	{
-		id: 4,
-		name: "NNPC",
-		branch: 705,
-		category: "Petrol",
-	},
-	{
-		id: 5,
-		name: "Nai",
-		branch: 705,
-		category: "Kerosene",
-	},
-	{
-		id: 6,
-		name: "Nae",
-		branch: 705,
-		category: "Kerosene",
-	},
-	{
-		id: 7,
-		name: "Naes",
-		branch: 75,
-		category: "Kerosene",
-	},
-	{
-		id: 8,
-		name: "Naess",
-		branch: 759,
-		category: "Kerosene",
-	},
-	{
-		id: 9,
-		name: "Naesss",
-		branch: 759,
-		category: "Kerosene",
-	},
-
-	// { name: "Cupcake", calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
-];
+import { useFetchAllHQQuery } from "src/api/manageHQApiSlice";
+import { Data } from "src/helpers/alias";
 
 interface HeadCell {
 	id: keyof Data;
@@ -98,12 +33,22 @@ const headCells: readonly HeadCell[] = [
 		label: "Name",
 	},
 	{
-		id: "branch",
+		id: "email",
+		minWidth: 170,
+		label: "Email",
+	},
+	{
+		id: "hqAddress",
 		minWidth: 170,
 		label: "Branches",
 	},
 	{
-		id: "category",
+		id: "phoneNumber",
+		minWidth: 170,
+		label: "Category",
+	},
+	{
+		id: "state",
 		minWidth: 170,
 		label: "Category",
 	},
@@ -114,13 +59,34 @@ const ManageHQ = () => {
 	const [value, setValue] = React.useState<string>("one");
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const navigate = useNavigate();
+	const hqQueryResult = useFetchAllHQQuery("");
+
+	const handledAPIResponse = useMemo(() => {
+		let neededData: Data[] = [];
+		const data = hqQueryResult?.currentData?.hqProfile?.data;
+		if (data) {
+			for (const iterator of data) {
+				const { id, name, email, hqAddress, phoneNumber, state } = iterator;
+
+				neededData = [
+					...neededData,
+					{ id, name, email, hqAddress, phoneNumber, state },
+				];
+			}
+			return neededData;
+		}
+	}, [hqQueryResult]);
 
 	const { handleSelectAllClick, selected, setSelected } =
-		useHandleSelectAllClick(rows);
+		useHandleSelectAllClick(handledAPIResponse);
 
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
+
+	// API TO GET ALL HQ INFORMATION
+
+	console.log(handledAPIResponse);
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
 		setValue(newValue);
@@ -135,7 +101,7 @@ const ManageHQ = () => {
 		navigate(`/manageHQ/${data?.name}`, { state: data?.name });
 	}
 	let dataToChildren: any = {
-		rows,
+		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
 		showFlag: true,
