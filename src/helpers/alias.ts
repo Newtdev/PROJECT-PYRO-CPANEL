@@ -54,6 +54,11 @@ export interface Data {
 	email?: string;
 	hqAddress?: string;
 	phoneNumber?: string | number;
+	location?: string;
+	lga?: string;
+	address?: string;
+	latitude?: string;
+	longitude?: string;
 }
 
 // ERROR HANDLE FROM API

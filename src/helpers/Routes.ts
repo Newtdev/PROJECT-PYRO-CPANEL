@@ -2,6 +2,7 @@ export enum API_ROUTE {
 	LOGIN = "auth/system-admin/login-email",
 	GET_ALL_HQ = "/system-admin/station-hq",
 	ADD_NEW_HQ = "system-admin/station-hq",
+	GET_ALL_BRANCH = "/system-admin/station/branches",
 }
 
 export enum APP_ROUTE {

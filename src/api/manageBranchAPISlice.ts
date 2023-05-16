@@ -1,11 +1,11 @@
 import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
 import { apiSlice } from "./apiSlice";
 import { providesList } from "src/helpers/helperFunction";
-export const manageHqAPISlice = apiSlice.injectEndpoints({
+export const manageBranAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
-		fetchAllHQ: builder.query({
+		fetchAllBranch: builder.query({
 			query: (params) =>
-				`${API_ROUTE.GET_ALL_HQ}?search=${params?.query}&page=${params?.page}`,
+				`${API_ROUTE.GET_ALL_BRANCH}?search=${params?.query}&page=${params?.page}`,
 			providesTags: (result) =>
 				providesList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
 		}),
@@ -20,5 +20,5 @@ export const manageHqAPISlice = apiSlice.injectEndpoints({
 		}),
 	}),
 });
-
-export const { useFetchAllHQQuery, useAddNewHQMutation } = manageHqAPISlice;
+export const { useFetchAllBranchQuery, useAddNewHQMutation } =
+	manageBranAPISlice;

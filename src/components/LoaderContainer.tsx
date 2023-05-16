@@ -4,7 +4,7 @@ import { Button } from "./Button";
 
 interface LoadingType {
 	data: { [index: string]: string | unknown | any };
-
+	tableData: { [index: string]: string | unknown | any }[];
 	children: ReactNode;
 }
 export const LoaderContainer = (props: LoadingType) => {
@@ -69,9 +69,7 @@ export function TableLoader(props: LoadingType) {
 				) : null}
 			</div>
 
-			{props?.data?.currentData?.hqProfile?.data?.length > 0 ? (
-				<div>{props.children}</div>
-			) : null}
+			{props?.tableData?.length > 0 ? <div>{props.children}</div> : null}
 		</>
 	);
 }

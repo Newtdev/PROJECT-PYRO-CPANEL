@@ -22,7 +22,7 @@ import {
 	useFetchAllHQQuery,
 } from "src/api/manageHQApiSlice";
 import { Data, ErrorType } from "src/helpers/alias";
-import { LoaderContainer, TableLoader } from "src/components/LoaderContainer";
+import { TableLoader } from "src/components/LoaderContainer";
 import {
 	handleNotification,
 	SuccessNotification,
@@ -404,16 +404,21 @@ const ManageHQ = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
 	const [value, setValue] = React.useState<string>("one");
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
+	const [pagination, setPagination] = useState({ newPage: 1 });
 	const navigate = useNavigate();
 	const { debouncedValue } = useDebounce(filteredValue, 700);
 
-	const hqQueryResult = useFetchAllHQQuery(debouncedValue);
+	const hqQueryResult = useFetchAllHQQuery({
+		query: debouncedValue,
+		page: pagination.newPage,
+	});
 
+	// hqQueryResult?.currentData?.hqProfile?.totalData;
 	const handledAPIResponse = useMemo(() => {
 		let neededData: Data[] = [];
-		const data = hqQueryResult?.currentData?.hqProfile?.data;
-		if (data) {
-			for (const iterator of data) {
+		const hqProfile = hqQueryResult?.currentData?.hqProfile;
+		if (hqProfile) {
+			for (const iterator of hqProfile?.data) {
 				const { id, name, email, hqAddress, phoneNumber, state } = iterator;
 
 				neededData = [
@@ -421,7 +426,7 @@ const ManageHQ = () => {
 					{ id, name, email, hqAddress, phoneNumber, state },
 				];
 			}
-			return neededData;
+			return { hqProfile, neededData };
 		}
 	}, [hqQueryResult]);
 
@@ -438,6 +443,12 @@ const ManageHQ = () => {
 		setValue(newValue);
 	};
 
+	const handleChangePage = (event: unknown, newPage: number) => {
+		setPagination((prev) => {
+			return { ...prev, newPage };
+		});
+	};
+
 	// TABLE FILTER TAB
 	const tabData: { id: string | number; value: string; label: string }[] = [
 		{ id: 1, value: "one", label: "All" },
@@ -447,7 +458,7 @@ const ManageHQ = () => {
 		navigate(`/manageHQ/${data?.name}`, { state: data?.name });
 	}
 	let dataToChildren: any = {
-		rows: handledAPIResponse || [],
+		rows: handledAPIResponse?.neededData || [],
 		headCells,
 		handleRowClick,
 		showFlag: true,
@@ -455,6 +466,12 @@ const ManageHQ = () => {
 		handleClick,
 		handleSelectAllClick,
 		selected,
+		handleChangePage,
+		paginationData: {
+			totalPage: handledAPIResponse?.hqProfile?.totalPages,
+			limit: handledAPIResponse?.hqProfile?.limit,
+			page: handledAPIResponse?.hqProfile?.page,
+		},
 	};
 
 	function closeAddHQModal(): void {
@@ -499,7 +516,9 @@ const ManageHQ = () => {
 					</div>
 				</div>
 				<div className="h-fit w-full bg-white">
-					<TableLoader data={hqQueryResult}>
+					<TableLoader
+						data={hqQueryResult}
+						tableData={handledAPIResponse?.neededData || []}>
 						<div className="h-full w-full">
 							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
 								<div>

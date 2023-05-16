@@ -1,8 +1,7 @@
 import { Flag } from "@mui/icons-material";
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { FormInput, SearchInput } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
-import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -18,6 +17,9 @@ import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
+import { useFetchAllBranchQuery } from "src/api/manageBranchAPISlice";
+import { TableLoader } from "src/components/LoaderContainer";
+import { useDebounce } from "src/hooks/useDebounce";
 
 export interface HeadCellTypes {
 	id: keyof Data;
@@ -26,65 +28,6 @@ export interface HeadCellTypes {
 	minWidth: number;
 }
 
-const rows: Data[] | null = [
-	{
-		id: 1,
-		name: "Aliko Petroleaum",
-		hq: "Aliko ",
-		state: "Imo state",
-	},
-	{
-		id: 2,
-		name: "A Y M Shafa",
-		hq: "Aliko ",
-		state: "Delta state",
-	},
-	{
-		id: 3,
-		name: "Nigerian National Petroleum Commission",
-		hq: "Aliko ",
-		state: "Niger state",
-	},
-	{
-		id: 4,
-		name: "NNPC",
-		hq: "Aliko ",
-		state: "Ogun state",
-	},
-	{
-		id: 5,
-		name: "Nai",
-		hq: "Aliko ",
-		state: "Oyo state",
-	},
-	{
-		id: 6,
-		name: "Nae",
-		hq: "Aliko ",
-		state: "Ondo state",
-	},
-	{
-		id: 7,
-		name: "Naes",
-		hq: "Aliko ",
-		state: "Ondo state",
-	},
-	{
-		id: 8,
-		name: "Naess",
-		hq: "Aliko ",
-		state: "Ogun state",
-	},
-	{
-		id: 9,
-		name: "Naesss",
-		hq: "Aliko ",
-		state: "kaduna",
-	},
-
-	// { name: "Cupcake", calories: 'Aliko ', fat: 3.7, carbs: 67, protein: 4.3 },
-];
-
 const headCells: readonly HeadCellTypes[] = [
 	{
 		id: "name",
@@ -92,14 +35,39 @@ const headCells: readonly HeadCellTypes[] = [
 		label: "Name",
 	},
 	{
-		id: "hq",
+		id: "phoneNumber",
 		minWidth: 170,
-		label: "HQ",
+		label: "Contact info",
+	},
+	{
+		id: "address",
+		minWidth: 170,
+		label: "Address",
+	},
+	{
+		id: "lga",
+		minWidth: 170,
+		label: "LGA",
+	},
+	{
+		id: "latitude",
+		minWidth: 170,
+		label: "Latitude",
+	},
+	{
+		id: "longitude",
+		minWidth: 170,
+		label: "Longitude",
 	},
 	{
 		id: "state",
 		minWidth: 170,
 		label: "State",
+	},
+	{
+		id: "status",
+		minWidth: 170,
+		label: "Status",
 	},
 ];
 
@@ -107,9 +75,48 @@ const ManageBranch = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
 	const [value, setValue] = React.useState<string>("one");
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
-	const { handleSelectAllClick, selected, setSelected } =
-		useHandleSelectAllClick(rows);
+	const { debouncedValue } = useDebounce(filteredValue, 700);
+	const [pagination, setPagination] = useState({ newPage: 1 });
 
+	const fetchAllBranchResult = useFetchAllBranchQuery({
+		query: debouncedValue,
+		page: pagination.newPage,
+	});
+
+	const handleChangePage = (event: unknown, newPage: number) => {
+		setPagination((prev) => {
+			return { ...prev, newPage };
+		});
+	};
+
+	const handledAPIResponse = useMemo(() => {
+		let neededData: Data[] = [];
+		const hqProfile = fetchAllBranchResult?.currentData;
+		if (hqProfile) {
+			for (const iterator of hqProfile?.stationBranches?.data) {
+				const { id, name, phoneNumber, status, location, config } = iterator;
+
+				neededData = [
+					...neededData,
+					{
+						id,
+						name,
+						phoneNumber,
+						status,
+						lga: location.lga,
+						address: location?.address,
+						latitude: location?.latitude,
+						longitude: location?.longitude,
+						state: location?.state,
+					},
+				];
+			}
+			return { hqProfile, neededData };
+		}
+	}, [fetchAllBranchResult]);
+
+	const { handleSelectAllClick, selected, setSelected } =
+		useHandleSelectAllClick(handledAPIResponse);
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
@@ -133,8 +140,8 @@ const ManageBranch = () => {
 	// CONFIRMATION OF WHAT IS SELECTED
 	// const isSelected = (data: string) => selected.indexOf(name) !== -1;
 
-	let dataToChildren: any = {
-		rows,
+	let dataToChildren: { [index: string]: string | number | any } = {
+		rows: handledAPIResponse?.neededData || [],
 		headCells,
 		handleRowClick,
 		showFlag: true,
@@ -142,6 +149,12 @@ const ManageBranch = () => {
 		handleClick,
 		handleSelectAllClick,
 		selected,
+		handleChangePage,
+		paginationData: {
+			totalPage: handledAPIResponse?.hqProfile?.totalPages,
+			limit: handledAPIResponse?.hqProfile?.limit,
+			page: handledAPIResponse?.hqProfile?.page,
+		},
 	};
 	// YUP VALIDATION FOR ADD BRANCH
 	const AddbranchValidation = Yup.object({
@@ -211,43 +224,49 @@ const ManageBranch = () => {
 						</div>
 					</div>
 				</div>
-				<div className="h-fit w-full">
-					<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
-						<div>
-							<Box sx={{ width: "100%" }}>
-								<Tabs
-									value={value}
-									onChange={handleChange}
-									textColor="secondary"
-									indicatorColor="secondary"
-									className="px-4"
-									aria-label="secondary tabs example">
-									{tabData?.map((dt) => {
-										return (
-											<Tab
-												sx={{
-													fontSize: 14,
-												}}
-												key={dt.id}
-												value={dt.value}
-												label={dt.label}
-											/>
-										);
-									})}
-								</Tabs>
-							</Box>
+				<div className="h-fit bg-white w-full">
+					<TableLoader
+						data={fetchAllBranchResult}
+						tableData={handledAPIResponse?.neededData || []}>
+						<div className="h-full w-full">
+							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
+								<div>
+									<Box sx={{ width: "100%" }}>
+										<Tabs
+											value={value}
+											onChange={handleChange}
+											textColor="secondary"
+											indicatorColor="secondary"
+											className="px-4"
+											aria-label="secondary tabs example">
+											{tabData?.map((dt) => {
+												return (
+													<Tab
+														sx={{
+															fontSize: 14,
+														}}
+														key={dt.id}
+														value={dt.value}
+														label={dt.label}
+													/>
+												);
+											})}
+										</Tabs>
+									</Box>
+								</div>
+								<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
+									<Flag
+										color="error"
+										fontSize="large"
+										onClick={() => setShowModal(true)}
+									/>
+								</div>
+							</div>
+							<div className="relative">
+								<EnhancedTable {...dataToChildren} />
+							</div>
 						</div>
-						<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
-							<Flag
-								color="error"
-								fontSize="large"
-								onClick={() => setShowModal(true)}
-							/>
-						</div>
-					</div>
-					<div className="relative">
-						<EnhancedTable {...dataToChildren} />
-					</div>
+					</TableLoader>
 
 					{/* FLAG A HQ */}
 					{showModal && (
