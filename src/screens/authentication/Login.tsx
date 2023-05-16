@@ -4,10 +4,13 @@ import { useLoginMutation } from "src/api/authApiSlice";
 import Logo from "src/assets/img/logo.svg";
 import { Button } from "src/components/Button";
 import Image from "src/components/Image";
-import { passwordRegex, Values } from "src/helpers/alias";
+import { ErrorType, passwordRegex, Values } from "src/helpers/alias";
 import { FormInput, PasswordInput, CheckBox } from "../../components/inputs";
 import * as Yup from "yup";
-import { ErrorNotification } from "src/helpers/helperFunction";
+import {
+	ErrorNotification,
+	handleNotification,
+} from "src/helpers/helperFunction";
 
 const Login = () => {
 	const [login, loginResult] = useLoginMutation();
@@ -27,16 +30,10 @@ const Login = () => {
 
 	const handleRequst = async (values: Values) => {
 		try {
-			const res = await login(values).unwrap();
-			console.log(res);
+			await login(values).unwrap();
 			navigate("/");
-		} catch (error: any) {
-			if (error.status === "FETCH_ERROR") {
-				ErrorNotification("Network Error! Please try again.");
-			}
-			if (error.status === 400) {
-				ErrorNotification(error?.data?.message);
-			}
+		} catch (error: ErrorType | any) {
+			handleNotification(error);
 		}
 	};
 

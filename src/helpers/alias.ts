@@ -56,6 +56,10 @@ export interface Data {
 	phoneNumber?: string | number;
 }
 
+// ERROR HANDLE FROM API
+export interface ErrorType {
+	[index: string]: string | number;
+}
 // export interface HeadCell {
 // 	id: keyof Data;
 // 	label: string;

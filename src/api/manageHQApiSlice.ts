@@ -4,7 +4,7 @@ import { providesList } from "src/helpers/helperFunction";
 export const manageHqAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllHQ: builder.query({
-			query: () => API_ROUTE.GET_ALL_HQ,
+			query: (query) => `${API_ROUTE.GET_ALL_HQ}?search=${query}`,
 			providesTags: (result) =>
 				providesList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
 		}),

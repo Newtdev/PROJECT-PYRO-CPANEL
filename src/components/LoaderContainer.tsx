@@ -8,7 +8,6 @@ interface LoadingType {
 	children: ReactNode;
 }
 export const LoaderContainer = (props: LoadingType) => {
-	console.log(props?.data);
 	return (
 		<div>
 			{props?.data?.isLoading || props?.data?.isFetching ? (
@@ -36,3 +35,43 @@ export const LoaderContainer = (props: LoadingType) => {
 		</div>
 	);
 };
+
+export function TableLoader(props: LoadingType) {
+	return (
+		<>
+			<div className=" flex justify-center items-center z-10">
+				{props?.data?.isLoading || props?.data?.isFetching ? (
+					<div className=" h-56 flex justify-center items-center">
+						<CircularProgress size={30} sx={{ color: "#002E66" }} />
+					</div>
+				) : null}
+				{props?.data?.isError &&
+				props?.data?.error?.status === "FETCH_ERROR" ? (
+					<div className="h-56 flex flex-col justify-center items-center">
+						<p className="font-bold text-[#002E66] text-base">
+							Network Error! Please try again
+						</p>
+						<Button
+							text="RELOAD"
+							disabled={false}
+							className=" font-bold text-sm  px-8 py-2 bg-[#002E66] text-white rounded-lg mt-5"
+							type="button"
+							onClick={() => props?.data?.refetch()}
+						/>
+					</div>
+				) : null}
+				{props?.data?.currentData?.hqProfile?.data?.length < 1 ? (
+					<div className="h-56 flex justify-center items-center">
+						<p className="font-bold text-[#002E66] text-base">
+							No Data Available
+						</p>
+					</div>
+				) : null}
+			</div>
+
+			{props?.data?.currentData?.hqProfile?.data?.length > 0 ? (
+				<div>{props.children}</div>
+			) : null}
+		</>
+	);
+}

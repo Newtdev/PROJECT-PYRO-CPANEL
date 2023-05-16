@@ -21,8 +21,13 @@ import {
 	useAddNewHQMutation,
 	useFetchAllHQQuery,
 } from "src/api/manageHQApiSlice";
-import { Data } from "src/helpers/alias";
-import { LoaderContainer } from "src/components/LoaderContainer";
+import { Data, ErrorType } from "src/helpers/alias";
+import { LoaderContainer, TableLoader } from "src/components/LoaderContainer";
+import {
+	handleNotification,
+	SuccessNotification,
+} from "src/helpers/helperFunction";
+import { useDebounce } from "src/hooks/useDebounce";
 
 interface HeadCell {
 	id: keyof Data;
@@ -95,10 +100,10 @@ const AddNewHQ = (props: { close: () => void }) => {
 			if (response) {
 				props.close();
 			}
-			console.log(response);
-		} catch (error) {
+			SuccessNotification(response?.data?.message);
+		} catch (error: ErrorType | any) {
 			props.close();
-			console.log(error);
+			handleNotification(error);
 		}
 	}
 
@@ -218,7 +223,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			onChange: Formik.handleChange,
 			value: Formik.values.password,
 			onBlur: Formik.handleBlur,
-			// disabled: loginResult.isLoading ,
+			disabled: addNewResult?.isLoading,
 			error: Formik.errors.password,
 			touched: Formik.touched.password,
 		},
@@ -241,7 +246,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			touched: Formik.touched.gender,
 		},
 		{
-			id: "name",
+			id: "stationHQ.name",
 			name: "Branch name",
 			type: "text",
 			styles: `${styles} ${
@@ -258,7 +263,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			touched: Formik.touched?.stationHQ?.name,
 		},
 		{
-			id: "email",
+			id: "stationHQ.email",
 			name: "Branch email",
 			type: "email",
 			styles: `${styles} ${
@@ -275,7 +280,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			touched: Formik.touched.stationHQ?.hqAddress,
 		},
 		{
-			id: "phoneNumber",
+			id: "stationHQ.phoneNumber",
 			name: "Branch phone number",
 			type: "text",
 			styles: `${styles} ${
@@ -293,7 +298,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			touched: Formik.touched.stationHQ?.email,
 		},
 		{
-			id: "hqAddress",
+			id: "stationHQ.hqAddress",
 			name: "Branch address",
 			type: "text",
 			styles: `${styles} ${
@@ -311,7 +316,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			touched: Formik.touched.stationHQ?.hqAddress,
 		},
 		{
-			id: "state",
+			id: "stationHQ.state",
 			name: "State",
 			type: "text",
 			styles: `${styles} ${
@@ -400,7 +405,9 @@ const ManageHQ = () => {
 	const [value, setValue] = React.useState<string>("one");
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const navigate = useNavigate();
-	const hqQueryResult = useFetchAllHQQuery("");
+	const { debouncedValue } = useDebounce(filteredValue, 700);
+
+	const hqQueryResult = useFetchAllHQQuery(debouncedValue);
 
 	const handledAPIResponse = useMemo(() => {
 		let neededData: Data[] = [];
@@ -455,119 +462,124 @@ const ManageHQ = () => {
 	}
 
 	return (
-		<LoaderContainer data={hqQueryResult}>
-			<section>
-				<article>
-					<div className="flex justify-between items-center mt-6 h-20 ">
-						<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
-							<SearchInput
-								name="branch-search"
-								placeholder="Search for names, branches, category"
-								value={filteredValue}
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-									const target = e.target;
-									setFilteredValue(target.value);
-								}}
+		// <LoaderContainer data={hqQueryResult}>
+		<section>
+			<article>
+				<div className="flex justify-between items-center mt-6 h-20 ">
+					<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
+						<SearchInput
+							name="branch-search"
+							placeholder="Search for names, branches, category"
+							value={filteredValue}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								const target = e.target;
+								setFilteredValue(target.value);
+							}}
+						/>
+					</div>
+					<div className="w-fit flex items-center ">
+						<div className="w-[189px] h-11 mr-6">
+							<Button
+								text="Create HQ"
+								className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
+								type="button"
+								showIcon={true}
+								onClick={() => setShowAddModal(true)}
 							/>
 						</div>
-						<div className="w-fit flex items-center ">
-							<div className="w-[189px] h-11 mr-6">
-								<Button
-									text="Create HQ"
-									className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
-									type="button"
-									showIcon={true}
-									onClick={() => setShowAddModal(true)}
-								/>
-							</div>
-							<div className="w-[109px]  h-11">
-								<Button
-									text="Export"
-									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-									type="button"
-									showIcon={false}
-									onClick={() => console.log("add branch")}
-								/>
-							</div>
+						<div className="w-[109px]  h-11">
+							<Button
+								text="Export"
+								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+								type="button"
+								showIcon={false}
+								onClick={() => console.log("add branch")}
+							/>
 						</div>
 					</div>
-					<div className="h-fit w-full bg-white">
-						<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
-							<div>
-								<Box sx={{ width: "100%" }}>
-									<Tabs
-										value={value}
-										onChange={handleChange}
-										textColor="secondary"
-										indicatorColor="secondary"
-										className="px-4"
-										aria-label="secondary tabs example">
-										{tabData?.map((dt) => {
-											return (
-												<Tab
-													sx={{
-														fontSize: 14,
-													}}
-													key={dt.id}
-													value={dt.value}
-													label={dt.label}
-												/>
-											);
-										})}
-									</Tabs>
-								</Box>
-							</div>
-							<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
-								<Flag
-									color="error"
-									fontSize="large"
-									onClick={() => setShowModal(true)}
-								/>
-							</div>
-						</div>
-						<div className="relative">
-							<EnhancedTable {...dataToChildren} />
-						</div>
-
-						{/* FLAG A HQ */}
-						{showModal && (
-							<Modal styles="absolute right-10 top-56">
-								<FlagModal
-									info="Are you sure you want to flag?"
-									onClose={() => setShowModal(false)}
-									onConfirmation={() => console.log(selected)}
-								/>
-							</Modal>
-						)}
-
-						{showAddModal ? (
-							<Modal>
-								<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-									<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-										<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-											<h1>Create HQ</h1>
-											<button
-												onClick={() => setShowAddModal(false)}
-												disabled={false}>
-												<HighlightOffOutlinedIcon
-													fontSize="large"
-													className="text-black cursor-pointer"
-												/>
-											</button>
-										</div>
-										<div className="w-full">
-											<Lines />
-										</div>
-										<AddNewHQ close={closeAddHQModal} />
-										{/* <Divider /> */}
-									</div>
+				</div>
+				<div className="h-fit w-full bg-white">
+					<TableLoader data={hqQueryResult}>
+						<div className="h-full w-full">
+							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
+								<div>
+									<Box sx={{ width: "100%" }}>
+										<Tabs
+											value={value}
+											onChange={handleChange}
+											textColor="secondary"
+											indicatorColor="secondary"
+											className="px-4"
+											aria-label="secondary tabs example">
+											{tabData?.map((dt) => {
+												return (
+													<Tab
+														sx={{
+															fontSize: 14,
+														}}
+														key={dt.id}
+														value={dt.value}
+														label={dt.label}
+													/>
+												);
+											})}
+										</Tabs>
+									</Box>
 								</div>
-							</Modal>
-						) : null}
-					</div>
-				</article>
-			</section>
-		</LoaderContainer>
+								<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
+									<Flag
+										color="error"
+										fontSize="large"
+										onClick={() => setShowModal(true)}
+									/>
+								</div>
+							</div>
+
+							<div className="relative">
+								<EnhancedTable {...dataToChildren} />
+							</div>
+						</div>
+					</TableLoader>
+
+					{/* FLAG A HQ */}
+					{showModal && (
+						<Modal styles="absolute right-10 top-56">
+							<FlagModal
+								info="Are you sure you want to flag?"
+								onClose={() => setShowModal(false)}
+								onConfirmation={() => console.log(selected)}
+							/>
+						</Modal>
+					)}
+
+					{showAddModal ? (
+						<Modal>
+							<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
+								<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
+									<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
+										<h1>Create HQ</h1>
+										<button
+											onClick={() => setShowAddModal(false)}
+											disabled={false}>
+											<HighlightOffOutlinedIcon
+												fontSize="large"
+												className="text-black cursor-pointer"
+											/>
+										</button>
+									</div>
+									<div className="w-full">
+										<Lines />
+									</div>
+									<AddNewHQ close={closeAddHQModal} />
+									{/* <Divider /> */}
+								</div>
+							</div>
+						</Modal>
+					) : null}
+				</div>
+			</article>
+		</section>
+		// </LoaderContainer>
 	);
 };
 
