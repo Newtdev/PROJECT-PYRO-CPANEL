@@ -350,7 +350,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 							onChange={dt.onChange}
 							value={dt.value}
 							onBlur={dt.onBlur}
-							// disabled={loginResult.isLoading}
+							disabled={dt.disabled}
 							error={dt.error}
 							touched={dt.touched}
 						/>
@@ -369,7 +369,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 							onChange={dt.onChange}
 							value={dt.value}
 							onBlur={dt.onBlur}
-							// disabled={loginResult.isLoading}
+							disabled={dt.disabled}
 							error={dt.error}
 							touched={dt.touched}
 						/>
@@ -454,6 +454,7 @@ const ManageHQ = () => {
 		{ id: 1, value: "one", label: "All" },
 		{ id: 1, value: "two", label: "Most popular" },
 	];
+
 	function fn(data: { [index: string]: string | number }) {
 		navigate(`/manageHQ/${data?.name}`, { state: data?.name });
 	}
@@ -479,7 +480,6 @@ const ManageHQ = () => {
 	}
 
 	return (
-		// <LoaderContainer data={hqQueryResult}>
 		<section>
 			<article>
 				<div className="flex justify-between items-center mt-6 h-20 ">
@@ -589,8 +589,7 @@ const ManageHQ = () => {
 									<div className="w-full">
 										<Lines />
 									</div>
-									<AddNewHQ close={closeAddHQModal} />
-									{/* <Divider /> */}
+									<AddNewHQ close={closeAddHQModal} />{" "}
 								</div>
 							</div>
 						</Modal>
@@ -598,7 +597,6 @@ const ManageHQ = () => {
 				</div>
 			</article>
 		</section>
-		// </LoaderContainer>
 	);
 };
 

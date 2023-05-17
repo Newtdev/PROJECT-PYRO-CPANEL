@@ -3,6 +3,10 @@ export enum API_ROUTE {
 	GET_ALL_HQ = "/system-admin/station-hq",
 	ADD_NEW_HQ = "system-admin/station-hq",
 	GET_ALL_BRANCH = "/system-admin/station/branches",
+	ADD_NEW_BRANCH = "station/branch",
+	FETCH_ALL_TRANSACTION = "system-admin/transactions",
+	FETCH_ALL_USERS = "system-admin/users",
+	FETCH_ALL_USER = "system-admin/user",
 }
 
 export enum APP_ROUTE {
@@ -41,4 +45,5 @@ export enum PERMISSION {
 
 export enum RTKTAG {
 	MANAGE_HQ = "MANAGE_HQ",
+	MANAGER_BRANCH = "MANAGE_BRANCH",
 }

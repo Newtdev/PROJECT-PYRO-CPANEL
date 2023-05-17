@@ -37,33 +37,37 @@ export type loginResponseType = {
 };
 
 export interface Data {
-	id: string | number;
+	id: stringOrNumber;
 	name?: string | undefined;
 	branch?: number | string | undefined;
 	category?: string;
 	flag?: string | ReactElement;
 	hq?: string;
 	state?: string;
-	amount?: string | number;
+	amount?: stringOrNumber;
 	type?: string;
 	status?: string | ReactElement;
-	referenceId?: string | number;
+	referenceId?: stringOrNumber;
 	doneby?: string;
 	usage?: string;
 	lastUsed?: string;
 	email?: string;
 	hqAddress?: string;
-	phoneNumber?: string | number;
+	phoneNumber?: stringOrNumber;
 	location?: string;
 	lga?: string;
 	address?: string;
 	latitude?: string;
 	longitude?: string;
+	firstName?: string;
+	lastName?: string;
+	gender?: string;
+	residentialAddress?: string;
 }
 
 // ERROR HANDLE FROM API
 export interface ErrorType {
-	[index: string]: string | number;
+	[index: string]: stringOrNumber;
 }
 // export interface HeadCell {
 // 	id: keyof Data;
@@ -77,7 +81,7 @@ export type inputType = {
 	id: string | undefined;
 	type: string;
 	inputName?: string | undefined;
-	value: string | number | undefined;
+	value: stringOrNumber | undefined;
 	placeholder?: string;
 	onChange: ChangeEventHandler<HTMLInputElement> | undefined;
 	onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
@@ -88,12 +92,12 @@ export type inputType = {
 	width?: string;
 };
 
-export type ProfiledataType = {
+export interface ProfiledataType {
 	id: number | string;
 	name: string;
 	value: string;
-	[key: string]: string | number;
-}[];
+	[key: string]: stringOrNumber;
+}
 
 export type ReviewDataType = {
 	id: number;

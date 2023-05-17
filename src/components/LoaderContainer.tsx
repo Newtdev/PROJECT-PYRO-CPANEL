@@ -4,9 +4,9 @@ import { Button } from "./Button";
 
 interface LoadingType {
 	data: { [index: string]: string | unknown | any };
-	tableData: { [index: string]: string | unknown | any }[];
 	children: ReactNode;
 }
+
 export const LoaderContainer = (props: LoadingType) => {
 	return (
 		<div>
@@ -36,7 +36,11 @@ export const LoaderContainer = (props: LoadingType) => {
 	);
 };
 
-export function TableLoader(props: LoadingType) {
+interface TableLoaderType extends LoadingType {
+	tableData: { [index: string]: string | unknown | any }[];
+}
+
+export function TableLoader(props: TableLoaderType) {
 	return (
 		<>
 			<div className=" flex justify-center items-center z-10">
@@ -60,7 +64,10 @@ export function TableLoader(props: LoadingType) {
 						/>
 					</div>
 				) : null}
-				{props?.data?.currentData?.hqProfile?.data?.length < 1 ? (
+				{props.tableData?.length < 1 &&
+				!props?.data?.isLoading &&
+				!props?.data?.isFetching &&
+				!props?.data?.isError ? (
 					<div className="h-56 flex justify-center items-center">
 						<p className="font-bold text-[#002E66] text-base">
 							No Data Available

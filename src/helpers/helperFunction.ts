@@ -30,12 +30,21 @@ export function handleNotification(error: {
 		case "FETCH_ERROR":
 			ErrorNotification("Network Error! Please try again.");
 			break;
-		case 400:
+		default:
 			ErrorNotification(error?.data?.message);
 			break;
-		default:
-			break;
 	}
+}
+
+// SPLIT KEYS TO FORM HEADERS
+export function splitByUpperCase(str: string): string {
+	const result = str
+		.trim()
+		.split(/(?=[A-Z])/)
+		.join(" ")
+		.trim();
+
+	return result;
 }
 
 // JS DEBOUNCE FUNCTION

@@ -11,16 +11,24 @@ import * as Yup from "yup";
 import { FlagModal, Modal } from "src/components/ModalComp";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { Lines } from "src/components/Icons";
-import { Data } from "src/helpers/alias";
+import { Data, ErrorType } from "src/helpers/alias";
 import { useNavigate } from "react-router-dom";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
-import { useFetchAllBranchQuery } from "src/api/manageBranchAPISlice";
+import {
+	useAddNewBranchMutation,
+	useFetchAllBranchQuery,
+} from "src/api/manageBranchAPISlice";
 import { TableLoader } from "src/components/LoaderContainer";
 import { useDebounce } from "src/hooks/useDebounce";
+import {
+	handleNotification,
+	SuccessNotification,
+} from "src/helpers/helperFunction";
 
+// TABLE HEADER TYPES
 export interface HeadCellTypes {
 	id: keyof Data;
 	label: string;
@@ -28,6 +36,7 @@ export interface HeadCellTypes {
 	minWidth: number;
 }
 
+// TABLE HEADER DETAILS
 const headCells: readonly HeadCellTypes[] = [
 	{
 		id: "name",
@@ -71,6 +80,7 @@ const headCells: readonly HeadCellTypes[] = [
 	},
 ];
 
+// ADD NEW BRANCH COMPONENTS
 const ManageBranch = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
 	const [value, setValue] = React.useState<string>("one");
@@ -94,7 +104,7 @@ const ManageBranch = () => {
 		const hqProfile = fetchAllBranchResult?.currentData;
 		if (hqProfile) {
 			for (const iterator of hqProfile?.stationBranches?.data) {
-				const { id, name, phoneNumber, status, location, config } = iterator;
+				const { id, name, phoneNumber, status, location } = iterator;
 
 				neededData = [
 					...neededData,
@@ -156,37 +166,9 @@ const ManageBranch = () => {
 			page: handledAPIResponse?.hqProfile?.page,
 		},
 	};
-	// YUP VALIDATION FOR ADD BRANCH
-	const AddbranchValidation = Yup.object({
-		name: Yup.string().label("Name").required(),
-		email: Yup.string().label("Email").email().required(),
-		address: Yup.string().label("Address").required(),
-		lga: Yup.string().label("LGA").required(),
-		state: Yup.string().label("State").required(),
-	});
-	// YUP VALIDATION FOR ADD BRANCH TYPE
-	type addBranchSchema = Yup.InferType<typeof AddbranchValidation>;
-
-	const Formik = useFormik<addBranchSchema>({
-		initialValues: {
-			name: "",
-			email: "",
-			address: "",
-			lga: "",
-			state: "",
-		},
-		validateOnBlur: true,
-		validateOnChange: true,
-		validationSchema: AddbranchValidation,
-		onSubmit: (values) => {
-			console.log(values);
-		},
-	});
-
-	const styles =
-		"h-[38px] py-2 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
-	const labelStyles =
-		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
+	function closeAddHQModal(): void {
+		setShowAddModal((prev) => !prev);
+	}
 
 	return (
 		<section>
@@ -282,8 +264,8 @@ const ManageBranch = () => {
 					{showAddModal ? (
 						<Modal>
 							<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-								<div className="w-[50%] max-w-[511px] h-[599px] flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-									<div className="w-full h-24 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
+								<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
+									<div className="w-full h-12 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
 										<h1>Add branch</h1>
 										<button
 											onClick={() => setShowAddModal(false)}
@@ -300,113 +282,7 @@ const ManageBranch = () => {
 
 									{/* <Divider /> */}
 
-									<form
-										// onSubmit={Formik.handleSubmit}
-										className="w-full flex flex-col justify-around items-center">
-										<FormInput
-											id="name"
-											name="Branch Name"
-											type="text"
-											styles={`${styles} ${
-												Formik.errors.name && Formik.touched.name
-													? "border-red-500"
-													: "border-gray-300"
-											}`}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values.name}
-											onBlur={Formik.handleBlur}
-
-											// disabled={loginResult.isLoading}
-											// error={Formik.errors.email}
-											// touched={Formik.touched.email}
-										/>
-
-										<FormInput
-											id="email"
-											name="Admin email"
-											type="email"
-											styles={`${styles} ${
-												Formik.errors.email && Formik.touched.email
-													? "border-red-500"
-													: "border-gray-300"
-											}`}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values.email}
-											onBlur={Formik.handleBlur}
-
-											// disabled={loginResult.isLoading}
-											// error={Formik.errors.email}
-											// touched={Formik.touched.email}
-										/>
-
-										<FormInput
-											id="address"
-											name="Branch address/coordinate"
-											type="text"
-											styles={`${styles} ${
-												Formik.errors.address && Formik.touched.address
-													? "border-red-500"
-													: "border-gray-300"
-											}`}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values.address}
-											onBlur={Formik.handleBlur}
-
-											// disabled={loginResult.isLoading}
-											// error={Formik.errors.email}
-											// touched={Formik.touched.email}
-										/>
-										<FormInput
-											id="lga"
-											name="Local Government Area"
-											type="text"
-											styles={`${styles} ${
-												Formik.errors.lga && Formik.touched.lga
-													? "border-red-500"
-													: "border-gray-300"
-											}`}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values.lga}
-											onBlur={Formik.handleBlur}
-
-											// disabled={loginResult.isLoading}
-											// error={Formik.errors.email}
-											// touched={Formik.touched.email}
-										/>
-
-										<FormInput
-											id="state"
-											name="State"
-											type="text"
-											styles={`${styles} ${
-												Formik.errors.state && Formik.touched.state
-													? "border-red-500"
-													: "border-gray-300"
-											}`}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values.state}
-											onBlur={Formik.handleBlur}
-
-											// disabled={loginResult.isLoading}
-											// error={Formik.errors.email}
-											// touched={Formik.touched.email}
-										/>
-
-										<div className="w-[80%]">
-											<Button
-												text="Add Branch"
-												// disabled={loginResult.isLoading}
-												// showModal={loginResult.isLoading}
-												className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-												type="submit"
-											/>
-										</div>
-									</form>
+									<AddNewBranch close={closeAddHQModal} />
 								</div>
 							</div>
 						</Modal>
@@ -418,3 +294,350 @@ const ManageBranch = () => {
 };
 
 export default ManageBranch;
+
+const AddbranchValidation = Yup.object({
+	name: Yup.string().label("First name").required(),
+	phoneNumber: Yup.string()
+		.label("phone number")
+		.length(11, "invalid")
+		.required(),
+	location: Yup.object({
+		lga: Yup.string().label("HQ name").required(),
+		latitude: Yup.string().label("Latitude").required(),
+		longitude: Yup.string().label("longitude").required(),
+		address: Yup.string().label("Address").required(),
+		state: Yup.string().label("State").required(),
+	}),
+	branchManager: Yup.object({
+		firstName: Yup.string().label("First name").required(),
+		lastName: Yup.string().label("Last name").required(),
+		phoneNumber: Yup.string()
+			.label("phone number")
+			.length(11, "invalid")
+			.required(),
+		email: Yup.string().label("Email").email().required(),
+		password: Yup.string().label("Password").required(),
+	}),
+	// stationHQ.
+});
+
+export type addBranchSchema = Yup.InferType<typeof AddbranchValidation>;
+
+export const AddNewBranch = (props: { close: () => void }) => {
+	const [step, setStep] = useState<number>(0);
+	const [AddNewBranch, addNewBranchResult] = useAddNewBranchMutation();
+
+	async function addNewBranchFunct(values: addBranchSchema) {
+		try {
+			const response = await AddNewBranch(values).unwrap();
+			if (response) {
+				props.close();
+			}
+			SuccessNotification(response?.data?.message);
+		} catch (error: ErrorType | any) {
+			props.close();
+			handleNotification(error);
+		}
+	}
+
+	const Formik = useFormik<addBranchSchema>({
+		initialValues: {
+			name: "AA Rano",
+			phoneNumber: "08157592146",
+			location: {
+				lga: "AMAC",
+				state: "Abuja",
+				latitude: "43412341234",
+				longitude: "42342342342",
+				address: "Wuse Zone 6 Abuja Nigeria",
+			},
+			branchManager: {
+				firstName: "Emma",
+				lastName: "Doe",
+				email: "emma@doe.com",
+				phoneNumber: "08157592150",
+				password: "Test@1234",
+			},
+		},
+		validateOnBlur: true,
+		validateOnChange: true,
+		validationSchema: AddbranchValidation,
+
+		onSubmit: (values) => {
+			if (step === 1) {
+				addNewBranchFunct(values);
+			} else {
+				setStep((prev) => prev + 1);
+			}
+		},
+	});
+	const styles =
+		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
+	const labelStyles =
+		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
+
+	const FormData = [
+		{
+			id: "name",
+			name: "Branch name",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.name && Formik.touched.name
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.name,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.name,
+			touched: Formik.touched.name,
+		},
+		{
+			id: "phoneNumber",
+			name: "Branch contact info",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.phoneNumber && Formik.touched.phoneNumber
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.phoneNumber,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.phoneNumber,
+			touched: Formik.touched.phoneNumber,
+		},
+		{
+			id: "location.address",
+			name: "Branch Address",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.location?.address && Formik.touched.location?.address
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.location.address,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.location?.address,
+			touched: Formik.touched.location?.address,
+		},
+		{
+			id: "location.lga",
+			name: "Branch LGA",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.location?.lga && Formik.touched.location?.lga
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.location.lga,
+			onBlur: Formik.handleBlur,
+
+			disabled: addNewBranchResult.isLoading,
+			error: Formik.errors.location?.lga,
+			touched: Formik.touched.location?.lga,
+		},
+		{
+			id: "location.latitude",
+			name: "Branch Latitude",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.location?.lga && Formik.touched.location?.latitude
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.location.latitude,
+			onBlur: Formik.handleBlur,
+
+			disabled: addNewBranchResult.isLoading,
+			error: Formik.errors.location?.latitude,
+			touched: Formik.touched.location?.latitude,
+		},
+		{
+			id: "location.longitude",
+			name: "Branch longitude",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.location?.lga && Formik.touched.location?.longitude
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.location.longitude,
+			onBlur: Formik.handleBlur,
+
+			disabled: addNewBranchResult.isLoading,
+			error: Formik.errors.location?.longitude,
+			touched: Formik.touched.location?.longitude,
+		},
+
+		{
+			id: "location.state",
+			name: "Branch state",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.location?.state && Formik.touched.location?.state
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.location?.state,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.location?.state,
+			touched: Formik.touched.location?.state,
+		},
+		{
+			id: "branchManager.firstName",
+			name: "Branch manager first name",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.branchManager?.firstName &&
+				Formik.touched.branchManager?.firstName
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.branchManager.firstName,
+			onBlur: Formik.handleBlur,
+
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.branchManager?.firstName,
+			touched: Formik.touched.branchManager?.firstName,
+		},
+		{
+			id: "branchManager.lastName",
+			name: "Branch manager last name",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors?.branchManager?.lastName &&
+				Formik.touched?.branchManager?.lastName
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values?.branchManager?.lastName,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors?.branchManager?.lastName,
+			touched: Formik.touched?.branchManager?.lastName,
+		},
+		{
+			id: "branchManager.email",
+			name: "Branch manager email",
+			type: "email",
+			styles: `${styles} ${
+				Formik.errors?.branchManager?.email &&
+				Formik.touched.branchManager?.email
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values?.branchManager?.email,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.branchManager?.email,
+			touched: Formik.touched.branchManager?.email,
+		},
+		{
+			id: "branchManager.password",
+			name: "Branch manager's password",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.branchManager?.password &&
+				Formik.touched.branchManager?.password
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.branchManager?.password,
+			onBlur: Formik.handleBlur,
+			disabled: addNewBranchResult?.isLoading,
+			error: Formik.errors.branchManager?.password,
+			touched: Formik.touched.branchManager?.password,
+		},
+	];
+
+	return (
+		<form
+			onSubmit={Formik.handleSubmit}
+			className="w-full flex flex-col justify-center items-center px-4 h-full">
+			{step === 0 ? (
+				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+					{FormData.slice(0, 6).map((dt, i) => (
+						<FormInput
+							id={dt.id}
+							name={dt.name}
+							type={dt.type}
+							styles={dt.styles}
+							labelStyles={dt.labelStyles}
+							onChange={dt.onChange}
+							value={dt.value}
+							onBlur={dt.onBlur}
+							disabled={dt.disabled}
+							error={dt.error}
+							touched={dt.touched}
+						/>
+					))}
+				</div>
+			) : null}
+			{step === 1 ? (
+				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+					{FormData.slice(-5).map((dt, i) => (
+						<FormInput
+							id={dt.id}
+							name={dt.name}
+							type={dt.type}
+							styles={dt.styles}
+							labelStyles={dt.labelStyles}
+							onChange={dt.onChange}
+							value={dt.value}
+							onBlur={dt.onBlur}
+							disabled={dt.disabled}
+							error={dt.error}
+							touched={dt.touched}
+						/>
+					))}
+				</div>
+			) : null}
+
+			<div className="w-full">
+				{step > 0 ? (
+					<Button
+						text="Back"
+						disabled={addNewBranchResult.isLoading}
+						showModal={addNewBranchResult.isLoading}
+						className="h-[41px] mt-6 font-bold bg-white border border-[#002E66] rounded-[38px] w-full hover: text-[#002E66]"
+						type="button"
+						onClick={() => setStep((prev) => prev - 1)}
+					/>
+				) : null}
+
+				<Button
+					text={step < 1 ? "Next" : "Add New Branch"}
+					disabled={addNewBranchResult?.isLoading}
+					showModal={addNewBranchResult?.isLoading}
+					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
+					type="submit"
+				/>
+			</div>
+		</form>
+	);
+};

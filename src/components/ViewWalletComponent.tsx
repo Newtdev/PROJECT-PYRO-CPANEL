@@ -70,6 +70,7 @@ interface WalletProps {
 
 export default function ViewWalletComp(props: WalletProps) {
 	const [selected, setSelected] = React.useState<readonly string[]>([]);
+
 	const addCellToRow = (): Data[] => {
 		return props.rows?.map((dt) => {
 			return {
@@ -124,7 +125,7 @@ export default function ViewWalletComp(props: WalletProps) {
 	// };
 
 	// CONFIRMATION OF WHAT IS SELECTED
-	const isSelected = (name: string) => selected.indexOf(name) !== -1;
+	const isSelected = (data: string) => selected.indexOf(data) !== -1;
 
 	let dataToChildren: any = {
 		rows: addCellToRow(),

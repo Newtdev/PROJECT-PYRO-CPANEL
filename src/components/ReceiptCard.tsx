@@ -1,17 +1,8 @@
 import { HighlightOffOutlined, Print } from "@mui/icons-material";
+import { splitByUpperCase } from "src/helpers/helperFunction";
 import { Modal } from "./ModalComp";
 
 export default function ReceiptCard(props: any) {
-	function splitByUpperCase(str: string): string {
-		const result = str
-			.trim()
-			.split(/(?=[A-Z])/)
-			.join(" ")
-			.trim()
-			.toUpperCase();
-
-		return result;
-	}
 	return (
 		<Modal>
 			<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">

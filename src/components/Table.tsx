@@ -187,7 +187,7 @@ export default function EnhancedTable({
 																fontFamily: "Poppins",
 																fontSize: "14px",
 																fontWeight: "400",
-
+																textTransform: "capitalize",
 																minWidth: column.minWidth,
 															}}>
 															{value}

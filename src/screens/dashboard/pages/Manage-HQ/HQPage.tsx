@@ -36,38 +36,38 @@ export default function HQPage() {
 			link: `/view/${routePath}/branch`,
 		},
 	];
-	const ViewProfileData: ProfiledataType = [
-		{
-			id: 1,
-			name: "Full Name",
-			value: "Aliko, Zaria Road II",
-		},
-		{
-			id: 2,
-			name: "Email",
-			value: "Zariaroad2@alikooil.com",
-		},
-		{
-			id: 4,
-			name: "Address",
-			value: "Ado Batero Bridge, Zaria Road Kano",
-		},
-		{
-			id: 3,
-			name: "State",
-			value: "Kano State",
-		},
-		{
-			id: 5,
-			name: "Branch Manager",
-			value: "Abdulsamad Auwal",
-		},
-		{
-			id: 6,
-			name: "Phone number",
-			value: "Abdulsamad Auwall",
-		},
-	];
+	// const ViewProfileData: ProfiledataType = [
+	// 	{
+	// 		id: 1,
+	// 		name: "Full Name",
+	// 		value: "Aliko, Zaria Road II",
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		name: "Email",
+	// 		value: "Zariaroad2@alikooil.com",
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		name: "Address",
+	// 		value: "Ado Batero Bridge, Zaria Road Kano",
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		name: "State",
+	// 		value: "Kano State",
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		name: "Branch Manager",
+	// 		value: "Abdulsamad Auwal",
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		name: "Phone number",
+	// 		value: "Abdulsamad Auwall",
+	// 	},
+	// ];
 	return (
 		<section>
 			{/* <LoaderContainer /> */}
@@ -96,14 +96,14 @@ export default function HQPage() {
 						))}
 					</>
 				</div>
-				{showCard ? (
+				{/* {showCard ? (
 					<ProfileCard
 						showBanner={true}
 						data={ViewProfileData}
 						imageURL="https://avatars.dicebear.com/api/adventurer-neutral/mail%40ashallendesign.co.uk.svg"
 						showImage={false}
 					/>
-				) : null}
+				) : null} */}
 			</article>
 		</section>
 	);

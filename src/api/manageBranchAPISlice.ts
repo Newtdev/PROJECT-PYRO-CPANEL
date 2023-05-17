@@ -7,18 +7,18 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 			query: (params) =>
 				`${API_ROUTE.GET_ALL_BRANCH}?search=${params?.query}&page=${params?.page}`,
 			providesTags: (result) =>
-				providesList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
+				providesList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),
-		addNewHQ: builder.mutation({
+		addNewBranch: builder.mutation({
 			query: (body): any => ({
-				url: API_ROUTE.ADD_NEW_HQ,
+				url: API_ROUTE.ADD_NEW_BRANCH,
 				method: "POST",
 				body,
 			}),
 			invalidatesTags: (result) =>
-				providesList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
+				providesList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),
 	}),
 });
-export const { useFetchAllBranchQuery, useAddNewHQMutation } =
+export const { useFetchAllBranchQuery, useAddNewBranchMutation } =
 	manageBranAPISlice;

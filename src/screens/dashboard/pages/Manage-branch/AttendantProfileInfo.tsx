@@ -12,48 +12,48 @@ type ReviewDataType = {
 }[];
 
 export default function AttendantProfileInfo() {
-	const ViewProfileData: ProfiledataType = [
-		{
-			id: 1,
-			name: "Full Name",
-			value: "Aliko, Zaria Road II",
-		},
-		{
-			id: 2,
-			name: "Email",
-			value: "Zariaroad2@alikooil.com",
-		},
-		{
-			id: 4,
-			name: "Address",
-			value: "Ado Batero Bridge, Zaria Road Kano",
-		},
-		{
-			id: 3,
-			name: "State",
-			value: "Kano State",
-		},
-		{
-			id: 5,
-			name: "Branch Manager",
-			value: "Abdulsamad Auwal",
-		},
-		{
-			id: 6,
-			name: "Phone number",
-			value: "Abdulsamad Auwall",
-		},
-		{
-			id: 7,
-			name: "Phone number",
-			value: "Abdulsamad Auwall",
-		},
-		{
-			id: 8,
-			name: "Phone number",
-			value: "Abdulsamad Auwall",
-		},
-	];
+	// const ViewProfileData: ProfiledataType = [
+	// 	{
+	// 		id: 1,
+	// 		name: "Full Name",
+	// 		value: "Aliko, Zaria Road II",
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		name: "Email",
+	// 		value: "Zariaroad2@alikooil.com",
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		name: "Address",
+	// 		value: "Ado Batero Bridge, Zaria Road Kano",
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		name: "State",
+	// 		value: "Kano State",
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		name: "Branch Manager",
+	// 		value: "Abdulsamad Auwal",
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		name: "Phone number",
+	// 		value: "Abdulsamad Auwall",
+	// 	},
+	// 	{
+	// 		id: 7,
+	// 		name: "Phone number",
+	// 		value: "Abdulsamad Auwall",
+	// 	},
+	// 	{
+	// 		id: 8,
+	// 		name: "Phone number",
+	// 		value: "Abdulsamad Auwall",
+	// 	},
+	// ];
 
 	const reviewData: ReviewDataType = [
 		{
@@ -86,11 +86,11 @@ export default function AttendantProfileInfo() {
 		<section>
 			<article className="flex flex-cols lg:flex-row  gap-4">
 				<div className=" lg:basis-[65%]">
-					<ProfileCard
+					{/* <ProfileCard
 						data={ViewProfileData}
 						showImage={true}
 						imageURL="https://avatars.dicebear.com/api/adventurer-neutral/mail%40ashallendesign.co.uk.svg"
-					/>
+					/> */}
 				</div>
 				<div className="lg:basis-[35%] h-fit pt-4 pb-10  bg-white rounded-lg">
 					<div className="p-4 flex items-center">

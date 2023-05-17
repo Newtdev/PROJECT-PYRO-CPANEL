@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { logOut } from "src/features/auth/authSlice";
 import { RootState } from "src/store/store";
 
 // headers.set("Content-Type", "multipart/form-data");
@@ -21,6 +22,7 @@ const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 	// eslint-disable-next-line no-undef
 	let result = await baseQuery(args, api, extraOptions);
 	if (result?.error?.status === 401) {
+		api.dispatch(logOut());
 		// eslint-disable-next-line no-undef
 		const refreshResult = await baseQuery("api", api, extraOptions);
 		console.log(refreshResult);
@@ -38,6 +40,6 @@ const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 export const apiSlice = createApi({
 	reducerPath: "api",
 	baseQuery: customBaseQuery,
-	tagTypes: ["MANAGE_HQ"],
+	tagTypes: ["MANAGE_HQ", "MANAGE_BRANCH"],
 	endpoints: (builder) => ({}),
 });

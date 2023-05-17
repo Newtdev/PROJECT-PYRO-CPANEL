@@ -1,4 +1,4 @@
-import { ChangeEventHandler, ReactElement } from "react";
+import { ChangeEventHandler, ReactElement, useMemo } from "react";
 import React, { useState } from "react";
 import { Button } from "src/components/Button";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
@@ -7,6 +7,9 @@ import { Data } from "src/helpers/alias";
 import { SearchInput } from "src/components/inputs";
 import { FilterList } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useFetchAllUserQuery } from "src/api/manageUserApi";
+import { TableLoader } from "src/components/LoaderContainer";
+import { useDebounce } from "src/hooks/useDebounce";
 
 interface HeadCellTypes {
 	id: keyof Data;
@@ -20,101 +23,36 @@ interface HeadCellTypes {
 	doneby?: string;
 }
 
-const rows: Data[] = [
-	{
-		id: 1,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 2,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 3,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 4,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 5,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 6,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 7,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 8,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 9,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 10,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-	{
-		id: 12,
-		name: "John Wick",
-
-		usage: "Frequently",
-		lastUsed: new Date().getTime().toString(),
-	},
-];
-
 const headCells: readonly HeadCellTypes[] = [
 	{
-		id: "name",
+		id: "firstName",
 		minWidth: 170,
-		label: "Name",
+		label: "First name",
 	},
 	{
-		id: "usage",
+		id: "lastName",
 		minWidth: 170,
-		label: "Usage Frequency",
+		label: "Last name",
 	},
 	{
-		id: "lastUsed",
+		id: "email",
 		minWidth: 170,
-		label: "Last Used",
+		label: "Email",
+	},
+	{
+		id: "gender",
+		minWidth: 170,
+		label: "Gender",
+	},
+	{
+		id: "phoneNumber",
+		minWidth: 170,
+		label: "Phone number",
+	},
+	{
+		id: "residentialAddress",
+		minWidth: 170,
+		label: "Address",
 	},
 ];
 
@@ -149,17 +87,63 @@ const SelectInput = (props: {
 };
 
 const Transactions = () => {
+	const [pagination, setPagination] = useState({ newPage: 1 });
+	const [searchValue, setSearchValue] = useState<string>("");
+	const [filteredValue, setFilteredValue] = useState<string>("");
+	const { debouncedValue } = useDebounce(searchValue, 700);
+
+	const userResult = useFetchAllUserQuery({
+		query: debouncedValue,
+		page: pagination.newPage,
+	});
+
+	const handledAPIResponse = useMemo(() => {
+		let neededData: Data[] = [];
+		const { data, ...rest } = userResult?.currentData?.users || {};
+
+		if (data) {
+			for (const iterator of data) {
+				const {
+					id,
+					// createdAt,
+					email,
+					firstName,
+					lastName,
+					gender,
+					phoneNumber,
+					residentialAddress,
+				} = iterator;
+				neededData = [
+					...neededData,
+					{
+						id,
+						// createdAt,
+						firstName,
+						lastName,
+						gender,
+						email,
+						phoneNumber,
+						residentialAddress,
+					},
+				];
+			}
+			return { neededData, rest };
+		}
+	}, [userResult]);
 	const { handleRowClick } = useHandleRowClick(fn);
 	const navigate = useNavigate();
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/user/${data.name}`, { state: data?.name });
+		navigate(`/user/${data?.id}`, { state: data?.firstName });
 	}
-	const [searchValue, setSearchValue] = useState<string>("");
-	const [filteredValue, setFilteredValue] = useState<string>("");
 
 	const handleSelectChange = (event: { target: { value: string } }) => {
 		setFilteredValue(event.target.value);
+	};
+	const handleChangePage = (event: unknown, newPage: number) => {
+		setPagination((prev) => {
+			return { ...prev, newPage };
+		});
 	};
 
 	// TABLE FILTER TAB
@@ -169,9 +153,15 @@ const Transactions = () => {
 	];
 
 	const props = {
-		rows,
+		rows: handledAPIResponse?.neededData || [],
 		headCells,
 		handleRowClick,
+		handleChangePage,
+		paginationData: {
+			totalPage: handledAPIResponse?.rest?.totalPages,
+			limit: handledAPIResponse?.rest?.limit,
+			page: handledAPIResponse?.rest?.page,
+		},
 		accountInformation: {
 			balance: 0,
 			amountIn: 0,
@@ -183,7 +173,7 @@ const Transactions = () => {
 			<article>
 				<div className=" mt-6 h-20">
 					<div className="w-fit flex items-center">
-						<div className="w-[109px]  h-11">
+						<div className="w-[109px] h-11">
 							<Button
 								text="Export"
 								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
@@ -193,29 +183,33 @@ const Transactions = () => {
 							/>
 						</div>
 					</div>
-					<div className="h-full w-full bg-white mt-6 shadow-lg rounded-t-lg">
-						<div className="h-full w-full flex justify-between items-center py-6 px-6">
-							<div>
-								<SelectInput
-									tabData={tabData}
-									filteredValue={filteredValue}
-									onChange={handleSelectChange}
-								/>
-							</div>
+					<div className="h-fit w-full bg-white mt-6 shadow-lg rounded-t-lg">
+						<TableLoader
+							data={userResult}
+							tableData={handledAPIResponse?.neededData || []}>
+							<div className="h-full w-full bg-white flex justify-between items-center py-6 px-6">
+								<div>
+									<SelectInput
+										tabData={tabData}
+										filteredValue={filteredValue}
+										onChange={handleSelectChange}
+									/>
+								</div>
 
-							<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
-								<SearchInput
-									name="branch-search"
-									placeholder="Search for Branch, HQ, User"
-									value={searchValue}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-										const target = e.target;
-										setSearchValue(target.value);
-									}}
-								/>
+								<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
+									<SearchInput
+										name="branch-search"
+										placeholder="Search for Branch, HQ, User"
+										value={searchValue}
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+											const target = e.target;
+											setSearchValue(target.value);
+										}}
+									/>
+								</div>
 							</div>
-						</div>
-						<ViewWalletComp {...props} />
+							<ViewWalletComp {...props} />
+						</TableLoader>
 					</div>
 				</div>
 			</article>
