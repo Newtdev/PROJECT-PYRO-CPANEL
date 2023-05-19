@@ -11,8 +11,7 @@ import { useFetchUserQuery } from "src/api/manageUserApi";
 import { LoaderContainer } from "src/components/LoaderContainer";
 
 export default function UserProfile() {
-	const navigate = useNavigate();
-	const { slicedPath, routePath } = useCustomLocation();
+	const { slicedPath } = useCustomLocation();
 	const id = slicedPath[2];
 	const userResult = useFetchUserQuery(id);
 
@@ -31,13 +30,6 @@ export default function UserProfile() {
 			name: "View Profile",
 			link: APP_ROUTE.USER_PROFILE,
 		},
-
-		{
-			id: 2,
-			icon: walletBtn,
-			name: "View Wallet",
-			link: `/user/${routePath}/wallet`,
-		},
 	];
 
 	return (
@@ -53,13 +45,7 @@ export default function UserProfile() {
 										icon={dt.icon}
 										link={dt.link}
 										height={"98px"}
-										onClick={() => {
-											if (dt.name.toString().toLowerCase() === "view profile") {
-												setShowCard(!showCard);
-											} else {
-												navigate(dt.link, { state: dt.name });
-											}
-										}}
+										onClick={() => setShowCard(!showCard)}
 										showCard={showCard}
 									/>
 								</Fragment>

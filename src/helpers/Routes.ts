@@ -7,6 +7,8 @@ export enum API_ROUTE {
 	FETCH_ALL_TRANSACTION = "system-admin/transactions",
 	FETCH_ALL_USERS = "system-admin/users",
 	FETCH_ALL_USER = "system-admin/user",
+	FETCH_BRANCH = "system-admin/station/branch",
+	FETCH_SINGLE_HQ = "system-admin/station-hq",
 }
 
 export enum APP_ROUTE {

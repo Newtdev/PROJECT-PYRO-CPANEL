@@ -456,13 +456,14 @@ const ManageHQ = () => {
 	];
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/manageHQ/${data?.name}`, { state: data?.name });
+		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
 	}
 	let dataToChildren: any = {
 		rows: handledAPIResponse?.neededData || [],
 		headCells,
 		handleRowClick,
 		showFlag: true,
+		showCheckBox: true,
 		isSelected,
 		handleClick,
 		handleSelectAllClick,

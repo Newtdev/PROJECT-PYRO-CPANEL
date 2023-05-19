@@ -7,11 +7,20 @@ interface ProfileType {
 	showImage?: boolean | undefined;
 	imageURL?: string;
 	showBanner?: boolean | undefined;
+	showHeader?: boolean;
+	header?: string;
 }
 
 export default function ProfileCard(props: ProfileType) {
 	return (
 		<div className="w-full h-fit bg-white shadow-lg rounded-lg text-[14px] py-6">
+			{props.showHeader ? (
+				<div className="my-3">
+					<h1 className="text-bold text-lg text-black text-center">
+						{props.header}
+					</h1>
+				</div>
+			) : null}
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-10 py-4 md:gap-x-2 text-start px-4 lg:px-16">
 				{!!props.showBanner ? (
 					<div>
@@ -28,13 +37,20 @@ export default function ProfileCard(props: ProfileType) {
 							</div>
 						</div>
 					</div>
-				) : null}
+				) : (
+					<div className="w-[90px] h-[90px] rounded-full self-center object-fit bg-[#D9D9D9] flex justify-center items-center">
+						<h1 className="text-xl text-center font-extrabold">
+							{props?.data?.name?.charAt(0) || ""}
+							{props?.data?.name?.charAt(1) || ""}
+						</h1>
+					</div>
+				)}
 				{Object.keys(props?.data)?.map((dt) => {
 					return (
 						<div key={props?.data?.id}>
 							<h2 className="text-black capitalize">{splitByUpperCase(dt)}</h2>
 							<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg capitalize"></span>
-							<h2 className="text-[#002E66]">{props?.data[dt]}</h2>
+							<h2 className="text-[#002E66] capitalize">{props?.data[dt]}</h2>
 						</div>
 					);
 				})}

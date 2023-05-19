@@ -1,21 +1,21 @@
 import { LinearProgress, linearProgressClasses, styled } from "@mui/material";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { ReviewDataType } from "src/helpers/alias";
 
 export function ReviewComponents({
-	reviewData,
+	review,
 }: {
-	reviewData: ReviewDataType;
+	review: (num: number) => { totalCalStar: number };
 }): ReactElement {
 	return (
 		<div className="">
-			{reviewData.map((d) => (
+			{[1, 2, 3, 4, 5].map((d, id) => (
 				<div className="flex gap-4 items-center justify-between">
-					<p>{d.star}</p>
-					<div key={d.id} className="w-full my-3">
+					<p>{d}</p>
+					<div key={id} className="w-full my-3">
 						<BorderLinearProgress
 							variant="determinate"
-							value={Number(d?.value)}
+							value={review(d)?.totalCalStar || 0}
 							className="py-2"
 						/>
 					</div>

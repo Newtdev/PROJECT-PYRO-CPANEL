@@ -9,6 +9,11 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 			providesTags: (result) =>
 				providesList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),
+		fetchBranch: builder.query({
+			query: (id) => `${API_ROUTE.FETCH_BRANCH}/${id}`,
+			providesTags: (result) =>
+				providesList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
+		}),
 		addNewBranch: builder.mutation({
 			query: (body): any => ({
 				url: API_ROUTE.ADD_NEW_BRANCH,
@@ -20,5 +25,8 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 		}),
 	}),
 });
-export const { useFetchAllBranchQuery, useAddNewBranchMutation } =
-	manageBranAPISlice;
+export const {
+	useFetchAllBranchQuery,
+	useAddNewBranchMutation,
+	useFetchBranchQuery,
+} = manageBranAPISlice;

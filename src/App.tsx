@@ -36,9 +36,7 @@ const ManageHQ = lazy(
 );
 const SinglePage = lazy(() => import("./screens/dashboard/pages/SinglePage"));
 const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
-const AttendantProfile = lazy(
-	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfile")
-);
+
 const BranchReview = lazy(
 	() => import("./screens/dashboard/pages/Manage-branch/BranchReview")
 );
@@ -82,10 +80,7 @@ function App() {
 						/>
 						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<HQPage />} />
 						<Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} />
-						<Route
-							path={APP_ROUTE.ATTENDANT_PROFILE}
-							element={<AttendantProfile />}
-						/>
+
 						<Route
 							path={APP_ROUTE.ATTENDANT_REVIEW}
 							element={<BranchReview />}

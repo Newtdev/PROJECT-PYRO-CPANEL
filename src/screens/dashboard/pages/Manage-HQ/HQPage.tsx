@@ -1,73 +1,73 @@
-import React, { Fragment, useState } from "react";
-import { cardBtnType, ProfiledataType } from "src/helpers/alias";
-import { APP_ROUTE } from "src/helpers/Routes";
+import React, { Fragment, useMemo, useState } from "react";
+import { cardBtnType } from "src/helpers/alias";
 import walletBtn from "src/assets/img/walletbtn.svg";
 import User from "src/assets/img/User.svg";
 import Attendant from "src/assets/img/Attendanticon.svg";
 import { CardButton } from "src/components/Card";
-import { useNavigate } from "react-router-dom";
 import ProfileCard from "src/components/ProfileCard";
 import useCustomLocation from "src/hooks/useCustomLocation";
+import { useFetchSingleHQQuery } from "src/api/manageHQApiSlice";
+import { LoaderContainer } from "src/components/LoaderContainer";
+import HqBranch from "./HqBranch";
 
 export default function HQPage() {
-	const navigate = useNavigate();
-	const { routePath } = useCustomLocation();
-
-	const [showCard, setShowCard] = useState<boolean>(true);
+	const { slicedPath } = useCustomLocation();
+	const [cardName, setCardName] = useState<string>("view profile");
+	const singleHqResult = useFetchSingleHQQuery(slicedPath[2]);
 
 	const HQData: cardBtnType[] = [
 		{
 			id: 1,
 			icon: User,
 			name: "View Profile",
-			link: APP_ROUTE.BRANCHES,
 		},
 
 		{
 			id: 2,
 			icon: walletBtn,
-			name: "View Wallet",
-			link: `/view/${routePath}/wallet`,
+			name: "Admin Info",
 		},
 		{
 			id: 3,
 			icon: Attendant,
 			name: "Branches",
-			link: `/view/${routePath}/branch`,
 		},
 	];
-	// const ViewProfileData: ProfiledataType = [
-	// 	{
-	// 		id: 1,
-	// 		name: "Full Name",
-	// 		value: "Aliko, Zaria Road II",
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		name: "Email",
-	// 		value: "Zariaroad2@alikooil.com",
-	// 	},
-	// 	{
-	// 		id: 4,
-	// 		name: "Address",
-	// 		value: "Ado Batero Bridge, Zaria Road Kano",
-	// 	},
-	// 	{
-	// 		id: 3,
-	// 		name: "State",
-	// 		value: "Kano State",
-	// 	},
-	// 	{
-	// 		id: 5,
-	// 		name: "Branch Manager",
-	// 		value: "Abdulsamad Auwal",
-	// 	},
-	// 	{
-	// 		id: 6,
-	// 		name: "Phone number",
-	// 		value: "Abdulsamad Auwall",
-	// 	},
-	// ];
+
+	const handledAPIResponse = useMemo(() => {
+		const singleResult = singleHqResult?.currentData?.hqProfile || {};
+
+		return {
+			hqInfo: {
+				name: singleResult.name,
+				email: singleResult.email,
+				hqAddress: singleResult.hqAddress,
+				state: singleResult.state,
+				phoneNumber: singleResult.phoneNumber,
+				totalBranches: singleResult.totalBranches,
+				status: singleResult.status?.status,
+			},
+			hqUsers: singleResult?.hqUsers,
+			stationBranch: singleResult?.stationBranches,
+		};
+	}, [singleHqResult]);
+
+	interface AdminInfoType {
+		[index: string]: string | number;
+	}
+
+	const handleAdminInfo = (data: AdminInfoType) => {
+		return (
+			{
+				firstName: data.firstName,
+				lastName: data?.lastName,
+				email: data?.email,
+				role: data?.role,
+				phoneNumber: data?.phoneNumber,
+			} || {}
+		);
+	};
+
 	return (
 		<section>
 			{/* <LoaderContainer /> */}
@@ -81,29 +81,46 @@ export default function HQPage() {
 									icon={dt.icon}
 									link={dt.link}
 									height={"98px"}
-									onClick={() => {
-										if (
-											dt.name.toString().toLocaleLowerCase() === "view profile"
-										) {
-											setShowCard(!showCard);
-										} else {
-											navigate(dt.link, { state: dt.name });
-										}
-									}}
-									showCard={showCard}
+									onClick={() => setCardName(dt?.name)}
+									// showCard={cardName}
 								/>
 							</Fragment>
 						))}
 					</>
 				</div>
-				{/* {showCard ? (
-					<ProfileCard
-						showBanner={true}
-						data={ViewProfileData}
-						imageURL="https://avatars.dicebear.com/api/adventurer-neutral/mail%40ashallendesign.co.uk.svg"
-						showImage={false}
-					/>
-				) : null} */}
+				<LoaderContainer data={singleHqResult}>
+					{cardName.toLowerCase() === "view profile" ? (
+						<ProfileCard
+							showBanner={false}
+							data={handledAPIResponse?.hqInfo || {}}
+							imageURL=""
+							showImage={false}
+						/>
+					) : null}
+					{cardName.toLowerCase() === "admin info" ? (
+						<>
+							<ProfileCard
+								showBanner={false}
+								showHeader={true}
+								header="HQ Admin Information"
+								data={handleAdminInfo(handledAPIResponse?.hqUsers[0]) || {}}
+								imageURL=""
+								showImage={false}
+							/>
+							<ProfileCard
+								showBanner={false}
+								showHeader={true}
+								header="Station Manager Information"
+								data={handleAdminInfo(handledAPIResponse?.hqUsers[1]) || {}}
+								imageURL=""
+								showImage={false}
+							/>
+						</>
+					) : null}
+					{cardName.toLowerCase() === "branches" ? (
+						<HqBranch branchInfo={handledAPIResponse?.stationBranch || []} />
+					) : null}
+				</LoaderContainer>
 			</article>
 		</section>
 	);

@@ -144,7 +144,7 @@ const ManageBranch = () => {
 	];
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/branch/${data.name}`, { state: data.name });
+		navigate(`/branch/${data?.id}`, { state: data.name });
 	}
 
 	// CONFIRMATION OF WHAT IS SELECTED
@@ -155,6 +155,7 @@ const ManageBranch = () => {
 		headCells,
 		handleRowClick,
 		showFlag: true,
+		showCheckBox: true,
 		isSelected,
 		handleClick,
 		handleSelectAllClick,

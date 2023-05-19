@@ -19,7 +19,7 @@ export type cardBtnType = {
 	id?: number | string;
 	icon: string | any;
 	name: string;
-	link: string;
+	link?: string;
 	height?: number | string;
 
 	onClick?: MouseEventHandler<HTMLDivElement> | undefined;
@@ -54,15 +54,11 @@ export interface Data {
 	email?: string;
 	hqAddress?: string;
 	phoneNumber?: stringOrNumber;
-	location?: string;
-	lga?: string;
-	address?: string;
-	latitude?: string;
-	longitude?: string;
 	firstName?: string;
 	lastName?: string;
 	gender?: string;
 	residentialAddress?: string;
+	location?: { [index: string]: string | number };
 }
 
 // ERROR HANDLE FROM API
@@ -101,7 +97,7 @@ export interface ProfiledataType {
 
 export type ReviewDataType = {
 	id: number;
-	value: number | string;
+	value?: () => number | string;
 	star: number | string;
 }[];
 
