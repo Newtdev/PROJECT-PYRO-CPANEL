@@ -11,10 +11,16 @@ export const ErrorNotification = (error: string) => toast.error(error);
 export const SuccessNotification = (message: string) => toast.error(message);
 
 // PROVIDERTAG AND INVALIDATION OF RTK
-export function providesList<
+export const InvalidateTag = (id: string, typeTag: string) => {
+	console.log(id);
+	return [{ type: typeTag, id }];
+};
+
+export function providesTagList<
 	R extends { id: string | number }[],
 	T extends string
 >(resultsWithIds: R | undefined, tagType: T) {
+	console.log(resultsWithIds?.map(({ id }) => id));
 	return resultsWithIds
 		? [
 				{ type: tagType, id: "LIST" },

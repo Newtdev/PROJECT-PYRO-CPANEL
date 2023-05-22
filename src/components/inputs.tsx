@@ -1,7 +1,7 @@
 import { Checkbox, IconButton } from "@mui/material";
-import { ChangeEventHandler, FocusEventHandler, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import { ReactElement } from "react";
-import { SearchOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { SearchIcon } from "./Icons";
 import { inputType } from "src/helpers/alias";
 
@@ -67,10 +67,13 @@ export const PasswordInput = (props: inputType) => {
 	};
 
 	return (
-		<div className="w-[70%]">
+		<div className={`${props.width || "w-[70%]"} `}>
 			<Label
 				name={props.name}
-				styles="block mb-[6px] text-start font-normal text-[20px] text-gray-700 ml-5"
+				styles={
+					props.labelStyles ||
+					"block mb-[6px] text-start font-normal text-[20px] text-gray-700 ml-5"
+				}
 			/>
 			<div
 				className={`flex justify-between items-center h-[54px] rounded-[38px] w-full border border-gray-300 pr-4  bg-[#D9D9D9]  ${
@@ -162,5 +165,34 @@ export const TextArea = (props: TextAreaTypes) => (
 			disabled={props.disabled}
 		/>
 		{props.error && props.touched ? <Error error={props.error} /> : null}
+	</div>
+);
+
+interface SelectInputType {
+	labelStyles: string;
+	data: string[];
+	onChange: ChangeEventHandler<HTMLSelectElement>;
+	name: string;
+	value: string;
+	id: string;
+	disabled: boolean;
+}
+
+export const SelectInput = (props: SelectInputType) => (
+	<div className="w-full">
+		<Label name={props.name} styles={props.labelStyles} />
+		<select
+			className="mt-1 py-4 rounded-[38px] w-full border border-gray-300 px-4 text-[14px] bg-[#D9D9D9]"
+			name={props.id}
+			value={props.value}
+			onChange={props.onChange}
+			disabled={props.disabled}>
+			<option>Select</option>
+			{props.data.map((_v: string, i: number) => (
+				<option key={i} value={_v}>
+					{_v}
+				</option>
+			))}
+		</select>
 	</div>
 );

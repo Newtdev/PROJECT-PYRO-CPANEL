@@ -1,6 +1,6 @@
 import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
 import { apiSlice } from "./apiSlice";
-import { providesList } from "src/helpers/helperFunction";
+import { providesTagList } from "src/helpers/helperFunction";
 
 export const manageHqAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
@@ -8,7 +8,7 @@ export const manageHqAPISlice = apiSlice.injectEndpoints({
 			query: (params) =>
 				`${API_ROUTE.GET_ALL_HQ}?search=${params?.query}&page=${params?.page}`,
 			providesTags: (result) =>
-				providesList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
+				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
 		}),
 		addNewHQ: builder.mutation({
 			query: (body): any => ({
@@ -17,7 +17,7 @@ export const manageHqAPISlice = apiSlice.injectEndpoints({
 				body,
 			}),
 			invalidatesTags: (result) =>
-				providesList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
+				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
 		}),
 		fetchSingleHQ: builder.query({
 			query: (id) => `${API_ROUTE.FETCH_SINGLE_HQ}/${id}`,

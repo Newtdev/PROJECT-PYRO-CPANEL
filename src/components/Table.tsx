@@ -220,7 +220,6 @@ export default function EnhancedTable({
 						</TableBody>
 					</Table>
 				</TableContainer>
-
 				<Pagination
 					count={paginationData?.totalPage}
 					page={paginationData?.page}

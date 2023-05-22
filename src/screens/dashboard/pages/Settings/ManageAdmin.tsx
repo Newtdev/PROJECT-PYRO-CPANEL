@@ -1,7 +1,12 @@
 import { Flag } from "@mui/icons-material";
 import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
-import { FormInput, SearchInput } from "src/components/inputs";
+import {
+	FormInput,
+	PasswordInput,
+	SearchInput,
+	SelectInput,
+} from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -17,8 +22,7 @@ import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
-import { useAddNewHQMutation } from "src/api/manageHQApiSlice";
-import { Data, ErrorType } from "src/helpers/alias";
+import { ErrorType } from "src/helpers/alias";
 import { TableLoader } from "src/components/LoaderContainer";
 import {
 	handleDateFormat,
@@ -26,7 +30,12 @@ import {
 	SuccessNotification,
 } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
-import { useGetAdminQuery } from "src/api/setttingsApislice";
+import {
+	useAddAdminMutation,
+	useGetAdminQuery,
+	useGetAllAdminQuery,
+} from "src/api/setttingsApislice";
+import { nanoid } from "nanoid";
 
 interface HeadCell {
 	id: string;
@@ -77,30 +86,27 @@ const AddbranchValidation = Yup.object({
 		.required(),
 	email: Yup.string().label("Email").email().required(),
 	password: Yup.string().label("Password").required(),
-	// gender: Yup.string<"male" | "female">().nullable().defined(),
-	gender: Yup.string().label("Gender").required(),
-	accountType: Yup.string().label("Password").notRequired(),
-	stationHQ: Yup.object({
-		name: Yup.string().label("HQ name").required(),
-		email: Yup.string().label("HQ email").email().required(),
-		phoneNumber: Yup.string()
-			.label("phone number")
-			.length(11, "invalid")
-			.required(),
-		hqAddress: Yup.string().label("HQ address").required(),
-		state: Yup.string().label("State").required(),
-	}),
+	confirmPassword: Yup.string().label("Password").required(),
+	role: Yup.string<
+		| "super_admin"
+		| "sub_admin"
+		| "hQ_admin"
+		| "transaction_admin"
+		| "support_admin"
+	>().defined(),
+
 	// stationHQ.
 });
-export type addBranchSchema = Yup.InferType<typeof AddbranchValidation>;
+export type AddAdminTypes = Yup.InferType<typeof AddbranchValidation>;
 
 const AddNewHQ = (props: { close: () => void }) => {
-	const [step, setStep] = useState<number>(0);
-	const [AddNewHq, addNewResult] = useAddNewHQMutation();
+	const [AddAdmin, addNewResult] = useAddAdminMutation();
 
-	async function addNewHQ(values: addBranchSchema) {
+	const generatedPassword = nanoid();
+
+	async function addNewAdmin(values: AddAdminTypes) {
 		try {
-			const response = await AddNewHq(values).unwrap();
+			const response = await AddAdmin(values).unwrap();
 			if (response) {
 				props.close();
 			}
@@ -111,32 +117,21 @@ const AddNewHQ = (props: { close: () => void }) => {
 		}
 	}
 
-	const Formik = useFormik<addBranchSchema>({
+	const Formik = useFormik<AddAdminTypes>({
 		initialValues: {
-			firstName: "AYM",
-			lastName: "Shafa",
-			email: "aym@shafa.com",
-			phoneNumber: "08051334098",
-			password: "Test@1234",
-			gender: "male",
-			accountType: "stationHq",
-			stationHQ: {
-				name: "AYM Shafa",
-				email: "info@aymshafa.com",
-				phoneNumber: "08051334098",
-				hqAddress: "Testing hq address",
-				state: "Abuja",
-			},
+			firstName: "",
+			lastName: "",
+			email: "",
+			phoneNumber: "",
+			password: "",
+			confirmPassword: "",
+			role: "super_admin",
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
 		validationSchema: AddbranchValidation,
 		onSubmit: (values) => {
-			if (step === 1) {
-				addNewHQ(values);
-			} else {
-				setStep((prev) => prev + 1);
-			}
+			addNewAdmin(values);
 		},
 	});
 	const styles =
@@ -147,7 +142,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 	const FormData = [
 		{
 			id: "firstName",
-			name: "Manager's firstname",
+			name: "Admin's firstname",
 			type: "text",
 			styles: `${styles} ${
 				Formik.errors.firstName && Formik.touched.firstName
@@ -164,7 +159,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 		},
 		{
 			id: "lastName",
-			name: "Manager's lastname",
+			name: "Admin's lastname",
 			type: "text",
 			styles: `${styles} ${
 				Formik.errors.lastName && Formik.touched.lastName
@@ -181,7 +176,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 		},
 		{
 			id: "email",
-			name: "Manager's email",
+			name: "Admin's email",
 			type: "email",
 			styles: `${styles} ${
 				Formik.errors.email && Formik.touched.email
@@ -193,13 +188,13 @@ const AddNewHQ = (props: { close: () => void }) => {
 			value: Formik.values.email,
 			onBlur: Formik.handleBlur,
 
-			// disabled: loginResult.isLoading,
+			disabled: addNewResult.isLoading,
 			error: Formik.errors.email,
 			touched: Formik.touched.email,
 		},
 		{
 			id: "phoneNumber",
-			name: "Manager's phone number",
+			name: "Admin's phone number",
 			type: "text",
 			styles: `${styles} ${
 				Formik.errors.phoneNumber && Formik.touched.phoneNumber
@@ -214,187 +209,100 @@ const AddNewHQ = (props: { close: () => void }) => {
 			error: Formik.errors.phoneNumber,
 			touched: Formik.touched.phoneNumber,
 		},
-		{
-			id: "password",
-			name: "Manager's password",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.password && Formik.touched.password
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.password,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.password,
-			touched: Formik.touched.password,
-		},
-		{
-			id: "gender",
-			name: "Manager's gender",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.gender && Formik.touched.gender
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.gender,
-			onBlur: Formik.handleBlur,
-
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.gender,
-			touched: Formik.touched.gender,
-		},
-		{
-			id: "stationHQ.name",
-			name: "Branch name",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.name && Formik.touched?.stationHQ?.name
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values?.stationHQ?.name,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors?.stationHQ?.name,
-			touched: Formik.touched?.stationHQ?.name,
-		},
-		{
-			id: "stationHQ.email",
-			name: "Branch email",
-			type: "email",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.email && Formik.touched.email
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values?.stationHQ?.email,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.email,
-			touched: Formik.touched.stationHQ?.hqAddress,
-		},
-		{
-			id: "stationHQ.phoneNumber",
-			name: "Branch phone number",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.phoneNumber &&
-				Formik.touched.stationHQ?.phoneNumber
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.stationHQ?.phoneNumber,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.email,
-			touched: Formik.touched.stationHQ?.email,
-		},
-		{
-			id: "stationHQ.hqAddress",
-			name: "Branch address",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.hqAddress &&
-				Formik.touched?.stationHQ?.hqAddress
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.stationHQ?.hqAddress,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.hqAddress,
-			touched: Formik.touched.stationHQ?.hqAddress,
-		},
-		{
-			id: "stationHQ.state",
-			name: "State",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.stationHQ?.state && Formik.touched.stationHQ?.state
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.stationHQ?.state,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.state,
-			touched: Formik.touched.stationHQ?.state,
-		},
 	];
 
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}
-			className="w-full flex flex-col justify-center items-center px-4 h-full">
-			{step === 0 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(0, 6).map((dt, i) => (
-						<FormInput
-							id={dt.id}
-							name={dt.name}
-							type={dt.type}
-							styles={dt.styles}
-							labelStyles={dt.labelStyles}
-							onChange={dt.onChange}
-							value={dt.value}
-							onBlur={dt.onBlur}
-							disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
-						/>
-					))}
-				</div>
-			) : null}
-			{step === 1 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(-5).map((dt, i) => (
-						<FormInput
-							id={dt.id}
-							name={dt.name}
-							type={dt.type}
-							styles={dt.styles}
-							labelStyles={dt.labelStyles}
-							onChange={dt.onChange}
-							value={dt.value}
-							onBlur={dt.onBlur}
-							disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
-						/>
-					))}
-				</div>
-			) : null}
-
-			<div className="w-full">
-				{step > 0 ? (
+			className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto pt-48">
+			<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+				{FormData.slice(0, 4).map((dt, i) => (
+					<FormInput
+						id={dt.id}
+						name={dt.name}
+						type={dt.type}
+						styles={dt.styles}
+						labelStyles={dt.labelStyles}
+						onChange={dt.onChange}
+						value={dt.value}
+						onBlur={dt.onBlur}
+						disabled={dt.disabled}
+						error={dt.error}
+						touched={dt.touched}
+					/>
+				))}
+				<div>
+					<PasswordInput
+						width="w-full"
+						id="password"
+						name={"Password"}
+						type={"text"}
+						styles={` ${
+							Formik.errors.password && Formik.touched.password
+								? "border-red-500"
+								: "border-gray-300"
+						}`}
+						labelStyles={labelStyles}
+						onChange={(e) => {
+							Formik.setFieldValue("password", e.target.value);
+							Formik.setFieldValue("confirmPassword", e.target.value);
+						}}
+						value={Formik.values.password}
+						onBlur={Formik.handleBlur}
+						disabled={addNewResult.isLoading}
+						error={Formik.errors.password}
+						touched={Formik.touched.password}
+					/>
 					<Button
-						text="Back"
-						// disabled={loginResult.isLoading}
+						text="Generate password"
+						disabled={addNewResult.isLoading}
 						// showModal={loginResult.isLoading}
 						className="h-[41px] mt-6 font-bold bg-white border border-[#002E66] rounded-[38px] w-full hover: text-[#002E66]"
 						type="button"
-						onClick={() => setStep((prev) => prev - 1)}
+						onClick={() => {
+							Formik.setFieldValue("password", generatedPassword);
+							Formik.setFieldValue("confirmPassword", generatedPassword);
+						}}
 					/>
-				) : null}
+					<PasswordInput
+						width="w-full"
+						id="confirmPassword"
+						name={"Confirm password"}
+						type={"text"}
+						styles={` ${
+							Formik.errors.password && Formik.touched.password
+								? "border-red-500"
+								: "border-gray-300"
+						}`}
+						labelStyles={labelStyles}
+						onChange={Formik.handleChange}
+						value={Formik.values.password}
+						onBlur={Formik.handleBlur}
+						disabled={addNewResult.isLoading}
+						error={Formik.errors.password}
+						touched={Formik.touched.password}
+					/>
+				</div>
+				<SelectInput
+					labelStyles={labelStyles}
+					data={[
+						"super_admin",
+						"sub_admin",
+						"HQ_admin",
+						"transaction_admin",
+						"support_admin",
+					]}
+					disabled={addNewResult.isLoading}
+					value={Formik.values.role}
+					onChange={Formik.handleChange}
+					name="Select role"
+					id="role"
+				/>
+			</div>
 
+			<div className="w-full">
 				<Button
-					text={step < 1 ? "Next" : "Create HQ"}
+					text={"Submit"}
 					disabled={addNewResult?.isLoading}
 					showModal={addNewResult?.isLoading}
 					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
@@ -422,7 +330,7 @@ const ManageAdmin = () => {
 		createdAt: string;
 	}
 
-	const adminListQueryResult = useGetAdminQuery({
+	const adminListQueryResult = useGetAllAdminQuery({
 		query: debouncedValue,
 		page: pagination.newPage,
 	});
@@ -474,6 +382,7 @@ const ManageAdmin = () => {
 		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
 	}
 
+	console.log(adminListQueryResult?.currentData?.data);
 	let dataToChildren: any = {
 		rows: handledAPIResponse || [],
 		headCells,
@@ -486,9 +395,9 @@ const ManageAdmin = () => {
 		selected,
 		handleChangePage,
 		paginationData: {
-			totalPage: adminListQueryResult?.currentData?.totalPages,
-			limit: adminListQueryResult?.currentData?.limit,
-			page: adminListQueryResult?.currentData?.page,
+			totalPage: adminListQueryResult?.currentData?.data?.totalPages,
+			limit: adminListQueryResult?.currentData?.data?.limit,
+			page: adminListQueryResult?.currentData?.data?.page,
 		},
 	};
 
@@ -514,20 +423,11 @@ const ManageAdmin = () => {
 					<div className="w-fit flex items-center ">
 						<div className="w-[189px] h-11 mr-6">
 							<Button
-								text="Create HQ"
+								text="Add admin"
 								className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
 								type="button"
 								showIcon={true}
 								onClick={() => setShowAddModal(true)}
-							/>
-						</div>
-						<div className="w-[109px]  h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
 							/>
 						</div>
 					</div>
@@ -591,9 +491,9 @@ const ManageAdmin = () => {
 					{showAddModal ? (
 						<Modal>
 							<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-								<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
+								<div className="w-[50%] max-w-[511px] h-[90%] flex flex-col justify-center rounded-[20px] pb-10  bg-white">
 									<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-										<h1>Create HQ</h1>
+										<h1>Add Admin</h1>
 										<button
 											onClick={() => setShowAddModal(false)}
 											disabled={false}>
@@ -606,7 +506,7 @@ const ManageAdmin = () => {
 									<div className="w-full">
 										<Lines />
 									</div>
-									<AddNewHQ close={closeAddHQModal} />{" "}
+									<AddNewHQ close={closeAddHQModal} />
 								</div>
 							</div>
 						</Modal>
