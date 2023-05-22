@@ -16,6 +16,7 @@ import useIsSelected from "src/hooks/useIsSelected";
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
 	id: string;
+
 	label: string;
 	numeric?: boolean | null;
 	minWidth: number;
@@ -66,6 +67,7 @@ const headCells: readonly HeadCellTypes[] = [
 ];
 
 interface HqBranchType {
+	[x: string]: string | number | any;
 	id: string;
 	name: string;
 	phoneNumber: string;
@@ -93,7 +95,7 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 				return (neededData = [
 					...neededData,
 					{
-						id: iterator.id,
+						id: iterator._id,
 						name: iterator.name,
 						phoneNumber: iterator.phoneNumber,
 						status: iterator.status,

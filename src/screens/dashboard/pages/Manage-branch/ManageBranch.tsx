@@ -30,7 +30,7 @@ import {
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
-	id: keyof Data;
+	id: string;
 	label: string;
 	numeric?: boolean | null;
 	minWidth: number;
@@ -100,7 +100,7 @@ const ManageBranch = () => {
 	};
 
 	const handledAPIResponse = useMemo(() => {
-		let neededData: Data[] = [];
+		let neededData: { [index: string]: string | number | any }[] = [];
 		const hqProfile = fetchAllBranchResult?.currentData;
 		if (hqProfile) {
 			for (const iterator of hqProfile?.stationBranches?.data) {
@@ -126,7 +126,7 @@ const ManageBranch = () => {
 	}, [fetchAllBranchResult]);
 
 	const { handleSelectAllClick, selected, setSelected } =
-		useHandleSelectAllClick(handledAPIResponse);
+		useHandleSelectAllClick(handledAPIResponse?.neededData);
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);

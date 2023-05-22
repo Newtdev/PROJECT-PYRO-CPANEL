@@ -107,14 +107,6 @@ export default function HQPage() {
 								imageURL=""
 								showImage={false}
 							/>
-							<ProfileCard
-								showBanner={false}
-								showHeader={true}
-								header="Station Manager Information"
-								data={handleAdminInfo(handledAPIResponse?.hqUsers[1]) || {}}
-								imageURL=""
-								showImage={false}
-							/>
 						</>
 					) : null}
 					{cardName.toLowerCase() === "branches" ? (

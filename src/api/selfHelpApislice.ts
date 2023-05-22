@@ -3,11 +3,11 @@
 import { API_ROUTE } from "src/helpers/Routes";
 import { apiSlice } from "./apiSlice";
 
-export const manageUserAPISlice = apiSlice.injectEndpoints({
+export const selfHelpAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
-		fetchAllUser: builder.query({
+		fetchAllSelfHelp: builder.query({
 			query: (params) =>
-				`${API_ROUTE.FETCH_ALL_USERS}?search=${params?.query}&page=${params?.page}`,
+				`${API_ROUTE.SELF_HELP}?search=${params?.query}&page=${params?.page}`,
 		}),
 		fetchUser: builder.query({
 			query: (id) => `${API_ROUTE.FETCH_ALL_USER}/${id}`,
@@ -15,4 +15,4 @@ export const manageUserAPISlice = apiSlice.injectEndpoints({
 	}),
 });
 
-export const { useFetchAllUserQuery, useFetchUserQuery } = manageUserAPISlice;
+export const { useFetchAllSelfHelpQuery, useFetchUserQuery } = selfHelpAPISlice;

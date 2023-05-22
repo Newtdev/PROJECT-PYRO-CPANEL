@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { toast } from "react-toastify";
 
 export const CurrencyFormatter = (amount: number): string =>
@@ -108,4 +109,9 @@ export function stableSort<T>(
 		return a[1] - b[1];
 	});
 	return stabilizedThis.map((el) => el[0]);
+}
+
+// HANDLE DATA FORMAT
+export function handleDateFormat(date: string) {
+	return format(new Date(date), "MMM d, yyyy hh:mm:ss");
 }

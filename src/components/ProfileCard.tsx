@@ -37,14 +37,7 @@ export default function ProfileCard(props: ProfileType) {
 							</div>
 						</div>
 					</div>
-				) : (
-					<div className="w-[90px] h-[90px] rounded-full self-center object-fit bg-[#D9D9D9] flex justify-center items-center">
-						<h1 className="text-xl text-center font-extrabold">
-							{props?.data?.name?.charAt(0) || ""}
-							{props?.data?.name?.charAt(1) || ""}
-						</h1>
-					</div>
-				)}
+				) : null}
 				{Object.keys(props?.data)?.map((dt) => {
 					return (
 						<div key={props?.data?.id}>

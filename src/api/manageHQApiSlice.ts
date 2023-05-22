@@ -1,7 +1,6 @@
 import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
 import { apiSlice } from "./apiSlice";
 import { providesList } from "src/helpers/helperFunction";
-import { addBranchSchema } from "src/screens/dashboard/pages/Manage-HQ/ManageHQ";
 
 export const manageHqAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({

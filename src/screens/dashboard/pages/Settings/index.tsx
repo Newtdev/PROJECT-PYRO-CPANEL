@@ -1,17 +1,18 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import AdminProfile from "src/assets/img/AdminProfile.svg";
 import ManageWebsite from "src/assets/img/ManageWebsite.svg";
-import ManageAdmin from "src/assets/img/ManageAdmin.svg";
+import ManageAdmins from "src/assets/img/ManageAdmin.svg";
 import ResetPasword from "src/assets/img/ResetPasword.svg";
-
-import { useNavigate } from "react-router-dom";
-
 import { CardButton } from "src/components/Card";
 import { cardBtnType } from "src/helpers/alias";
 import { APP_ROUTE } from "src/helpers/Routes";
+import { useGetAdminQuery } from "src/api/setttingsApislice";
+import ProfileCard from "src/components/ProfileCard";
+import ManageAdmin from "./ManageAdmin";
+import { LoaderContainer } from "src/components/LoaderContainer";
 
 const Settings = () => {
-	const navigate = useNavigate();
+	const [cardName, setName] = useState<string>("profile");
 	const HQData: cardBtnType[] = [
 		{
 			id: 1,
@@ -22,7 +23,7 @@ const Settings = () => {
 
 		{
 			id: 2,
-			icon: ManageAdmin,
+			icon: ManageAdmins,
 			name: "Manage Admin",
 			link: APP_ROUTE.MANAGE_ADMIN,
 		},
@@ -40,6 +41,20 @@ const Settings = () => {
 		},
 	];
 
+	const adminResult = useGetAdminQuery("");
+
+	const handledAPIResponse = useMemo(() => {
+		const hqProfile = adminResult?.data?.data?.data[0];
+
+		return {
+			firstName: hqProfile?.firstName,
+			lastName: hqProfile?.lastName,
+			email: hqProfile?.email,
+			role: hqProfile?.role,
+			phoneNumber: hqProfile?.phoneNumber,
+		};
+	}, [adminResult]);
+
 	return (
 		<section>
 			<article>
@@ -52,14 +67,23 @@ const Settings = () => {
 									icon={dt.icon}
 									link={dt.link}
 									height={"98px"}
-									onClick={() => {
-										navigate(dt.link, { state: dt.name });
-									}}
+									onClick={() => setName(dt.name)}
 								/>
 							</Fragment>
 						))}
 					</>
 				</div>
+				<LoaderContainer data={adminResult}>
+					{cardName.toLowerCase() === "profile" ? (
+						<ProfileCard
+							showBanner={false}
+							data={handledAPIResponse || {}}
+							imageURL=""
+							showImage={true}
+						/>
+					) : null}
+					{cardName.toLowerCase() === "manage admin" ? <ManageAdmin /> : null}
+				</LoaderContainer>
 			</article>
 		</section>
 	);

@@ -1,5 +1,5 @@
 import { Checkbox, IconButton } from "@mui/material";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, FocusEventHandler, useState } from "react";
 import { ReactElement } from "react";
 import { SearchOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { SearchIcon } from "./Icons";
@@ -143,3 +143,24 @@ export const SearchInput = (props: searchInput) => {
 		</>
 	);
 };
+
+interface TextAreaTypes {
+	onChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
+	[index: string]: string | any;
+}
+export const TextArea = (props: TextAreaTypes) => (
+	<div className="w-full">
+		<Label name={props.name} styles={props.labelStyles} />
+		<textarea
+			className="w-full rounded-lg p-3 bg-[#D9D9D9]"
+			placeholder="Add description..."
+			rows={5}
+			id={props.id}
+			name={props.name}
+			onChange={props.onChange}
+			value={props.value}
+			disabled={props.disabled}
+		/>
+		{props.error && props.touched ? <Error error={props.error} /> : null}
+	</div>
+);
