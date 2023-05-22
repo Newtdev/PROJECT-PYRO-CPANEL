@@ -149,7 +149,7 @@ const ManageBranch = () => {
 
 	// CONFIRMATION OF WHAT IS SELECTED
 	// const isSelected = (data: string) => selected.indexOf(name) !== -1;
-
+	console.log(handledAPIResponse);
 	let dataToChildren: { [index: string]: string | number | any } = {
 		rows: handledAPIResponse?.neededData || [],
 		headCells,
@@ -162,9 +162,9 @@ const ManageBranch = () => {
 		selected,
 		handleChangePage,
 		paginationData: {
-			totalPage: handledAPIResponse?.hqProfile?.totalPages,
-			limit: handledAPIResponse?.hqProfile?.limit,
-			page: handledAPIResponse?.hqProfile?.page,
+			totalPage: handledAPIResponse?.hqProfile?.stationBranch?.totalPages,
+			limit: handledAPIResponse?.hqProfile?.stationBranch?.limit,
+			page: handledAPIResponse?.hqProfile?.stationBranch?.page,
 		},
 	};
 	function closeAddHQModal(): void {

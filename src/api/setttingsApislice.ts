@@ -1,5 +1,6 @@
 import { InvalidateTag, providesTagList } from "src/helpers/helperFunction";
 import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
+import { UpdateAdminTypes } from "src/screens/dashboard/pages/Settings";
 import { AddAdminTypes } from "src/screens/dashboard/pages/Settings/ManageAdmin";
 import { apiSlice } from "./apiSlice";
 
@@ -23,8 +24,21 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result) =>
 				InvalidateTag(result?.data?.id, RTKTAG.ADMIN) as any,
 		}),
+		updateAdmin: builder.mutation({
+			query: (body: { body: UpdateAdminTypes }): string | any => ({
+				url: `${API_ROUTE.ADMIN}/${body?.id}`,
+				method: "PATCH",
+				body,
+			}),
+			invalidatesTags: (result) =>
+				InvalidateTag(result?.data?.id, RTKTAG.ADMIN) as any,
+		}),
 	}),
 });
 
-export const { useGetAdminQuery, useGetAllAdminQuery, useAddAdminMutation } =
-	settingsAPISlice;
+export const {
+	useGetAdminQuery,
+	useGetAllAdminQuery,
+	useAddAdminMutation,
+	useUpdateAdminMutation,
+} = settingsAPISlice;

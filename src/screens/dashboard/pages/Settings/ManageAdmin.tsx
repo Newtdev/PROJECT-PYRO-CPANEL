@@ -382,7 +382,6 @@ const ManageAdmin = () => {
 		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
 	}
 
-	console.log(adminListQueryResult?.currentData?.data);
 	let dataToChildren: any = {
 		rows: handledAPIResponse || [],
 		headCells,

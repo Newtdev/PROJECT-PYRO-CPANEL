@@ -40,9 +40,9 @@ const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
 const BranchReview = lazy(
 	() => import("./screens/dashboard/pages/Manage-branch/BranchReview")
 );
-const AttendantProfileInfo = lazy(
-	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfileInfo")
-);
+// const AttendantProfileInfo = lazy(
+// 	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfileInfo")
+// );
 
 const AppRoute = [
 	{ path: APP_ROUTE.LOGIN, component: <Login />, permissions: "" },
@@ -85,10 +85,10 @@ function App() {
 							path={APP_ROUTE.ATTENDANT_REVIEW}
 							element={<BranchReview />}
 						/>
-						<Route
+						{/* <Route
 							path={APP_ROUTE.ATTENDANT_PROFILE_INFO}
 							element={<AttendantProfileInfo />}
-						/>
+						/> */}
 						<Route path={APP_ROUTE.VIEW_HQ_WALLET} element={<ViewHQWallet />} />
 						<Route path={APP_ROUTE.VIEW_HQ_BRANCH} element={<ManageBranch />} />
 						<Route

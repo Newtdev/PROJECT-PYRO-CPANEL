@@ -173,11 +173,12 @@ export default function AttendantProfile(props: {
 						<div key={v?.id}>
 							<div
 								className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66]"
-								onClick={() =>
-									navigate(`/branch/${slicedPath[2]}/attendant/${v.id}`, {
-										state: `${v?.firstName} ${v?.lastName}`,
-									})
-								}>
+								//  onClick={() =>
+								//  	navigate(`/branch/${slicedPath[2]}/attendant/${v.id}`, {
+								//  		state: `${v?.firstName} ${v?.lastName}`,
+								//  	})
+								// }
+							>
 								<div className="basis-[40%] flex items-start justify-start">
 									<Checkbox
 										color="primary"
