@@ -25,8 +25,8 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 				InvalidateTag(result?.data?.id, RTKTAG.ADMIN) as any,
 		}),
 		updateAdmin: builder.mutation({
-			query: (body: { body: UpdateAdminTypes }): string | any => ({
-				url: `${API_ROUTE.ADMIN}/${body?.id}`,
+			query: ({ id, ...body }: UpdateAdminTypes): string | any => ({
+				url: `${API_ROUTE.ADMIN}/${id}`,
 				method: "PATCH",
 				body,
 			}),

@@ -64,6 +64,7 @@ const Settings = () => {
 		const hqProfile = adminResult?.data?.data?.data[0];
 
 		return {
+			id: hqProfile?.id,
 			firstName: hqProfile?.firstName,
 			lastName: hqProfile?.lastName,
 			email: hqProfile?.email,
@@ -108,7 +109,9 @@ const Settings = () => {
 						/>
 					) : null}
 					{cardName.toLowerCase() === "manage admin" ? <ManageAdmin /> : null}
-					{showModal ? <ResetPassword close={CloseModal} /> : null}
+					{showModal ? (
+						<ResetPassword close={CloseModal} id={handledAPIResponse.id} />
+					) : null}
 				</LoaderContainer>
 			</article>
 		</section>
@@ -119,7 +122,7 @@ export default Settings;
 
 const AddbranchValidation = Yup.object({
 	oldPassword: Yup.string().label("Old password").required(),
-	newPassword: Yup.string().label("Password").required(),
+	password: Yup.string().label("Password").required(),
 	confirmPassword: Yup.string().label("Password"),
 	avatar: Yup.string().notRequired(),
 	id: Yup.string().notRequired(),
@@ -127,7 +130,7 @@ const AddbranchValidation = Yup.object({
 
 export type UpdateAdminTypes = Yup.InferType<typeof AddbranchValidation>;
 
-const ResetPassword = (props: { close: () => void }) => {
+const ResetPassword = (props: { close: () => void; id: string }) => {
 	const [updateAdmin, addNewResult] = useUpdateAdminMutation();
 
 	async function addNewAdmin(values: UpdateAdminTypes) {
@@ -146,10 +149,10 @@ const ResetPassword = (props: { close: () => void }) => {
 	const Formik = useFormik<UpdateAdminTypes>({
 		initialValues: {
 			oldPassword: "",
-			newPassword: "",
+			password: "",
 			confirmPassword: "",
 			avatar: "",
-			id: "",
+			id: props.id,
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
@@ -182,34 +185,34 @@ const ResetPassword = (props: { close: () => void }) => {
 			touched: Formik.touched.oldPassword,
 		},
 		{
-			id: "newPassword",
+			id: "password",
 			name: "New password",
 			type: "text",
 			styles: `${styles} ${
-				Formik.errors.newPassword && Formik.touched.newPassword
+				Formik.errors.password && Formik.touched.password
 					? "border-red-500"
 					: "border-gray-300"
 			}`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
-			value: Formik.values.newPassword,
+			value: Formik.values.password,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
-			error: Formik.errors.newPassword,
-			touched: Formik.touched.newPassword,
+			error: Formik.errors.password,
+			touched: Formik.touched.password,
 		},
 		{
 			id: "confirmPassword",
 			name: "Confirm password",
 			type: "text",
 			styles: `${styles} ${
-				Formik.errors.newPassword && Formik.touched.newPassword
+				Formik.errors.password && Formik.touched.password
 					? "border-red-500"
 					: "border-gray-300"
 			}`,
 			labelStyles: labelStyles,
 			onChange: () =>
-				Formik.setFieldValue("confirmPassword", Formik.values.newPassword),
+				Formik.setFieldValue("confirmPassword", Formik.values.password),
 			value: Formik.values.confirmPassword,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
