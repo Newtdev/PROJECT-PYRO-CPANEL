@@ -77,7 +77,7 @@ export type inputType = {
 	id: string | undefined;
 	type: string;
 	inputName?: string | undefined;
-	value: stringOrNumber | undefined;
+	value?: stringOrNumber | undefined;
 	placeholder?: string;
 	onChange: ChangeEventHandler<HTMLInputElement> | undefined;
 	onBlur?: FocusEventHandler<HTMLInputElement> | undefined;

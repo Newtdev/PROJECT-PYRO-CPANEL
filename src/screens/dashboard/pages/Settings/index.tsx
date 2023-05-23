@@ -1,6 +1,6 @@
 import React, { ChangeEvent, Fragment, useMemo, useState } from "react";
 import AdminProfile from "src/assets/img/AdminProfile.svg";
-import ManageWebsite from "src/assets/img/ManageWebsite.svg";
+import ManageWebsites from "src/assets/img/ManageWebsite.svg";
 import ManageAdmins from "src/assets/img/ManageAdmin.svg";
 import ResetPasword from "src/assets/img/ResetPasword.svg";
 import { CardButton } from "src/components/Card";
@@ -27,6 +27,7 @@ import {
 	SuccessNotification,
 } from "src/helpers/helperFunction";
 import Image from "src/components/Image";
+import ManageWebsite from "./ManageWebsite";
 
 const Settings = () => {
 	const [cardName, setName] = useState<string>("profile");
@@ -47,7 +48,7 @@ const Settings = () => {
 		},
 		{
 			id: 3,
-			icon: ManageWebsite,
+			icon: ManageWebsites,
 			name: "Manage Website",
 			link: APP_ROUTE.MANAGE_WEBSITE,
 		},
@@ -113,6 +114,9 @@ const Settings = () => {
 						/>
 					) : null}
 					{cardName.toLowerCase() === "manage admin" ? <ManageAdmin /> : null}
+					{cardName.toLowerCase() === "manage website" ? (
+						<ManageWebsite />
+					) : null}
 					{showModal ? (
 						<ResetPassword close={CloseModal} id={handledAPIResponse.id} />
 					) : null}
