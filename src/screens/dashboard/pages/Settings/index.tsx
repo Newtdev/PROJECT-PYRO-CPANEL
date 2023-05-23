@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useState } from "react";
+import React, { ChangeEvent, Fragment, useMemo, useState } from "react";
 import AdminProfile from "src/assets/img/AdminProfile.svg";
 import ManageWebsite from "src/assets/img/ManageWebsite.svg";
 import ManageAdmins from "src/assets/img/ManageAdmin.svg";
@@ -7,7 +7,6 @@ import { CardButton } from "src/components/Card";
 import { cardBtnType, ErrorType } from "src/helpers/alias";
 import { APP_ROUTE } from "src/helpers/Routes";
 import {
-	useAddAdminMutation,
 	useGetAdminQuery,
 	useUpdateAdminMutation,
 } from "src/api/setttingsApislice";
@@ -20,12 +19,14 @@ import { Lines } from "src/components/Icons";
 import { Button } from "src/components/Button";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { PasswordInput } from "src/components/inputs";
+import { PasswordInput, TextArea } from "src/components/inputs";
 import { Upload } from "src/components/Upload";
 import {
+	convert2base64,
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
+import Image from "src/components/Image";
 
 const Settings = () => {
 	const [cardName, setName] = useState<string>("profile");
@@ -64,12 +65,15 @@ const Settings = () => {
 		const hqProfile = adminResult?.data?.data?.data[0];
 
 		return {
+			profile: {
+				firstName: hqProfile?.firstName,
+				lastName: hqProfile?.lastName,
+				email: hqProfile?.email,
+				role: hqProfile?.role,
+				phoneNumber: hqProfile?.phoneNumber,
+			},
 			id: hqProfile?.id,
-			firstName: hqProfile?.firstName,
-			lastName: hqProfile?.lastName,
-			email: hqProfile?.email,
-			role: hqProfile?.role,
-			phoneNumber: hqProfile?.phoneNumber,
+			avatar: hqProfile?.avatar,
 		};
 	}, [adminResult]);
 
@@ -103,8 +107,8 @@ const Settings = () => {
 					{cardName.toLowerCase() === "profile" ? (
 						<ProfileCard
 							showBanner={false}
-							data={handledAPIResponse || {}}
-							imageURL=""
+							data={handledAPIResponse.profile || {}}
+							imageURL={handledAPIResponse.avatar?.url || ""}
 							showImage={true}
 						/>
 					) : null}
@@ -126,6 +130,10 @@ const AddbranchValidation = Yup.object({
 	confirmPassword: Yup.string().label("Password"),
 	avatar: Yup.string().notRequired(),
 	id: Yup.string().notRequired(),
+	accountStatus: Yup.object({
+		status: Yup.string().notRequired(),
+		reason: Yup.string().notRequired(),
+	}),
 });
 
 export type UpdateAdminTypes = Yup.InferType<typeof AddbranchValidation>;
@@ -139,7 +147,7 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 			if (response) {
 				props.close();
 			}
-			SuccessNotification(response?.data?.message);
+			SuccessNotification(response?.status);
 		} catch (error: ErrorType | any) {
 			props.close();
 			handleNotification(error);
@@ -153,6 +161,10 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 			confirmPassword: "",
 			avatar: "",
 			id: props.id,
+			accountStatus: {
+				status: "confirmed",
+				reason: "Test",
+			},
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
@@ -220,10 +232,16 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 			// touched: Formik.touched.confirmPassword,
 		},
 	];
+
+	// HANDLE IMAGE UPLOAD TO BASE 64
+	async function uploadAvatar(e: { [index: string]: string | any }) {
+		Formik.setFieldValue("avatar", await convert2base64(e.target.files[0]));
+	}
+
 	return (
 		<Modal>
 			<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-				<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10  bg-white">
+				<div className="w-[50%] max-w-[511px] h-[95%] flex flex-col justify-center rounded-[20px] pb-10  bg-white">
 					<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
 						<h1>Update Admin Info</h1>
 						<button onClick={props.close} disabled={false}>
@@ -257,15 +275,33 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 								/>
 							))}
 						</div>
-						<div className="w-full h-36 mt-4">
+
+						<div className="w-full h-full">
+							<TextArea
+								labelStyles={labelStyles}
+								name="Reason"
+								id="accountStatus.reason"
+								onChange={Formik.handleChange}
+								value={Formik.values.accountStatus.reason}
+								disabled={false}
+							/>
+						</div>
+						{Formik.values.avatar ? (
+							<div>
+								<Image
+									image={Formik.values.avatar || ""}
+									width={200}
+									height={200}
+								/>
+							</div>
+						) : null}
+
+						<div className="w-full h-24 mt-4">
 							<Upload
 								name="avatar"
-								onChange={(e: any) =>
-									Formik.setFieldValue(
-										"avatar",
-										URL.createObjectURL(e.target.files[0])
-									)
-								}
+								onChange={(e: ChangeEvent<HTMLInputElement>) => {
+									uploadAvatar(e);
+								}}
 							/>
 						</div>
 

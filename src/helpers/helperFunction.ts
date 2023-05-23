@@ -8,7 +8,7 @@ export const CurrencyFormatter = (amount: number): string =>
 	}).format(amount || 0);
 
 export const ErrorNotification = (error: string) => toast.error(error);
-export const SuccessNotification = (message: string) => toast.error(message);
+export const SuccessNotification = (message: string) => toast.success(message);
 
 // PROVIDERTAG AND INVALIDATION OF RTK
 export const InvalidateTag = (id: string, typeTag: string) => {
@@ -118,4 +118,18 @@ export function stableSort<T>(
 // HANDLE DATA FORMAT
 export function handleDateFormat(date: string) {
 	return format(new Date(date), "MMM d, yyyy hh:mm:ss");
+}
+
+// CONVERT IMAGE TO BASE 64
+export function convert2base64(file: any) {
+	return new Promise((resolve, reject) => {
+		const fileReader = new FileReader();
+		fileReader.readAsDataURL(file);
+		fileReader.onload = () => {
+			resolve(fileReader.result);
+		};
+		fileReader.onerror = (error) => {
+			reject(error);
+		};
+	});
 }

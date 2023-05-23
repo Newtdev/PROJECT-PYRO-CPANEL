@@ -8,6 +8,8 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getAdmin: builder.query({
 			query: () => `${API_ROUTE.ADMIN}`,
+			providesTags: (result) =>
+				providesTagList(result.data.data, RTKTAG.ADMIN) as any,
 		}),
 		getAllAdmin: builder.query({
 			query: (params) =>

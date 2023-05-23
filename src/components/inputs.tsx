@@ -157,9 +157,9 @@ export const TextArea = (props: TextAreaTypes) => (
 		<textarea
 			className="w-full rounded-lg p-3 bg-[#D9D9D9]"
 			placeholder="Add description..."
-			rows={5}
+			rows={3}
 			id={props.id}
-			name={props.name}
+			name={props.id}
 			onChange={props.onChange}
 			value={props.value}
 			disabled={props.disabled}
