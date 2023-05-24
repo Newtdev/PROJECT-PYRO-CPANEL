@@ -35,6 +35,20 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result) =>
 				InvalidateTag(result?.data?.id, RTKTAG.ADMIN) as any,
 		}),
+		saveWebiteInfo: builder.mutation({
+			query: (body): string | any => ({
+				url: API_ROUTE.SAVE_WEBSITE_INFO,
+				method: "POST",
+				body,
+			}),
+			invalidatesTags: (result) =>
+				InvalidateTag(result?.data?.id, RTKTAG.WEBSITE_INFO) as any,
+		}),
+		getWebsiteInfo: builder.query({
+			query: (params) => API_ROUTE.SAVE_WEBSITE_INFO,
+			providesTags: (result) =>
+				providesTagList(result.info.data, RTKTAG.WEBSITE_INFO) as any,
+		}),
 	}),
 });
 
@@ -43,4 +57,6 @@ export const {
 	useGetAllAdminQuery,
 	useAddAdminMutation,
 	useUpdateAdminMutation,
+	useSaveWebiteInfoMutation,
+	useGetWebsiteInfoQuery,
 } = settingsAPISlice;

@@ -11,6 +11,7 @@ export enum API_ROUTE {
 	FETCH_SINGLE_HQ = "system-admin/station-hq",
 	SELF_HELP = "system-admin/self-help",
 	ADMIN = "system-admin",
+	SAVE_WEBSITE_INFO = "system-admin/website-info",
 }
 
 export enum APP_ROUTE {
@@ -51,4 +52,5 @@ export enum RTKTAG {
 	MANAGE_HQ = "MANAGE_HQ",
 	MANAGER_BRANCH = "MANAGE_BRANCH",
 	ADMIN = "ADMIN",
+	WEBSITE_INFO = "WEBSITE",
 }

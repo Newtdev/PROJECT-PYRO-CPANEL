@@ -1,44 +1,24 @@
-import {
-	RemoveCircle,
-	RemoveCircleOutlined,
-	RemoveCircleOutlineSharp,
-} from "@mui/icons-material";
+import { RemoveCircleOutlineSharp } from "@mui/icons-material";
 import { Box, Tab, Tabs } from "@mui/material";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { useCallback, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import {
+	useGetWebsiteInfoQuery,
+	useSaveWebiteInfoMutation,
+} from "src/api/setttingsApislice";
 import { Button } from "src/components/Button";
-import { AddIcon } from "src/components/Icons";
 import { FormInput, Label } from "src/components/inputs";
-import * as Yup from "yup";
+import { ErrorType } from "src/helpers/alias";
+import {
+	handleNotification,
+	SuccessNotification,
+} from "src/helpers/helperFunction";
 
-const WebsiteInformationValidation = Yup.object({
-	about: Yup.string().label("About us").notRequired(),
-	mission: Yup.string().label("Mission").notRequired(),
-	vision: Yup.string().label("Vision").notRequired(),
-	contact: Yup.object({
-		email: Yup.string().notRequired(),
-		phone: Yup.string().notRequired(),
-		address: Yup.string().notRequired(),
-	}),
-	socials: Yup.object({
-		facebook: Yup.string().notRequired(),
-		twitter: Yup.string().notRequired(),
-		instagram: Yup.string().notRequired(),
-		linkedin: Yup.string().notRequired(),
-	}),
-	faqs: Yup.array().of(
-		Yup.object({
-			question: Yup.string(),
-			answer: Yup.string(),
-		})
-	),
-});
-
-export type WebsiteDetailsTypes = Yup.InferType<
-	typeof WebsiteInformationValidation
->;
+// export type WebsiteDetailsTypes = Yup.InferType<
+// 	typeof WebsiteInformationValidation
+// >;
 
 // REACT QUILL MODULE
 const ReactQuillModule = {
@@ -113,27 +93,42 @@ const tabData = [
 ];
 
 // WEBSITE CONTACT US, SOCIALS AND FAQS DATASET
+interface ManageWebsiteType {
+	contact: {
+		email: string | "email";
+		phone: string;
+		address: string;
+	};
+	socials: {
+		facebook: string;
+		twitter: string;
+		instagram: string;
+		linkedin: string;
+	};
+	mission: string;
+	about: string;
+	vision: string;
+	faqs: [{ question: string; answer: string }];
+}
 
 export default function ManageWebsite() {
+	const [saveWebsiteInfo, saveWebsiteInfoResult] = useSaveWebiteInfoMutation();
+	const result = useGetWebsiteInfoQuery("");
 	const [value, setValue] = useState<string>("one");
 
-	const Formik = useFormik<{
-		contact: {
-			email: string | "email";
-			phone: string;
-			address: string;
-		};
-		socials: {
-			facebook: string;
-			twitter: string;
-			instagram: string;
-			linkedin: string;
-		};
-		mission: string;
-		about: string;
-		vision: string;
-		faqs: [{ question: string; answer: string }];
-	}>({
+	// SUMBIT WEBSITE INFO TO THE DATABASE
+	async function handleAPIRequest(values: ManageWebsiteType) {
+		try {
+			const response = await saveWebsiteInfo(values).unwrap();
+			if (response) {
+				SuccessNotification(response?.status);
+			}
+		} catch (error: ErrorType | any) {
+			handleNotification(error);
+		}
+	}
+
+	const Formik = useFormik<ManageWebsiteType>({
 		initialValues: {
 			about: "",
 			mission: "",
@@ -158,9 +153,15 @@ export default function ManageWebsite() {
 			],
 		},
 		onSubmit: (values) => {
-			console.log(values);
+			handleAPIRequest(values);
 		},
 	});
+
+	useEffect(() => {
+		if (!result.currentData?.info) return;
+		Formik.setValues({ ...result.currentData.info.data[0] });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [result]);
 
 	const websiteFormData = [
 		{
@@ -265,20 +266,18 @@ export default function ManageWebsite() {
 		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
 
 	// ADD MORE OBJECT TO THE FAQS ARRAY
-
 	const addMoreFAQ = useCallback(() => {
 		Formik.setFieldValue("faqs", [
-			...(Formik.values?.faqs || []),
+			...Formik.values?.faqs,
 			{ question: "", answer: "" },
 		]);
 	}, [Formik]);
 
+	// REMOVE ITEM FAQS INPUT
 	const removeMoreFAQ = useCallback(
 		(id: number) => {
-			const values = [...Formik.values?.faqs];
-
-			values.splice(id, 1);
-			Formik.setFieldValue("faqs", values);
+			const removedId = [...Formik.values?.faqs].filter((_, i) => i !== id);
+			Formik.setFieldValue("faqs", removedId);
 		},
 		[Formik]
 	);
@@ -297,8 +296,8 @@ export default function ManageWebsite() {
 				<div className="w-fit">
 					<Button
 						text="Save info"
-						// disabled={addNewResult?.isLoading}
-						// showModal={addNewResult?.isLoading}
+						disabled={saveWebsiteInfoResult?.isLoading}
+						showModal={saveWebsiteInfoResult?.isLoading}
 						className="h-[41px] mt-6 font-bold text-white rounded-[38px] px-6 hover: bg-[#002E66]"
 						type="submit"
 					/>
