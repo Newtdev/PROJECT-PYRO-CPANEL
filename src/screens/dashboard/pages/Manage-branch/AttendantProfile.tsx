@@ -89,14 +89,6 @@ const data: dataType[] = [
 		lastName: "Voff",
 	},
 ];
-// const AddAttendantValidation = Yup.object({
-// 	firstName: Yup.string().label("First name").required(),
-// 	lastName: Yup.string().label("Last name").required(),
-// 	phoneNumber: Yup.string().label("Phone number").required(),
-// 	password: Yup.string().label("Password").required(),
-// });
-
-// type addAttendantTypes = Yup.InferType<typeof AddAttendantValidation>;
 
 export default function AttendantProfile(props: {
 	attendantData: { [index: string]: string | any }[];
@@ -155,30 +147,12 @@ export default function AttendantProfile(props: {
 							}}>
 							<Trash />
 						</div>
-						{/* <div className="w-[189px] h-11">
-							<Button
-								text="Add Branch"
-								className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
-								type="button"
-								showIcon={true}
-								onClick={() => {
-									setShowAddModal(true);
-								}}
-							/>
-						</div> */}
 					</div>
 				</div>
 				<div className="w-full grid lg:grid-cols-3 md:grid-cols-2 gap-x-4 gap-y-4 mt-6">
 					{props?.attendantData?.map((v) => (
 						<div key={v?.id}>
-							<div
-								className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66]"
-								//  onClick={() =>
-								//  	navigate(`/branch/${slicedPath[2]}/attendant/${v.id}`, {
-								//  		state: `${v?.firstName} ${v?.lastName}`,
-								//  	})
-								// }
-							>
+							<div className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66]">
 								<div className="basis-[40%] flex items-start justify-start">
 									<Checkbox
 										color="primary"

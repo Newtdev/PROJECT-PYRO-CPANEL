@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button } from "src/components/Button";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import ViewWalletComp from "src/components/ViewWalletComponent";
-import { Data } from "src/helpers/alias";
 import { SearchInput } from "src/components/inputs";
 import { FilterList } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +11,7 @@ import { TableLoader } from "src/components/LoaderContainer";
 import { useDebounce } from "src/hooks/useDebounce";
 
 interface HeadCellTypes {
-	id: keyof Data;
+	id: string;
 	label: string;
 	numeric?: boolean | null;
 	minWidth: number;
@@ -98,36 +97,35 @@ const Transactions = () => {
 	});
 
 	const handledAPIResponse = useMemo(() => {
-		let neededData: Data[] = [];
-		const { data, ...rest } = userResult?.currentData?.users || {};
+		let neededData: {
+			id: string;
+			// createdAt,
+			firstName: string;
+			lastName: string;
+			gender: "Male" | "Female";
+			email: string;
+			phoneNumber: string;
+			residentialAddress: string;
+		}[] = [];
+		const { data } = userResult?.currentData?.users || {};
 
 		if (data) {
 			for (const iterator of data) {
-				const {
-					id,
-					// createdAt,
-					email,
-					firstName,
-					lastName,
-					gender,
-					phoneNumber,
-					residentialAddress,
-				} = iterator;
 				neededData = [
 					...neededData,
 					{
-						id,
+						id: iterator.id,
 						// createdAt,
-						firstName,
-						lastName,
-						gender,
-						email,
-						phoneNumber,
-						residentialAddress,
+						firstName: iterator.firstName,
+						lastName: iterator.lastName,
+						gender: iterator.gender,
+						email: iterator.email,
+						phoneNumber: iterator.phoneNumber,
+						residentialAddress: iterator.residentialAddress,
 					},
 				];
 			}
-			return { neededData, rest };
+			return neededData;
 		}
 	}, [userResult]);
 	const { handleRowClick } = useHandleRowClick(fn);
@@ -153,14 +151,14 @@ const Transactions = () => {
 	];
 
 	const props = {
-		rows: handledAPIResponse?.neededData || [],
+		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
 		handleChangePage,
 		paginationData: {
-			totalPage: handledAPIResponse?.rest?.totalPages,
-			limit: handledAPIResponse?.rest?.limit,
-			page: handledAPIResponse?.rest?.page,
+			totalPage: userResult?.currentData?.users?.totalPages,
+			limit: userResult?.currentData?.users?.limit,
+			page: userResult?.currentData?.users?.page,
 		},
 		accountInformation: {
 			balance: 0,
@@ -184,9 +182,7 @@ const Transactions = () => {
 						</div>
 					</div>
 					<div className="h-fit w-full bg-white mt-6 shadow-lg rounded-t-lg">
-						<TableLoader
-							data={userResult}
-							tableData={handledAPIResponse?.neededData || []}>
+						<TableLoader data={userResult} tableData={handledAPIResponse || []}>
 							<div className="h-full w-full bg-white flex justify-between items-center py-6 px-6">
 								<div>
 									<SelectInput

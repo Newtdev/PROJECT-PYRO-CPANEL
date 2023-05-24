@@ -8,17 +8,18 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setCredentials } from "./features/auth/authSlice";
 import { useAppDispatch } from "./hooks/reduxhooks";
+import Notification from "./screens/dashboard/pages/Notification";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Settings = lazy(() => import("./screens/dashboard/pages/Settings"));
 const SelfHelp = lazy(() => import("./screens/dashboard/pages/self-help"));
 const HQPage = lazy(() => import("./screens/dashboard/pages/Manage-HQ/HQPage"));
-const UserWallet = lazy(
-	() => import("./screens/dashboard/pages/User/UserWallet")
-);
-const ViewHQWallet = lazy(
-	() => import("./screens/dashboard/pages/Manage-HQ/ViewHQWallet")
-);
+// const UserWallet = lazy(
+// 	() => import("./screens/dashboard/pages/User/UserWallet")
+// );
+// const ViewHQWallet = lazy(
+// 	() => import("./screens/dashboard/pages/Manage-HQ/ViewHQWallet")
+// );
 const AllTransactions = lazy(
 	() => import("./screens/dashboard/pages/Transactions/AllTransactions")
 );
@@ -35,7 +36,7 @@ const ManageHQ = lazy(
 	() => import("./screens/dashboard/pages/Manage-HQ/ManageHQ")
 );
 const SinglePage = lazy(() => import("./screens/dashboard/pages/SinglePage"));
-const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
+// const ViewWallet = lazy(() => import("./screens/dashboard/pages/ViewWallet"));
 
 const BranchReview = lazy(
 	() => import("./screens/dashboard/pages/Manage-branch/BranchReview")
@@ -43,10 +44,6 @@ const BranchReview = lazy(
 // const AttendantProfileInfo = lazy(
 // 	() => import("./screens/dashboard/pages/Manage-branch/AttendantProfileInfo")
 // );
-
-const AppRoute = [
-	{ path: APP_ROUTE.LOGIN, component: <Login />, permissions: "" },
-];
 
 function App() {
 	type saveUserTypes = {
@@ -79,7 +76,7 @@ function App() {
 							element={<SinglePage />}
 						/>
 						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<HQPage />} />
-						<Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} />
+						{/* <Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} /> */}
 
 						<Route
 							path={APP_ROUTE.ATTENDANT_REVIEW}
@@ -89,7 +86,7 @@ function App() {
 							path={APP_ROUTE.ATTENDANT_PROFILE_INFO}
 							element={<AttendantProfileInfo />}
 						/> */}
-						<Route path={APP_ROUTE.VIEW_HQ_WALLET} element={<ViewHQWallet />} />
+						{/* <Route path={APP_ROUTE.VIEW_HQ_WALLET} element={<ViewHQWallet />} /> */}
 						<Route path={APP_ROUTE.VIEW_HQ_BRANCH} element={<ManageBranch />} />
 						<Route
 							path={APP_ROUTE.TRANSACTIONS}
@@ -97,9 +94,10 @@ function App() {
 						/>
 						<Route path={APP_ROUTE.USER} element={<Users />} />
 						<Route path={APP_ROUTE.USER_PROFILE} element={<UserProfile />} />
-						<Route path={APP_ROUTE.USER_WALLET} element={<UserWallet />} />
+						{/* <Route path={APP_ROUTE.USER_WALLET} element={<UserWallet />} /> */}
 						<Route path={APP_ROUTE.SELF_HELP} element={<SelfHelp />} />
 						<Route path={APP_ROUTE.SETTINGS} element={<Settings />} />
+						<Route path={APP_ROUTE.NOTIFICATION} element={<Notification />} />
 					</Route>
 				</Routes>
 			</Suspense>

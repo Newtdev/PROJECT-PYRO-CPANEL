@@ -1,17 +1,21 @@
-import { ChangeEventHandler, ReactElement } from "react";
+import { ReactElement, useMemo } from "react";
 import React, { useState } from "react";
 import { Button } from "src/components/Button";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import ViewWalletComp from "src/components/ViewWalletComponent";
-import { CurrencyFormatter } from "src/helpers/helperFunction";
-import { Data } from "src/helpers/alias";
+import {
+	CurrencyFormatter,
+	handleDateFormat,
+} from "src/helpers/helperFunction";
+import { TransactionsType } from "src/helpers/alias";
 import { SearchInput } from "src/components/inputs";
-import { FilterList } from "@mui/icons-material";
 import ReceiptCard from "src/components/ReceiptCard";
 import { SelectInput, SelectType } from "src/components/SelectInput";
+import { useGetAllTransactionsQuery } from "src/api/transactionsApiSlice";
+import { TableLoader } from "src/components/LoaderContainer";
 
 interface HeadCellTypes {
-	id: keyof Data;
+	id: string;
 	label: string;
 	numeric?: boolean | null;
 	minWidth: number;
@@ -22,98 +26,17 @@ interface HeadCellTypes {
 	doneby?: string;
 }
 
-const rows: Data[] = [
-	{
-		id: 1,
-		amount: CurrencyFormatter(200000),
-		type: "Transfer",
-		doneby: "Zaria Road, Tambuwawa",
-		status: <p className="text-yellow-500">Pending</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 2,
-		amount: CurrencyFormatter(200000),
-		type: "Withdrawal",
-		doneby: "Zaria Road, Tambuwawa",
-		status: <p className="text-green-500">Successful</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 3,
-		amount: CurrencyFormatter(200000),
-		type: "Transfer",
-		doneby: "Zaria Road, Tambuwawa",
-		status: <p className="text-yellow-500">Pending</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 4,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwawa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 5,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 6,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 7,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 8,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 9,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 10,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 12,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		doneby: "Zaria Road, Tambuwa",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-];
-
 const headCells: readonly HeadCellTypes[] = [
+	{
+		id: "walletId",
+		minWidth: 170,
+		label: "Wallet ID",
+	},
+	{
+		id: "referenceId",
+		minWidth: 170,
+		label: "Reference",
+	},
 	{
 		id: "amount",
 		minWidth: 170,
@@ -134,32 +57,11 @@ const headCells: readonly HeadCellTypes[] = [
 		minWidth: 170,
 		label: "Status",
 	},
-	{
-		id: "referenceId",
-		minWidth: 170,
-		label: "Reference Id",
-	},
 ];
 
-const data = {
-	ref: "1234567890",
-	accountNumber: 1234567890,
-	accountName: "Thomas Ejembi",
-	bank: "Polaris Bank",
-	category: "Branch",
-	amount: "2000",
-	vat: "3000",
-	status: "pending",
-	transactionTime: "2/3/2023",
-};
-
-// const useGetSelectedData = (data) => {
-// 	const [transactionData, setTransactionData] = useState<{}>(data || {});
-
-// 	return
-// };
 const Transactions = () => {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
+	const [page, setPage] = useState({ newPage: 1 });
 
 	const [transactionData, setTransactionData] = useState<{}>({});
 	function fn(data: { [index: string]: string | number }) {
@@ -172,7 +74,46 @@ const Transactions = () => {
 	const handleSelectChange = (event: { target: { value: string } }) => {
 		setFilteredValue(event.target.value);
 	};
+	const allTransactionsResult = useGetAllTransactionsQuery({ page });
 
+	const handledAPIResponse = useMemo(() => {
+		const transactions = allTransactionsResult?.currentData?.transactions || [];
+		return transactions?.data?.reduce(
+			(acc: { [index: string]: string }[], cur: TransactionsType) => [
+				...acc,
+				{
+					referenceId: cur.meta?.reference,
+					doneby: cur.meta?.payerName,
+					walletId: cur.meta.walletNumber,
+					type: cur.type,
+
+					category: cur.category,
+					amount: CurrencyFormatter(Number(cur?.amount)),
+
+					status: (
+						<p
+							className={`${
+								cur.status.toString().toLowerCase() === "pending"
+									? "text-yellow-500"
+									: cur.status.toString().toLowerCase() === "successful"
+									? "text-green-500"
+									: "text-red-500"
+							}`}>
+							{cur.status}
+						</p>
+					),
+					createdAt: handleDateFormat(cur?.createdAt),
+				},
+			],
+			[]
+		);
+	}, [allTransactionsResult]);
+
+	const handleChangePage = (event: unknown, newPage: number) => {
+		setPage((prev) => {
+			return { ...prev, newPage };
+		});
+	};
 	// TABLE FILTER TAB
 	const tabData: SelectType[] = [
 		{ id: 1, value: "Pending", label: "Pending " },
@@ -184,13 +125,19 @@ const Transactions = () => {
 	];
 
 	const props = {
-		rows,
+		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
 		accountInformation: {
 			balance: 0,
 			amountIn: 0,
 			amountOut: 0,
+		},
+		handleChangePage,
+		paginationData: {
+			totalPage: allTransactionsResult?.currentData?.transactions?.totalPages,
+			limit: allTransactionsResult?.currentData?.transactions?.limit,
+			page: allTransactionsResult?.currentData?.transactions?.page,
 		},
 	};
 	return (
@@ -230,7 +177,11 @@ const Transactions = () => {
 								/>
 							</div>
 						</div>
-						<ViewWalletComp {...props} />
+						<TableLoader
+							data={allTransactionsResult}
+							tableData={handledAPIResponse || []}>
+							<ViewWalletComp {...props} />
+						</TableLoader>
 					</div>
 				</div>
 				{showModal ? (

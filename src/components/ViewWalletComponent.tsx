@@ -1,17 +1,16 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, IconButton, Tab, Tabs } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React, { ReactElement, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { SearchInput } from "src/components/inputs";
+
 import EnhancedTable from "src/components/Table";
-import { Data } from "src/helpers/alias";
+import { Data, TransactionsType } from "src/helpers/alias";
 import { CurrencyFormatter } from "src/helpers/helperFunction";
 import { DropDownComponent } from "src/screens/dashboard/layout/main";
 
 type TabType = { id: string | number; value: string; label: string };
 
 export interface HeadCellTypes {
-	id: keyof Data;
+	id: string;
 	label: string;
 	numeric?: boolean | null;
 	minWidth: number;
@@ -21,39 +20,8 @@ export interface HeadCellTypes {
 	referenceId?: string | number;
 }
 
-const rows: Data[] | null = [
-	{
-		id: 1,
-		amount: CurrencyFormatter(200000),
-		type: "Transfer",
-		status: <p className="text-yellow-500">Pending</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 2,
-		amount: CurrencyFormatter(200000),
-		type: "Withdrawal",
-		status: <p className="text-green-500">Successful</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 3,
-		amount: CurrencyFormatter(200000),
-		type: "Transfer",
-		status: <p className="text-yellow-500">Pending</p>,
-		referenceId: "683928724647",
-	},
-	{
-		id: 4,
-		amount: CurrencyFormatter(200000),
-		type: "Deposits",
-		status: <p className="text-red-500">Failed</p>,
-		referenceId: "683928724647",
-	},
-];
-
 interface WalletProps {
-	rows: Data[];
+	rows: any;
 	headCells: readonly HeadCellTypes[];
 	showCard?: boolean;
 	tabData?: TabType[];
@@ -66,76 +34,29 @@ interface WalletProps {
 		amountIn: number;
 		amountOut: number;
 	};
+	paginationData: { totalPage: number; limit: number; page: number };
+	handleChangePage: (event: unknown, newPage: number) => void;
 }
 
 export default function ViewWalletComp(props: WalletProps) {
 	const [selected, setSelected] = React.useState<readonly string[]>([]);
 
-	const addCellToRow = (): Data[] => {
-		return props.rows?.map((dt) => {
-			return {
-				...dt,
-				status: (
-					<p
-						className={`${
-							dt?.status?.toString().toLowerCase() === "pending"
-								? "text-yellow-500"
-								: dt?.status?.toString().toLowerCase() === "successful"
-								? "text-green-500"
-								: "text-red-500"
-						}`}>
-						{dt.status}
-					</p>
-				),
-			};
-		});
-	};
-
 	// TABLE FILTER TAB
-
-	// SELECT ALL THE ROWS ON THE FUNCTION
-	// const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-	// 	if (event.target.checked) {
-	// 		const newSelected = rows?.map((n) => n.name) as [];
-	// 		setSelected(newSelected);
-	// 		return;
-	// 	}
-	// 	setSelected([]);
-	// };
-
-	// SELECT A SINGLE ROW ON TABLE
-	// const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-	// 	const selectedIndex = selected.indexOf(name);
-	// 	let newSelected: readonly string[] = [];
-
-	// 	if (selectedIndex === -1) {
-	// 		newSelected = newSelected.concat(selected, name);
-	// 	} else if (selectedIndex === 0) {
-	// 		newSelected = newSelected.concat(selected.slice(1));
-	// 	} else if (selectedIndex === selected.length - 1) {
-	// 		newSelected = newSelected.concat(selected.slice(0, -1));
-	// 	} else if (selectedIndex > 0) {
-	// 		newSelected = newSelected.concat(
-	// 			selected.slice(0, selectedIndex),
-	// 			selected.slice(selectedIndex + 1)
-	// 		);
-	// 	}
-
-	// 	setSelected(newSelected);
-	// };
 
 	// CONFIRMATION OF WHAT IS SELECTED
 	const isSelected = (data: string) => selected.indexOf(data) !== -1;
 
 	let dataToChildren: any = {
-		rows: addCellToRow(),
+		rows: props.rows,
 		headCells: props.headCells,
 		handleRowClick: props.handleRowClick,
 		showFlag: false,
 		isSelected,
+		handleChangePage: props.handleChangePage,
 		// handleClick,
 		// handleSelectAllClick,
 		selected,
+		paginationData: props.paginationData,
 	};
 
 	return (

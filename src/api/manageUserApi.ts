@@ -7,7 +7,7 @@ export const manageUserAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllUser: builder.query({
 			query: (params) =>
-				`${API_ROUTE.FETCH_ALL_USERS}?search=${params?.query}&page=${params?.page}`,
+				`${API_ROUTE.FETCH_ALL_USERS}?search=${params?.query}&page=${params?.page}&limit=8`,
 		}),
 		fetchUser: builder.query({
 			query: (id) => `${API_ROUTE.FETCH_ALL_USER}/${id}`,

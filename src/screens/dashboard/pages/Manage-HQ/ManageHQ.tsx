@@ -30,7 +30,7 @@ import {
 import { useDebounce } from "src/hooks/useDebounce";
 
 interface HeadCell {
-	id: keyof Data;
+	id: string;
 	label: string | ReactElement;
 	minWidth: number;
 }
@@ -412,10 +412,10 @@ const ManageHQ = () => {
 		query: debouncedValue,
 		page: pagination.newPage,
 	});
-
+	type ProfileType = { [index: string]: string };
 	// hqQueryResult?.currentData?.hqProfile?.totalData;
 	const handledAPIResponse = useMemo(() => {
-		let neededData: Data[] = [];
+		let neededData: ProfileType[] = [];
 		const hqProfile = hqQueryResult?.currentData?.hqProfile;
 		if (hqProfile) {
 			for (const iterator of hqProfile?.data) {
@@ -426,7 +426,7 @@ const ManageHQ = () => {
 					{ id, name, email, hqAddress, phoneNumber, state },
 				];
 			}
-			return { hqProfile, neededData };
+			return neededData;
 		}
 	}, [hqQueryResult]);
 
@@ -459,7 +459,7 @@ const ManageHQ = () => {
 		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
 	}
 	let dataToChildren: any = {
-		rows: handledAPIResponse?.neededData || [],
+		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
 		showFlag: true,
@@ -470,9 +470,9 @@ const ManageHQ = () => {
 		selected,
 		handleChangePage,
 		paginationData: {
-			totalPage: handledAPIResponse?.hqProfile?.totalPages,
-			limit: handledAPIResponse?.hqProfile?.limit,
-			page: handledAPIResponse?.hqProfile?.page,
+			totalPage: hqQueryResult?.currentData?.hqProfile?.totalPages,
+			limit: hqQueryResult?.currentData?.hqProfile?.limit,
+			page: hqQueryResult?.currentData?.hqProfile?.page,
 		},
 	};
 
@@ -519,7 +519,7 @@ const ManageHQ = () => {
 				<div className="h-fit w-full bg-white">
 					<TableLoader
 						data={hqQueryResult}
-						tableData={handledAPIResponse?.neededData || []}>
+						tableData={handledAPIResponse || []}>
 						<div className="h-full w-full">
 							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
 								<div>

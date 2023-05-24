@@ -58,7 +58,19 @@ export interface Data {
 	lastName?: string;
 	gender?: string;
 	residentialAddress?: string;
+	walletId: string;
 	location?: { [index: string]: string | number };
+}
+
+export interface TransactionsType {
+	meta: { reference: string; payerName: string; walletNumber: string };
+	type: string;
+	category: string;
+	amount: string;
+	status: string | ReactElement;
+	createdAt: string;
+
+	// [index:string]:string | number
 }
 
 // ERROR HANDLE FROM API

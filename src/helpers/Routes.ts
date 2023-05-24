@@ -12,6 +12,7 @@ export enum API_ROUTE {
 	SELF_HELP = "system-admin/self-help",
 	ADMIN = "system-admin",
 	SAVE_WEBSITE_INFO = "system-admin/website-info",
+	NOTIFICATION = "system-admin/notification",
 }
 
 export enum APP_ROUTE {
@@ -53,4 +54,5 @@ export enum RTKTAG {
 	MANAGER_BRANCH = "MANAGE_BRANCH",
 	ADMIN = "ADMIN",
 	WEBSITE_INFO = "WEBSITE",
+	NOTIFICATION = "NOTIFICATION",
 }

@@ -41,10 +41,12 @@ interface TableLoaderType extends LoadingType {
 }
 
 export function TableLoader(props: TableLoaderType) {
+	const loading = props?.data?.isLoading || props?.data?.isFetching;
+	console.log(props.tableData);
 	return (
 		<>
 			<div className=" flex justify-center items-center z-10">
-				{props?.data?.isLoading || props?.data?.isFetching ? (
+				{loading ? (
 					<div className=" h-56 flex justify-center items-center">
 						<CircularProgress size={30} sx={{ color: "#002E66" }} />
 					</div>
@@ -76,7 +78,9 @@ export function TableLoader(props: TableLoaderType) {
 				) : null}
 			</div>
 
-			{props?.tableData?.length > 0 ? <div>{props.children}</div> : null}
+			{props?.tableData?.length > 0 && !props.data.isFetching ? (
+				<div>{props.children}</div>
+			) : null}
 		</>
 	);
 }

@@ -88,26 +88,25 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const [value, setValue] = React.useState<string>("one");
 
 	const handledAPIResponse = useMemo(() => {
-		let neededData: HqBranchType[] = [];
+		// let neededData: HqBranchType[] = [];
 		const hqProfile = props?.branchInfo;
-		if (hqProfile) {
-			for (const iterator of hqProfile) {
-				return (neededData = [
-					...neededData,
-					{
-						id: iterator._id,
-						name: iterator.name,
-						phoneNumber: iterator.phoneNumber,
-						status: iterator.status,
-						lga: iterator?.location?.lga,
-						address: iterator.location?.address,
-						latitude: iterator.location?.latitude,
-						longitude: iterator.location?.longitude,
-						state: iterator.location?.state,
-					},
-				]);
-			}
-		}
+		return hqProfile?.reduce(
+			(acc: HqBranchType[], cur: HqBranchType) => [
+				...acc,
+				{
+					id: cur._id,
+					name: cur.name,
+					phoneNumber: cur.phoneNumber,
+					status: cur.status,
+					lga: cur?.location?.lga,
+					address: cur.location?.address,
+					latitude: cur.location?.latitude,
+					longitude: cur.location?.longitude,
+					state: cur.location?.state,
+				},
+			],
+			[]
+		);
 	}, [props]);
 
 	const { handleSelectAllClick, selected, setSelected } =
