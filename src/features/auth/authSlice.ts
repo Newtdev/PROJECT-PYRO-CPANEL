@@ -50,7 +50,12 @@ import { RootState } from "src/store/store";
 const authSlice = createSlice({
 	name: "auth",
 	initialState: {
-		systemAdmin: { role: null, firstName: "", lastName: "" },
+		systemAdmin: {
+			role: null,
+			firstName: "",
+			lastName: "",
+			avatar: { url: "" },
+		},
 		token: { accessToken: null, refreshToken: null },
 	} as loginResponseType,
 

@@ -28,6 +28,7 @@ export type cardBtnType = {
 };
 export type loginResponseType = {
 	systemAdmin: {
+		avatar: any;
 		role: null;
 		firstName: string | null;
 		lastName: string | null;

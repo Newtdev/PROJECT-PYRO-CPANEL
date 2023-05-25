@@ -1,12 +1,11 @@
 import Image from "src/components/Image";
-import Img from "src/assets/img/image.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { Collapse } from "@mui/material";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "src/hooks/useAuth";
 import { ReactNode } from "react";
 import { useAppDispatch } from "src/hooks/reduxhooks";
@@ -44,16 +43,18 @@ const DashboardHeader = (props: { header: string }) => {
 				{props.header}
 			</h1>
 			<div className="w-full flex items-center justify-end gap-4 pr-[20.33px]">
-				<div className="flex items-center justify-between lg:w-[70%] max-w-full relative ">
+				<div className="flex items-center justify-between lg:w-[60%] max-w-full relative ">
 					<p className="font-normal text-sm lg:text-[18px] text-[#393939] w-full ">
 						{user?.firstName} {user?.lastName}
 					</p>
-					<Image
-						image={Img}
-						width={50}
-						height={50}
-						styles="rounded-full ml-4"
-					/>
+					<div className="h-[50px] w-[65px] flex justify-center items-center rounded-full">
+						<Image
+							width="100%"
+							height="100%"
+							image={user?.avatar?.url}
+							styles="rounded-full h-full w-full"
+						/>
+					</div>
 					<ExpandMore
 						expand={expanded}
 						onClick={handleExpandClick}
@@ -84,12 +85,6 @@ interface propstype {
 	[index: string]: any;
 }
 export const DropDownComponent = (props: propstype) => {
-	// const [expanded, setExpanded] = useState<boolean>(false);
-
-	// const handleExpandClick = () => {
-	// 	setExpanded(!expanded);
-	// };
-
 	interface ExpandMoreProps extends IconButtonProps {
 		expand: boolean;
 	}

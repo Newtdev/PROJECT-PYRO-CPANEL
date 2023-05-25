@@ -45,7 +45,7 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 				InvalidateTag(result?.data?.id, RTKTAG.WEBSITE_INFO) as any,
 		}),
 		getWebsiteInfo: builder.query({
-			query: (params) => API_ROUTE.SAVE_WEBSITE_INFO,
+			query: (params) => `${API_ROUTE.SAVE_WEBSITE_INFO}?orderBy=createdAt:asc`,
 			providesTags: (result) =>
 				providesTagList(result.info.data, RTKTAG.WEBSITE_INFO) as any,
 		}),

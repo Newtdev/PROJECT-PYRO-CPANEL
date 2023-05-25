@@ -1,4 +1,3 @@
-import { FetchBaseQueryMeta } from "@reduxjs/toolkit/dist/query";
 import { loginResponseType, Values } from "src/helpers/alias";
 import { API_ROUTE } from "src/helpers/Routes";
 import { apiSlice } from "./apiSlice";
