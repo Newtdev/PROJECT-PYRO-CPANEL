@@ -26,6 +26,16 @@ interface HeadCellTypes {
 	doneby?: string;
 }
 
+interface CategoryType {
+	fuel_purchase: string;
+	wallet_transfer: string;
+}
+
+const Category: CategoryType | any = {
+	fuel_purchase: "Fuel purchase",
+	wallet_transfer: "Wallet transfer",
+};
+
 const headCells: readonly HeadCellTypes[] = [
 	{
 		id: "walletId",
@@ -41,6 +51,11 @@ const headCells: readonly HeadCellTypes[] = [
 		id: "amount",
 		minWidth: 170,
 		label: "Transaction Amount (N)",
+	},
+	{
+		id: "category",
+		minWidth: 170,
+		label: "Category",
 	},
 	{
 		id: "type",
@@ -59,9 +74,17 @@ const headCells: readonly HeadCellTypes[] = [
 	},
 ];
 
+// TRANSACTION TABLE FILTER INFORMATION
+const tabData: SelectType[] = [
+	{ id: 1, value: "available_balance", label: "Available balance " },
+	{ id: 2, value: "bank_transfer", label: "Bank transfer" },
+	{ id: 3, value: "card_deposit", label: "Card deposit " },
+	{ id: 4, value: "user_transfer", label: "User transfer" },
+];
+
 const Transactions = () => {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
-	const [page, setPage] = useState({ newPage: 1 });
+	const [info, setInfo] = useState({ newPage: 1, source: "user_transfer" });
 
 	const [transactionData, setTransactionData] = useState<{}>({});
 	function fn(data: { [index: string]: string | number }) {
@@ -69,12 +92,16 @@ const Transactions = () => {
 		setShowModal((prev) => !prev);
 	}
 	const [searchValue, setSearchValue] = useState<string>("");
-	const [filteredValue, setFilteredValue] = useState<string>("");
 
 	const handleSelectChange = (event: { target: { value: string } }) => {
-		setFilteredValue(event.target.value);
+		setInfo((prev) => {
+			return { ...prev, source: event.target.value };
+		});
 	};
-	const allTransactionsResult = useGetAllTransactionsQuery({ page });
+	const allTransactionsResult = useGetAllTransactionsQuery({
+		page: info.newPage,
+		source: info.source,
+	});
 
 	const handledAPIResponse = useMemo(() => {
 		const transactions = allTransactionsResult?.currentData?.transactions || [];
@@ -87,7 +114,7 @@ const Transactions = () => {
 					walletId: cur.meta.walletNumber,
 					type: cur.type,
 
-					category: cur.category,
+					category: Category[cur.category],
 					amount: CurrencyFormatter(Number(cur?.amount)),
 
 					status: (
@@ -110,19 +137,10 @@ const Transactions = () => {
 	}, [allTransactionsResult]);
 
 	const handleChangePage = (event: unknown, newPage: number) => {
-		setPage((prev) => {
+		setInfo((prev) => {
 			return { ...prev, newPage };
 		});
 	};
-	// TABLE FILTER TAB
-	const tabData: SelectType[] = [
-		{ id: 1, value: "Pending", label: "Pending " },
-		{ id: 2, value: "HQ", label: "HQ" },
-		{ id: 3, value: "Branch", label: "Branch " },
-		{ id: 4, value: "Users", label: "Users " },
-		{ id: 5, value: "Success", label: "Success" },
-		{ id: 6, value: "Failed", label: "Failed" },
-	];
 
 	const props = {
 		rows: handledAPIResponse || [],
@@ -160,7 +178,7 @@ const Transactions = () => {
 							<div>
 								<SelectInput
 									tabData={tabData}
-									filteredValue={filteredValue}
+									filteredValue={info.source}
 									onChange={handleSelectChange}
 								/>
 							</div>
