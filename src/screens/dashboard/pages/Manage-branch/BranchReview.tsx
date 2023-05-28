@@ -4,179 +4,32 @@ import { useCallback, useMemo } from "react";
 import { ReviewComponents } from "src/components/ReviewComponents";
 import { ReviewDataType } from "src/helpers/alias";
 
-export default function BranchReview() {
-	const ratings = [
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-		{
-			user: {
-				_id: "64465fc83d2b9078e9fa4222",
-				firstName: "Peta",
-				lastName: "Doe",
-				gender: "male",
-				phoneNumber: "+2348157585161",
-				nin: "1234567890",
-				deviceInfo: [],
-				systemCode: "PD-ABU-AMA-URCXCF",
-				accountStatus: "confirmed",
-				location: {
-					lga: "AMAC",
-					state: "Abuja",
-				},
-				createdAt: "2023-04-24T10:54:00.790Z",
-				updatedAt: "2023-04-24T10:54:17.008Z",
-				emailVerifiedAt: "2023-04-24T10:54:09.670Z",
-			},
-			rating: 5,
-			comment: "testing rating",
-			_id: "645fd785b0853e967f954a0e",
-		},
-	];
-
+export default function BranchReview(props: {
+	ratings: {
+		comment: string;
+		rating: number;
+		_id: string;
+		user: {
+			firstName: string;
+			lastName: string;
+			location: { state: string };
+		};
+	}[];
+}) {
 	const occurrences = useCallback(
 		(num: number) => {
-			const RatingAverage = ratings.reduce(
-				(acc, cur, index, array): any =>
-					Number((acc += cur.rating / array.length).toFixed(1)),
+			const ratings = props?.ratings;
+
+			const RatingAverage = ratings?.reduce(
+				(
+					acc: number,
+					cur: { rating: number },
+					index: any,
+					array: string | any[]
+				): any => Number((acc += cur.rating / array.length).toFixed(1)),
 				0
 			);
-			const occurr = ratings.reduce((acc: any, curr: any) => {
+			const occurr = ratings?.reduce((acc: any, curr: any) => {
 				return (
 					acc[curr?.rating] ? ++acc[curr?.rating] : (acc[curr?.rating] = 1), acc
 				);
@@ -188,7 +41,7 @@ export default function BranchReview() {
 				totalCalStar,
 			};
 		},
-		[ratings]
+		[props]
 	);
 
 	// console.log(occurrences(2));
@@ -197,7 +50,7 @@ export default function BranchReview() {
 		<section>
 			<article className="flex flex-cols lg:flex-row gap-4  bg-white rounded-lg mt-10 h-screen">
 				<div className="lg:basis-[65%] h-fit grid grid-cols-2 mt-10 gap-4 px-4">
-					{ratings?.map((dt, i) => (
+					{props.ratings?.map((dt, i) => (
 						<div className="h-fit mt-6 border px-2 py-4 border-[#636685] rounded-xl">
 							<div
 								key={dt?._id}
@@ -212,7 +65,6 @@ export default function BranchReview() {
 										size="small"
 										disabled
 										defaultValue={dt.rating}
-										// max={5}
 									/>
 								</div>
 							</div>

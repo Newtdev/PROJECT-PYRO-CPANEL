@@ -149,7 +149,6 @@ const ManageBranch = () => {
 
 	// CONFIRMATION OF WHAT IS SELECTED
 	// const isSelected = (data: string) => selected.indexOf(name) !== -1;
-	console.log(handledAPIResponse);
 	let dataToChildren: { [index: string]: string | number | any } = {
 		rows: handledAPIResponse?.neededData || [],
 		headCells,

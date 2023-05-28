@@ -45,15 +45,17 @@ export default function SinglePage() {
 	const handledAPIResponse = useMemo(() => {
 		const station = branchResult?.currentData?.station;
 
-		const { name, phoneNumber, location } = station || {};
 		return {
-			name,
-			phoneNumber,
-			lga: location?.lga,
-			address: location?.address,
-			latitude: location?.latitude,
-			longitude: location?.longitude,
-			state: location?.state,
+			profileData: {
+				name: station?.name,
+				phoneNumber: station?.phoneNumber,
+				lga: station?.location?.lga,
+				address: station?.location?.address,
+				latitude: station?.location?.latitude,
+				longitude: station?.location?.longitude,
+				state: station?.location?.state,
+			},
+			rating: station?.ratings,
 		};
 	}, [branchResult]);
 
@@ -62,26 +64,17 @@ export default function SinglePage() {
 			id: 1,
 			icon: User,
 			name: "Branch Profile",
-			// link: APP_ROUTE.BRANCHES,
 		},
-		// {
-		// 	id: 2,
-		// 	icon: walletBtn,
-		// 	name: "View Wallet",
-		// 	// link: APP_ROUTE.VIEW_WALLET,
-		// },
+
 		{
 			id: 3,
 			icon: Attendant,
 			name: "Attendant Profile",
-			// navigate(`/branch/${name}`, { state: name })
-			// link: `/branch/${routePath}/attendant`,
 		},
 		{
 			id: 4,
 			icon: Rating,
 			name: "Ratings and Reviews",
-			// link: `/branch/${routePath}/reviews`,
 		},
 	];
 
@@ -105,16 +98,20 @@ export default function SinglePage() {
 						))}
 					</>
 				</div>
+
 				<LoaderContainer data={branchResult}>
 					{tabName.toLowerCase() === "branch profile" ? (
-						<ProfileCard data={handledAPIResponse || {}} showImage={false} />
+						<ProfileCard
+							data={handledAPIResponse.profileData || {}}
+							showImage={false}
+						/>
 					) : null}
 					{/* {tabName.toLowerCase() === "view wallet" ? <ViewWallet /> : null} */}
 					{tabName.toLowerCase() === "attendant profile" ? (
 						<AttendantProfile attendantData={pumpAttendants} />
 					) : null}
 					{tabName.toLowerCase() === "ratings and reviews" ? (
-						<BranchReview />
+						<BranchReview ratings={handledAPIResponse.rating} />
 					) : null}
 				</LoaderContainer>
 			</article>

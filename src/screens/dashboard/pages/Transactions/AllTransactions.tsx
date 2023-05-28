@@ -8,11 +8,11 @@ import {
 	handleDateFormat,
 } from "src/helpers/helperFunction";
 import { TransactionsType } from "src/helpers/alias";
-import { SearchInput } from "src/components/inputs";
 import ReceiptCard from "src/components/ReceiptCard";
 import { SelectInput, SelectType } from "src/components/SelectInput";
 import { useGetAllTransactionsQuery } from "src/api/transactionsApiSlice";
 import { TableLoader } from "src/components/LoaderContainer";
+import { CustomTabs } from "src/components/CustomTab";
 
 interface HeadCellTypes {
 	id: string;
@@ -75,33 +75,52 @@ const headCells: readonly HeadCellTypes[] = [
 ];
 
 // TRANSACTION TABLE FILTER INFORMATION
-const tabData: SelectType[] = [
+const filterData: SelectType[] = [
 	{ id: 1, value: "available_balance", label: "Available balance " },
 	{ id: 2, value: "bank_transfer", label: "Bank transfer" },
 	{ id: 3, value: "card_deposit", label: "Card deposit " },
 	{ id: 4, value: "user_transfer", label: "User transfer" },
 ];
 
+// TAB DATA FOR TABLE TAB
+const tabData: { id: number; value: string; label: string }[] = [
+	{ id: 1, value: "one", label: "Station branch" },
+	{ id: 2, value: "two", label: "Users" },
+];
+
 const Transactions = () => {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
-	const [info, setInfo] = useState({ newPage: 1, source: "user_transfer" });
-
+	const [info, setInfo] = useState({ page: 1, source: "user_transfer" });
+	const [value, setValue] = useState({
+		tab: "one",
+		who: "stations",
+		for: "station_branch",
+	});
 	const [transactionData, setTransactionData] = useState<{}>({});
+
 	function fn(data: { [index: string]: string | number }) {
 		setTransactionData(data);
 		setShowModal((prev) => !prev);
 	}
-	const [searchValue, setSearchValue] = useState<string>("");
 
+	// HANDLE CHANGE FOR TABLE TAB
 	const handleSelectChange = (event: { target: { value: string } }) => {
 		setInfo((prev) => {
 			return { ...prev, source: event.target.value };
 		});
 	};
 	const allTransactionsResult = useGetAllTransactionsQuery({
-		page: info.newPage,
-		source: info.source,
+		...{ ...info, ...value },
 	});
+
+	// HANDLE TAB CHANGE
+	const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+		setValue({
+			tab: newValue,
+			who: newValue === "two" ? "users" : "stations",
+			for: newValue === "two" ? "" : "station_branch",
+		});
+	};
 
 	const handledAPIResponse = useMemo(() => {
 		const transactions = allTransactionsResult?.currentData?.transactions || [];
@@ -113,7 +132,6 @@ const Transactions = () => {
 					doneby: cur.meta?.payerName,
 					walletId: cur.meta.walletNumber,
 					type: cur.type,
-
 					category: Category[cur.category],
 					amount: CurrencyFormatter(Number(cur?.amount)),
 
@@ -136,6 +154,7 @@ const Transactions = () => {
 		);
 	}, [allTransactionsResult]);
 
+	// HANDLE CHANGE FOR PAGINATION
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setInfo((prev) => {
 			return { ...prev, newPage };
@@ -176,22 +195,18 @@ const Transactions = () => {
 					<div className="h-full w-full bg-white mt-6 shadow-lg rounded-t-lg">
 						<div className="h-full w-full flex justify-between items-center py-6 px-6">
 							<div>
-								<SelectInput
+								<CustomTabs
+									value={value.tab}
 									tabData={tabData}
-									filteredValue={info.source}
-									onChange={handleSelectChange}
+									handleChange={handleTabChange}
 								/>
 							</div>
 
-							<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
-								<SearchInput
-									name="branch-search"
-									placeholder="Search for Branch, HQ, User"
-									value={searchValue}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-										const target = e.target;
-										setSearchValue(target.value);
-									}}
+							<div>
+								<SelectInput
+									tabData={filterData}
+									filteredValue={info.source}
+									onChange={handleSelectChange}
 								/>
 							</div>
 						</div>

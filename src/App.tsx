@@ -78,10 +78,10 @@ function App() {
 						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<HQPage />} />
 						{/* <Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} /> */}
 
-						<Route
+						{/* <Route
 							path={APP_ROUTE.ATTENDANT_REVIEW}
 							element={<BranchReview />}
-						/>
+						/> */}
 						{/* <Route
 							path={APP_ROUTE.ATTENDANT_PROFILE_INFO}
 							element={<AttendantProfileInfo />}
