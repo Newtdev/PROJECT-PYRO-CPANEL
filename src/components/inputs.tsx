@@ -175,7 +175,7 @@ interface SelectInputType {
 	name: string;
 	value: string;
 	id: string;
-	disabled: boolean;
+	disabled?: boolean;
 }
 
 export const SelectInput = (props: SelectInputType) => (

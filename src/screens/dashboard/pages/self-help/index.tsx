@@ -1,7 +1,12 @@
 import { Delete } from "@mui/icons-material";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, ChangeEvent, Fragment } from "react";
 import { ReactElement } from "react";
-import { FormInput, SearchInput, TextArea } from "src/components/inputs";
+import {
+	FormInput,
+	SearchInput,
+	SelectInput,
+	TextArea,
+} from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -20,6 +25,7 @@ import useIsSelected from "src/hooks/useIsSelected";
 import { useAddNewHQMutation } from "src/api/manageHQApiSlice";
 import { TableLoader } from "src/components/LoaderContainer";
 import {
+	convert2base64,
 	handleDateFormat,
 	handleNotification,
 	SuccessNotification,
@@ -28,6 +34,7 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { useFetchAllSelfHelpQuery } from "src/api/selfHelpApislice";
 import { Label } from "src/components/inputs";
 import { Upload } from "src/components/Upload";
+import Image from "src/components/Image";
 
 interface SelfHelpType {
 	id: "title" | "description" | "likes" | "createdAt";
@@ -253,7 +260,7 @@ const SelfHelp = () => {
 									<div className="w-full">
 										<Lines />
 									</div>
-									<AddNewHQ close={closeAddHQModal} />{" "}
+									<AddNewHQ close={closeAddHQModal} />
 								</div>
 							</div>
 						</Modal>
@@ -270,8 +277,7 @@ const AddbranchValidation = Yup.object({
 	title: Yup.string().label("Title").required(),
 	description: Yup.string().label("Description").required(),
 	type: Yup.string().label("Media type").required(),
-
-	// stationHQ.
+	media: Yup.array().of(Yup.string().notRequired()),
 });
 export type addBranchSchema = Yup.InferType<typeof AddbranchValidation>;
 
@@ -297,6 +303,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			title: "",
 			description: "",
 			type: "",
+			media: [],
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
@@ -350,10 +357,23 @@ const AddNewHQ = (props: { close: () => void }) => {
 		},
 	];
 
+	// const HandleChange = (e) => {
+	// 	const type = e.target.files[0].type;
+	// 	console.log(type);
+	// 	// console.log(e.target.files[0]);
+	// };
+
+	console.log(Formik.values?.media);
+	async function uploadSelfImage(e: { [index: string]: string | any }) {
+		Formik.setFieldValue("media", [
+			...(Formik.values?.media ?? []),
+			await convert2base64(e.target.files[0]),
+		]);
+	}
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}
-			className="w-full flex flex-col justify-center items-center px-4 h-full">
+			className="w-full flex flex-col justify-center items-center px-4 h-fit">
 			{step === 0 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
 					<FormInput
@@ -377,42 +397,29 @@ const AddNewHQ = (props: { close: () => void }) => {
 			) : null}
 			<TextArea {...FormData[1]} />
 			<div className="w-full">
-				<Label name="Media type" styles={labelStyles} />
-				<select className="mt-1 py-4 rounded-[38px] w-full border border-gray-300 px-4 text-[14px] bg-[#D9D9D9]">
-					<option>Select Type</option>
-					{["Image", "Video"].map((_v, i) => (
-						<option key={i} value={_v}>
-							{_v}
-						</option>
-					))}
-				</select>
-			</div>
-			<div className="flex items-center justify-between">
-				{/* <FormInput
-					id="title"
-					name="Manager's firstname"
-					type="text"
-					styles={`${styles} ${
-						Formik.errors.title && Formik.touched.title
-							? "border-red-500"
-							: "border-gray-300"
-					}`}
+				<SelectInput
+					id="type"
+					data={["Image", "Video"]}
 					labelStyles={labelStyles}
+					name="Select type"
 					onChange={Formik.handleChange}
-					value={Formik.values.title}
-					onBlur={Formik.handleBlur}
-					disabled={addNewResult?.isLoading}
-					error={Formik.errors.title}
-					touched={Formik.touched.title}
+					value={Formik.values.type}
 				/>
-				<Button
-					text="Add file"
-					disabled={addNewResult?.isLoading}
-					showModal={addNewResult?.isLoading}
-					className="h-[41px] mt-12 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-					type="submit"
-				/> */}
-				{/* <Upload /> */}
+			</div>
+			<div className="flex-col w-full items-center justify-between ">
+				<ShowVideoAndImage
+					media={Formik?.values?.media ?? []}
+					type={Formik.values.type}
+				/>
+				<div className="w-full h-24 mt-4">
+					<Upload
+						name="avatar"
+						// onChange={(e) => HandleChange(e)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							uploadSelfImage(e);
+						}}
+					/>
+				</div>
 			</div>
 			<div className="w-full">
 				{step > 0 ? (
@@ -435,5 +442,47 @@ const AddNewHQ = (props: { close: () => void }) => {
 				/>
 			</div>
 		</form>
+	);
+};
+
+const ShowVideoAndImage = ({
+	media,
+	type,
+}: {
+	media: string[];
+	type: string;
+}) => {
+	return (
+		<>
+			{type.toLowerCase() === "image" && media.length > 0 ? (
+				<div className="w-full flex  items-center overflow-x-auto py-2 h-fit">
+					{media?.map((_v, i) => {
+						return (
+							<Fragment key={i}>
+								<Image
+									image={_v || ""}
+									width={200}
+									height={200}
+									styles="h-24 object-cover"
+								/>
+							</Fragment>
+						);
+					})}
+				</div>
+			) : null}
+			{type.toLowerCase() === "video" &&
+			media.length > 0 &&
+			media.length === 1 ? (
+				<div className="flex items-center overflow-x-auto py-2 h-full">
+					{media?.map((_v, i) => {
+						return (
+							<Fragment key={i}>
+								<video width={"100%"} src={_v} controls></video>
+							</Fragment>
+						);
+					})}
+				</div>
+			) : null}
+		</>
 	);
 };
