@@ -10,6 +10,8 @@ import { setCredentials } from "./features/auth/authSlice";
 import { useAppDispatch } from "./hooks/reduxhooks";
 import Notification from "./screens/dashboard/pages/Notification";
 import AddNewSelfHelp from "./screens/dashboard/pages/self-help/AddNewSelfHelp";
+import Support from "./screens/dashboard/pages/support";
+import Feeds from "./screens/dashboard/pages/feeds";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Settings = lazy(() => import("./screens/dashboard/pages/Settings"));
@@ -77,7 +79,8 @@ function App() {
 							element={<SinglePage />}
 						/>
 						<Route path={APP_ROUTE.MANAGE_SINGLE_HQ} element={<HQPage />} />
-						{/* <Route path={APP_ROUTE.VIEW_WALLET} element={<ViewWallet />} /> */}
+						<Route path={APP_ROUTE.SUPPORT} element={<Support />} />
+						<Route path={APP_ROUTE.FEEDS} element={<Feeds />} />
 
 						{/* <Route
 							path={APP_ROUTE.ATTENDANT_REVIEW}

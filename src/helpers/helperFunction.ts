@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import { formatDistance } from "date-fns";
 
 export const CurrencyFormatter = (amount: number): string =>
 	new Intl.NumberFormat("NGN", {
@@ -131,5 +132,12 @@ export function convert2base64(file: any) {
 		fileReader.onerror = (error) => {
 			reject(error);
 		};
+	});
+}
+
+// FORMAT DATE TO SOCIAL MEDIA STANDARD
+export function formatDateToSocialMediaStandard(date: number | Date) {
+	return formatDistance(new Date(date) || new Date(), new Date(), {
+		addSuffix: true,
 	});
 }

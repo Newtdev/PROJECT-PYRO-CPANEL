@@ -1,7 +1,7 @@
-import { ArrowBack, ArrowBackIosNewSharp } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import { useMemo } from "react";
 import { ReactElement } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
 	Branch,
 	Help,
@@ -77,6 +77,13 @@ const linksData = [
 		route: "self Help",
 		Icon: <Help />,
 		link: APP_ROUTE.SELF_HELP,
+	},
+	{
+		id: 7,
+		name: "Feeds",
+		route: "Feeds",
+		Icon: <Help />,
+		link: APP_ROUTE.FEEDS,
 	},
 	{
 		id: 7,

@@ -3,8 +3,8 @@ import { stringOrNumber } from "src/helpers/alias";
 type imageType = {
 	image: string;
 	alt?: string;
-	width: stringOrNumber;
-	height: stringOrNumber;
+	width?: stringOrNumber;
+	height?: stringOrNumber;
 	styles?: string;
 };
 

@@ -23,14 +23,13 @@ const AddNewSelfHelpValidation = Yup.object({
 export type selfHelpValidation = Yup.InferType<typeof AddNewSelfHelpValidation>;
 
 const AddNewSelfHelp = () => {
-	const [step, setStep] = useState<number>(0);
 	const [AddNewSelfHelp, addNewResult] = useAddNewSelfHelpMutation();
 
 	async function addNewHQ(values: selfHelpValidation) {
 		try {
 			const response = await AddNewSelfHelp(values).unwrap();
-			console.log(response);
-			SuccessNotification(response?.data?.message);
+
+			SuccessNotification(response?.status);
 		} catch (error: any) {
 			handleNotification(error);
 		}
@@ -38,11 +37,11 @@ const AddNewSelfHelp = () => {
 
 	const Formik = useFormik<selfHelpValidation>({
 		initialValues: {
-			title: "How to fix a car headlight",
-			description: "A simple step by step guide to fixing a card headlight",
+			title: "",
+			description: "",
 			type: "",
 			media: [],
-			body: ["Buy a new headlight", "Remove the broken headlight"],
+			body: [""],
 		},
 		validateOnBlur: true,
 		validateOnChange: true,

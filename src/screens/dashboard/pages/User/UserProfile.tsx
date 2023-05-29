@@ -17,8 +17,17 @@ export default function UserProfile() {
 
 	const handleApiResponse = useMemo(() => {
 		const result = userResult?.currentData?.user ?? {};
-		const { firstName, lastName, email, gender, phoneNumber } = result;
-		return { firstName, lastName, email, gender, phoneNumber };
+
+		return {
+			profile: {
+				firstName: result.firstName,
+				lastName: result.lastName,
+				email: result.email,
+				gender: result.gender,
+				phoneNumber: result.phoneNumber,
+			},
+			profilePicture: result.profilePicture.url,
+		};
 	}, [userResult]);
 
 	const [showCard, setShowCard] = useState<boolean>(true);
@@ -56,8 +65,8 @@ export default function UserProfile() {
 					{showCard ? (
 						<ProfileCard
 							showBanner={false}
-							data={handleApiResponse || {}}
-							imageURL=""
+							data={handleApiResponse?.profile || {}}
+							imageURL={handleApiResponse?.profilePicture}
 							showImage={true}
 						/>
 					) : null}

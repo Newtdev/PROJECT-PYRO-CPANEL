@@ -13,6 +13,8 @@ export enum API_ROUTE {
 	ADMIN = "system-admin",
 	SAVE_WEBSITE_INFO = "system-admin/website-info",
 	NOTIFICATION = "system-admin/notification",
+	TICKET = "system-admin/ticket",
+	FEEDS = "system-admin/feed",
 }
 
 export enum APP_ROUTE {
@@ -43,6 +45,7 @@ export enum APP_ROUTE {
 	MANAGE_WEBSITE = "/manage/website",
 	RESET_PASSWORD = "/reset/password",
 	ADD_NEW_SELF_HELP = "/add/new/self-help",
+	FEEDS = "/feeds",
 }
 
 export enum PERMISSION {
@@ -56,4 +59,5 @@ export enum RTKTAG {
 	ADMIN = "ADMIN",
 	WEBSITE_INFO = "WEBSITE",
 	NOTIFICATION = "NOTIFICATION",
+	SELP_HELP = "SELF_HELP",
 }

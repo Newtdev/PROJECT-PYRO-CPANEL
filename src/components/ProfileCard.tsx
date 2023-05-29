@@ -27,12 +27,12 @@ export default function ProfileCard(props: ProfileType) {
 						<div className=" text-start ">
 							<h2 className="text-black">Profile Picture</h2>
 							<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg"></span>
-							<div className="h-20 w-20 mt-6">
+							<div className="h-20 w-20 mt-6 ">
 								<Image
 									image={props.imageURL || ""}
 									width={"100%"}
 									height={"100%"}
-									styles="object-fit rounded-full"
+									styles="object-cover rounded-full"
 								/>
 							</div>
 						</div>
@@ -53,13 +53,13 @@ export default function ProfileCard(props: ProfileType) {
 					<div className=" py-4 text-start px-4 lg:px-16">
 						<h2 className="text-black">Profile Picture</h2>
 						<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg"></span>
-						<div className="w-[147px] h-[166px] mt-6">
+						<div className="w-36 h-36 rounded-full mt-6">
 							{props?.imageURL ? (
 								<Image
 									image={props.imageURL || ""}
 									width={"100%"}
 									height={"100%"}
-									styles="object-fit"
+									styles="object-cover h-full rounded-full"
 								/>
 							) : (
 								<div className="w-[90px] h-[90px] rounded-full self-center object-fit bg-[#D9D9D9] flex justify-center items-center">
