@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { setCredentials } from "./features/auth/authSlice";
 import { useAppDispatch } from "./hooks/reduxhooks";
 import Notification from "./screens/dashboard/pages/Notification";
+import AddNewSelfHelp from "./screens/dashboard/pages/self-help/AddNewSelfHelp";
 
 const Entry = lazy(() => import("./screens/protected"));
 const Settings = lazy(() => import("./screens/dashboard/pages/Settings"));
@@ -82,10 +83,10 @@ function App() {
 							path={APP_ROUTE.ATTENDANT_REVIEW}
 							element={<BranchReview />}
 						/> */}
-						{/* <Route
-							path={APP_ROUTE.ATTENDANT_PROFILE_INFO}
-							element={<AttendantProfileInfo />}
-						/> */}
+						<Route
+							path={APP_ROUTE.ADD_NEW_SELF_HELP}
+							element={<AddNewSelfHelp />}
+						/>
 						{/* <Route path={APP_ROUTE.VIEW_HQ_WALLET} element={<ViewHQWallet />} /> */}
 						<Route path={APP_ROUTE.VIEW_HQ_BRANCH} element={<ManageBranch />} />
 						<Route

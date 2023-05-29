@@ -42,6 +42,7 @@ export enum APP_ROUTE {
 	MANAGE_ADMIN = "/manage/admin",
 	MANAGE_WEBSITE = "/manage/website",
 	RESET_PASSWORD = "/reset/password",
+	ADD_NEW_SELF_HELP = "/add/new/self-help",
 }
 
 export enum PERMISSION {

@@ -1,6 +1,7 @@
 //FETCH_ALL_USER
 
 import { API_ROUTE } from "src/helpers/Routes";
+import { selfHelpValidation } from "src/screens/dashboard/pages/self-help/AddNewSelfHelp";
 import { apiSlice } from "./apiSlice";
 
 export const selfHelpAPISlice = apiSlice.injectEndpoints({
@@ -9,10 +10,16 @@ export const selfHelpAPISlice = apiSlice.injectEndpoints({
 			query: (params) =>
 				`${API_ROUTE.SELF_HELP}?search=${params?.query}&page=${params?.page}`,
 		}),
-		fetchUser: builder.query({
-			query: (id) => `${API_ROUTE.FETCH_ALL_USER}/${id}`,
+
+		addNewSelfHelp: builder.mutation({
+			query: (body: selfHelpValidation): any => ({
+				url: API_ROUTE.SELF_HELP,
+				method: "POST",
+				body,
+			}),
 		}),
 	}),
 });
 
-export const { useFetchAllSelfHelpQuery, useFetchUserQuery } = selfHelpAPISlice;
+export const { useFetchAllSelfHelpQuery, useAddNewSelfHelpMutation } =
+	selfHelpAPISlice;

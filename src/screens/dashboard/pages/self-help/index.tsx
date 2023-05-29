@@ -1,40 +1,20 @@
 import { Delete } from "@mui/icons-material";
-import React, { useState, useMemo, ChangeEvent, Fragment } from "react";
+import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
-import {
-	FormInput,
-	SearchInput,
-	SelectInput,
-	TextArea,
-} from "src/components/inputs";
+import { SearchInput } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
 import { Button } from "src/components/Button";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { FlagModal, Modal } from "src/components/ModalComp";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import { Lines } from "src/components/Icons";
 import { useNavigate } from "react-router-dom";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
-import { useAddNewHQMutation } from "src/api/manageHQApiSlice";
 import { TableLoader } from "src/components/LoaderContainer";
-import {
-	convert2base64,
-	handleDateFormat,
-	handleNotification,
-	SuccessNotification,
-} from "src/helpers/helperFunction";
+import { handleDateFormat } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useFetchAllSelfHelpQuery } from "src/api/selfHelpApislice";
-import { Label } from "src/components/inputs";
-import { Upload } from "src/components/Upload";
-import Image from "src/components/Image";
+import { APP_ROUTE } from "src/helpers/Routes";
 
 interface SelfHelpType {
 	id: "title" | "description" | "likes" | "createdAt";
@@ -69,8 +49,6 @@ const headCells: readonly SelfHelpType[] = [
 
 const SelfHelp = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
-	const [value, setValue] = React.useState<string>("one");
-	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const [pagination, setPagination] = useState({ newPage: 1 });
 	const navigate = useNavigate();
 	const { debouncedValue } = useDebounce(filteredValue, 700);
@@ -113,10 +91,6 @@ const SelfHelp = () => {
 
 	// API TO GET ALL HQ INFORMATION
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue(newValue);
-	};
-
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setPagination((prev) => {
 			return { ...prev, newPage };
@@ -124,10 +98,6 @@ const SelfHelp = () => {
 	};
 
 	// TABLE FILTER TAB
-	const tabData: { id: string | number; value: string; label: string }[] = [
-		{ id: 1, value: "one", label: "All" },
-		{ id: 1, value: "two", label: "Most popular" },
-	];
 
 	function fn(data: { [index: string]: string | number }) {
 		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
@@ -149,10 +119,6 @@ const SelfHelp = () => {
 			page: handledAPIResponse?.hqProfile?.page,
 		},
 	};
-
-	function closeAddHQModal(): void {
-		setShowAddModal((prev) => !prev);
-	}
 
 	return (
 		<section>
@@ -176,7 +142,12 @@ const SelfHelp = () => {
 								className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
 								type="button"
 								showIcon={true}
-								onClick={() => setShowAddModal(true)}
+								onClick={() =>
+									navigate(APP_ROUTE.ADD_NEW_SELF_HELP, {
+										replace: true,
+										state: "Add New Self Help",
+									})
+								}
 							/>
 						</div>
 						<div className="w-[109px]  h-11">
@@ -196,31 +167,7 @@ const SelfHelp = () => {
 						tableData={handledAPIResponse?.neededData || []}>
 						<div className="h-full w-full">
 							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
-								<div>
-									<Box sx={{ width: "100%" }}>
-										<Tabs
-											value={value}
-											onChange={handleChange}
-											textColor="secondary"
-											indicatorColor="secondary"
-											className="px-4"
-											aria-label="secondary tabs example">
-											{tabData?.map((dt) => {
-												return (
-													<Tab
-														sx={{
-															fontSize: 14,
-														}}
-														key={dt.id}
-														value={dt.value}
-														label={dt.label}
-													/>
-												);
-											})}
-										</Tabs>
-									</Box>
-								</div>
-								<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
+								<div className=" w-full flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
 									<Delete fontSize="large" onClick={() => setShowModal(true)} />
 								</div>
 							</div>
@@ -241,30 +188,6 @@ const SelfHelp = () => {
 							/>
 						</Modal>
 					)}
-
-					{showAddModal ? (
-						<Modal>
-							<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-								<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-									<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-										<h1>Create Self Help</h1>
-										<button
-											onClick={() => setShowAddModal(false)}
-											disabled={false}>
-											<HighlightOffOutlinedIcon
-												fontSize="large"
-												className="text-black cursor-pointer"
-											/>
-										</button>
-									</div>
-									<div className="w-full">
-										<Lines />
-									</div>
-									<AddNewHQ close={closeAddHQModal} />
-								</div>
-							</div>
-						</Modal>
-					) : null}
 				</div>
 			</article>
 		</section>
@@ -272,217 +195,3 @@ const SelfHelp = () => {
 };
 
 export default SelfHelp;
-
-const AddbranchValidation = Yup.object({
-	title: Yup.string().label("Title").required(),
-	description: Yup.string().label("Description").required(),
-	type: Yup.string().label("Media type").required(),
-	media: Yup.array().of(Yup.string().notRequired()),
-});
-export type addBranchSchema = Yup.InferType<typeof AddbranchValidation>;
-
-const AddNewHQ = (props: { close: () => void }) => {
-	const [step, setStep] = useState<number>(0);
-	const [AddNewHq, addNewResult] = useAddNewHQMutation();
-
-	async function addNewHQ(values: addBranchSchema) {
-		try {
-			const response = await AddNewHq(values).unwrap();
-			if (response) {
-				props.close();
-			}
-			SuccessNotification(response?.data?.message);
-		} catch (error: any) {
-			props.close();
-			handleNotification(error);
-		}
-	}
-
-	const Formik = useFormik<addBranchSchema>({
-		initialValues: {
-			title: "",
-			description: "",
-			type: "",
-			media: [],
-		},
-		validateOnBlur: true,
-		validateOnChange: true,
-		validationSchema: AddbranchValidation,
-		onSubmit: (values) => {
-			if (step === 1) {
-				addNewHQ(values);
-			} else {
-				setStep((prev) => prev + 1);
-			}
-		},
-	});
-	const styles =
-		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
-	const labelStyles =
-		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
-
-	const FormData = [
-		{
-			id: "title",
-			name: "Manager's firstname",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.title && Formik.touched.title
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.title,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.title,
-			touched: Formik.touched.title,
-		},
-		{
-			id: "description",
-			name: "Description",
-			styles: `${styles} ${
-				Formik.errors.description && Formik.touched.description
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.description,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.description,
-			touched: Formik.touched.description,
-		},
-	];
-
-	// const HandleChange = (e) => {
-	// 	const type = e.target.files[0].type;
-	// 	console.log(type);
-	// 	// console.log(e.target.files[0]);
-	// };
-
-	console.log(Formik.values?.media);
-	async function uploadSelfImage(e: { [index: string]: string | any }) {
-		Formik.setFieldValue("media", [
-			...(Formik.values?.media ?? []),
-			await convert2base64(e.target.files[0]),
-		]);
-	}
-	return (
-		<form
-			onSubmit={Formik.handleSubmit}
-			className="w-full flex flex-col justify-center items-center px-4 h-fit">
-			{step === 0 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					<FormInput
-						id="title"
-						name="Manager's firstname"
-						type="text"
-						styles={`${styles} ${
-							Formik.errors.title && Formik.touched.title
-								? "border-red-500"
-								: "border-gray-300"
-						}`}
-						labelStyles={labelStyles}
-						onChange={Formik.handleChange}
-						value={Formik.values.title}
-						onBlur={Formik.handleBlur}
-						disabled={addNewResult?.isLoading}
-						error={Formik.errors.title}
-						touched={Formik.touched.title}
-					/>
-				</div>
-			) : null}
-			<TextArea {...FormData[1]} />
-			<div className="w-full">
-				<SelectInput
-					id="type"
-					data={["Image", "Video"]}
-					labelStyles={labelStyles}
-					name="Select type"
-					onChange={Formik.handleChange}
-					value={Formik.values.type}
-				/>
-			</div>
-			<div className="flex-col w-full items-center justify-between ">
-				<ShowVideoAndImage
-					media={Formik?.values?.media ?? []}
-					type={Formik.values.type}
-				/>
-				<div className="w-full h-24 mt-4">
-					<Upload
-						name="avatar"
-						// onChange={(e) => HandleChange(e)}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							uploadSelfImage(e);
-						}}
-					/>
-				</div>
-			</div>
-			<div className="w-full">
-				{step > 0 ? (
-					<Button
-						text="Back"
-						// disabled={loginResult.isLoading}
-						// showModal={loginResult.isLoading}
-						className="h-[41px] mt-6 font-bold bg-white border border-[#002E66] rounded-[38px] w-full hover: text-[#002E66]"
-						type="button"
-						onClick={() => setStep((prev) => prev - 1)}
-					/>
-				) : null}
-
-				<Button
-					text={step < 1 ? "Next" : "Create HQ"}
-					disabled={addNewResult?.isLoading}
-					showModal={addNewResult?.isLoading}
-					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-					type="submit"
-				/>
-			</div>
-		</form>
-	);
-};
-
-const ShowVideoAndImage = ({
-	media,
-	type,
-}: {
-	media: string[];
-	type: string;
-}) => {
-	return (
-		<>
-			{type.toLowerCase() === "image" && media.length > 0 ? (
-				<div className="w-full flex  items-center overflow-x-auto py-2 h-fit">
-					{media?.map((_v, i) => {
-						return (
-							<Fragment key={i}>
-								<Image
-									image={_v || ""}
-									width={200}
-									height={200}
-									styles="h-24 object-cover"
-								/>
-							</Fragment>
-						);
-					})}
-				</div>
-			) : null}
-			{type.toLowerCase() === "video" &&
-			media.length > 0 &&
-			media.length === 1 ? (
-				<div className="flex items-center overflow-x-auto py-2 h-full">
-					{media?.map((_v, i) => {
-						return (
-							<Fragment key={i}>
-								<video width={"100%"} src={_v} controls></video>
-							</Fragment>
-						);
-					})}
-				</div>
-			) : null}
-		</>
-	);
-};
