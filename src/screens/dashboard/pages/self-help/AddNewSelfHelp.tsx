@@ -1,10 +1,11 @@
 import { RemoveCircleOutlineSharp } from "@mui/icons-material";
 import { useFormik } from "formik";
-import { ChangeEvent, Fragment, useCallback, useState } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { useAddNewSelfHelpMutation } from "src/api/selfHelpApislice";
 import { Button } from "src/components/Button";
-import Image from "src/components/Image";
+
 import { FormInput, SelectInput, TextArea } from "src/components/inputs";
+import { ShowVideoAndImage } from "src/components/RenderImagePreview";
 import { Upload } from "src/components/Upload";
 import {
 	convert2base64,
@@ -51,7 +52,7 @@ const AddNewSelfHelp = () => {
 		},
 	});
 	const styles =
-		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
+		"h-[38px] py-6 rounded-lg w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
 	const labelStyles =
 		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
 
@@ -100,6 +101,18 @@ const AddNewSelfHelp = () => {
 		},
 		[Formik]
 	);
+
+	//FILTER DELETE SELECTED IMAGE OR VIDEO
+	const removeImage = useCallback(
+		(id: number | string) => {
+			const data = Formik.values.media?.filter(
+				(_, i: string | number) => i !== id
+			);
+			Formik.setFieldValue("media", data);
+		},
+
+		[Formik]
+	);
 	return (
 		<section>
 			<form
@@ -140,6 +153,7 @@ const AddNewSelfHelp = () => {
 					<ShowVideoAndImage
 						media={Formik.values?.media || []}
 						type={Formik.values.type}
+						removeImage={(id) => removeImage(id)}
 					/>
 					<div className="w-full h-24 mt-4">
 						<Upload
@@ -195,48 +209,6 @@ const AddNewSelfHelp = () => {
 				</div>
 			</form>
 		</section>
-	);
-};
-
-const ShowVideoAndImage = ({
-	media,
-	type,
-}: {
-	media: string[] | any;
-	type: string;
-}) => {
-	return (
-		<>
-			{type.toLowerCase() === "image" && media.length > 0 ? (
-				<div className="w-full flex  items-center overflow-x-auto py-2 h-fit">
-					{media?.map((_v: string, i: React.Key) => {
-						return (
-							<Fragment key={i}>
-								<Image
-									image={_v || ""}
-									width={200}
-									height={200}
-									styles="h-24 object-cover"
-								/>
-							</Fragment>
-						);
-					})}
-				</div>
-			) : null}
-			{type.toLowerCase() === "video" &&
-			media.length > 0 &&
-			media.length === 1 ? (
-				<div className="flex items-center overflow-x-auto py-2 h-full">
-					{media?.map((_v: string, i: React.Key) => {
-						return (
-							<Fragment key={i}>
-								<video width={"100%"} src={_v} controls></video>
-							</Fragment>
-						);
-					})}
-				</div>
-			) : null}
-		</>
 	);
 };
 

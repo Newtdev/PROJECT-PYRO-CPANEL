@@ -1,8 +1,7 @@
 import { Star } from "@mui/icons-material";
 import { Rating } from "@mui/material";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { ReviewComponents } from "src/components/ReviewComponents";
-import { ReviewDataType } from "src/helpers/alias";
 
 export default function BranchReview(props: {
 	ratings: {

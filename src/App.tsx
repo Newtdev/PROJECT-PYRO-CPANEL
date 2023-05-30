@@ -59,6 +59,7 @@ function App() {
 		"fuleap-user-info"
 	) as string;
 	const parseData: saveUserTypes = JSON.parse(getUserInfo);
+
 	useEffect(() => {
 		if (!parseData) return;
 		dispatch(setCredentials(parseData));
