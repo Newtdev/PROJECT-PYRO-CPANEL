@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import React, { ChangeEvent, Key, useCallback, useMemo, useState } from "react";
 import {
 	useAddNewFeedsMutation,
+	useDeleteFeedsMutation,
 	useFetchAllFeedsQuery,
 } from "src/api/feedsApiSlice";
 import { Button } from "src/components/Button";
@@ -10,7 +11,7 @@ import { Lines } from "src/components/Icons";
 import Image from "src/components/Image";
 import { FormInput, TextArea } from "src/components/inputs";
 import { LoaderContainer } from "src/components/LoaderContainer";
-import { Modal } from "src/components/ModalComp";
+import { FlagModal, Modal } from "src/components/ModalComp";
 import { ShowVideoAndImage } from "src/components/RenderImagePreview";
 import { Upload } from "src/components/Upload";
 import {
@@ -23,15 +24,37 @@ import * as Yup from "yup";
 
 export default function Feeds() {
 	const [showAddModal, setShowAddModal] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState<{
+		action: boolean;
+		id: string;
+	}>({
+		action: false,
+		id: "",
+	});
 	const feedsResult = useFetchAllFeedsQuery("");
+	const [deleteFeed, deleteFeedsResult] = useDeleteFeedsMutation();
 
 	const handleApiResponse = useMemo(() => {
 		return feedsResult?.currentData?.feeds;
 	}, [feedsResult]);
 
+	async function DeleteFeeds(id: string) {
+		try {
+			const response = await deleteFeed(id).unwrap();
+
+			if (response) {
+				setShowDeleteModal((prevState) => {
+					return { ...prevState, action: false };
+				});
+				SuccessNotification(response?.status);
+			}
+		} catch (error: any) {
+			handleNotification(error);
+		}
+	}
 	return (
 		<section>
-			<article className="bg-white rounded-lg mt-10 h-screen">
+			<article className="bg-white rounded-lg mt-10 h-fit">
 				<div className=" flex items-center justify-end w-full">
 					<div className="w-[189px] h-11 mr-6">
 						<Button
@@ -43,11 +66,17 @@ export default function Feeds() {
 						/>
 					</div>
 				</div>
-				<LoaderContainer data={feedsResult}>
+				<LoaderContainer data={feedsResult || deleteFeedsResult}>
 					<div className="w-full h-fit grid grid-cols-2 mt-10 gap-6 px-10">
 						{handleApiResponse?.data?.map(
 							(
-								_v: { createdAt: Date; title: string; body: string },
+								_v: {
+									id: string;
+									createdAt: Date;
+									title: string;
+									body: string;
+									media: { url: string }[];
+								},
 								i: Key
 							) => {
 								return (
@@ -65,7 +94,10 @@ export default function Feeds() {
 										</div>
 										<div className="h-56 w-full px-2 mt-4">
 											<Image
-												image="https://static.vecteezy.com/packs/media/photo/hero-800px-9fbe463f.jpg"
+												image={
+													_v?.media[1]?.url ||
+													"https://static.vecteezy.com/packs/media/photo/hero-800px-9fbe463f.jpg"
+												}
 												width={100}
 												height={100}
 												styles="w-full h-full object-cover rounded-lg"
@@ -79,7 +111,13 @@ export default function Feeds() {
 												/>
 												<h1>Thomas Ejembi</h1>
 											</div>
-											<div className="mt-4 cursor-pointer">
+											<div
+												className="mt-4 cursor-pointer"
+												onClick={() =>
+													setShowDeleteModal(() => {
+														return { action: true, id: _v?.id };
+													})
+												}>
 												<Delete fontSize="large" />
 											</div>
 										</div>
@@ -89,6 +127,19 @@ export default function Feeds() {
 						)}
 					</div>
 				</LoaderContainer>
+				{showDeleteModal.action && (
+					<Modal styles="absolute top-0 left-0  h-full w-full flex justify-center pt-4">
+						<FlagModal
+							info="Are you sure you want to delete?"
+							onClose={() =>
+								setShowDeleteModal((prevState) => {
+									return { ...prevState, action: false };
+								})
+							}
+							onConfirmation={() => DeleteFeeds(showDeleteModal.id)}
+						/>
+					</Modal>
+				)}
 
 				{showAddModal ? (
 					<Modal>

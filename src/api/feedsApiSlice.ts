@@ -21,7 +21,19 @@ export const feedsAPISlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result) =>
 				InvalidateTag(result?.data?.id, RTKTAG.FEEDS) as any,
 		}),
+		deleteFeeds: builder.mutation({
+			query: (id): any => ({
+				url: `${API_ROUTE.FEEDS}/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: (result) =>
+				InvalidateTag(result?.data?.id, RTKTAG.FEEDS) as any,
+		}),
 	}),
 });
 
-export const { useFetchAllFeedsQuery, useAddNewFeedsMutation } = feedsAPISlice;
+export const {
+	useFetchAllFeedsQuery,
+	useAddNewFeedsMutation,
+	useDeleteFeedsMutation,
+} = feedsAPISlice;
