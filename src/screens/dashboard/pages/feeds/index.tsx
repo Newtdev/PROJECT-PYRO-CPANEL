@@ -1,7 +1,10 @@
 import { Delete, HighlightOffOutlined } from "@mui/icons-material";
 import { useFormik } from "formik";
 import React, { ChangeEvent, Key, useCallback, useMemo, useState } from "react";
-import { useFetchAllFeedsQuery } from "src/api/feedsApiSlice";
+import {
+	useAddNewFeedsMutation,
+	useFetchAllFeedsQuery,
+} from "src/api/feedsApiSlice";
 import { Button } from "src/components/Button";
 import { Lines } from "src/components/Icons";
 import Image from "src/components/Image";
@@ -13,6 +16,8 @@ import { Upload } from "src/components/Upload";
 import {
 	convert2base64,
 	formatDateToSocialMediaStandard,
+	handleNotification,
+	SuccessNotification,
 } from "src/helpers/helperFunction";
 import * as Yup from "yup";
 
@@ -117,39 +122,40 @@ export default function Feeds() {
 }
 
 // ADD FEEDS
-const AddNewSelfHelpValidation = Yup.object({
+const AddNewFeedsValidation = Yup.object({
 	title: Yup.string().label("Title").required(),
-	description: Yup.string().label("Description").required(),
-	type: Yup.string().label("Media type").required(),
+	body: Yup.string().label("body").required(),
 	media: Yup.array().of(Yup.string().notRequired()),
 });
-export type selfHelpValidation = Yup.InferType<typeof AddNewSelfHelpValidation>;
+export type newFeedsValidation = Yup.InferType<typeof AddNewFeedsValidation>;
 
 const AddNewSelfHelp = ({ close }: { close: () => void }) => {
-	// const [AddNewSelfHelp, addNewResult] = useAddNewSelfHelpMutation();
+	const [addNewFeeds, addNewFeedsResult] = useAddNewFeedsMutation();
 
-	// async function addNewHQ(values: selfHelpValidation) {
-	// 	try {
-	// 		const response = await AddNewSelfHelp(values).unwrap();
+	async function SubmitNewFeeds(values: newFeedsValidation) {
+		try {
+			const response = await addNewFeeds(values).unwrap();
+			if (response) {
+				close();
+			}
+			SuccessNotification(response?.status);
+		} catch (error: any) {
+			close();
+			handleNotification(error);
+		}
+	}
 
-	// 		SuccessNotification(response?.status);
-	// 	} catch (error: any) {
-	// 		handleNotification(error);
-	// 	}
-	// }
-
-	const Formik = useFormik<selfHelpValidation>({
+	const Formik = useFormik<newFeedsValidation>({
 		initialValues: {
 			title: "",
-			description: "",
-			type: "",
+			body: "",
 			media: [],
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
-		validationSchema: AddNewSelfHelpValidation,
+		validationSchema: AddNewFeedsValidation,
 		onSubmit: (values) => {
-			// addNewHQ(values);
+			SubmitNewFeeds(values);
 		},
 	});
 	const styles =
@@ -159,26 +165,27 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 
 	const FormData = [
 		{
-			id: "description",
+			id: "body",
 			name: "Description",
 			styles: `${styles} ${
-				Formik.errors.description && Formik.touched.description
+				Formik.errors.body && Formik.touched.body
 					? "border-red-500"
 					: "border-gray-300"
 			}`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
-			value: Formik.values.description,
+			value: Formik.values.body,
 			onBlur: Formik.handleBlur,
-			// disabled: addNewResult?.isLoading,
-			error: Formik.errors.description,
-			touched: Formik.touched.description,
+			disabled: addNewFeedsResult?.isLoading,
+			error: Formik.errors.body,
+			touched: Formik.touched.body,
 		},
 	];
 
 	const uploadSelfImage = useCallback(
 		async (e: any) => {
 			const file = e.target.files[0];
+
 			Formik.setFieldValue("media", [
 				...(Formik.values?.media ?? []),
 				await convert2base64(file),
@@ -186,12 +193,11 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 		},
 		[Formik]
 	);
-	// async function uploadSelfImage(e: { [index: string]: string | any }) {
-
-	// }
 
 	const removeImage = useCallback(
 		(id: number | string) => {
+			if (Formik.values.media?.length === 1) return;
+
 			const data = Formik.values.media?.filter(
 				(_, i: string | number) => i !== id
 			);
@@ -220,7 +226,7 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 						onChange={Formik.handleChange}
 						value={Formik.values.title}
 						onBlur={Formik.handleBlur}
-						// disabled={addNewResult?.isLoading}
+						disabled={addNewFeedsResult?.isLoading}
 						error={Formik.errors.title}
 						touched={Formik.touched.title}
 					/>
@@ -228,10 +234,10 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 
 				<TextArea {...FormData[0]} />
 
-				<div className="flex-col w-full items-center justify-between ">
+				<div className="flex-col w-full items-center justify-between overflow-x-auto ">
 					<ShowVideoAndImage
 						media={Formik.values?.media || []}
-						type={Formik.values.type || "Image"}
+						type={"Image"}
 						removeImage={(id) => removeImage(id)}
 					/>
 					<div className="w-full h-24 mt-4">
@@ -247,8 +253,8 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 				<div className="w-full">
 					<Button
 						text={"Submit"}
-						// disabled={addNewResult?.isLoading}
-						// showModal={addNewResult?.isLoading}
+						disabled={addNewFeedsResult?.isLoading}
+						showModal={addNewFeedsResult?.isLoading}
 						className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
 						type="submit"
 					/>
