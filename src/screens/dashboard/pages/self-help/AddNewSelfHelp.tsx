@@ -21,7 +21,13 @@ const AddNewSelfHelpValidation = Yup.object({
 	media: Yup.array().of(Yup.string().notRequired()),
 	body: Yup.array().of(Yup.string().label("Body").required()),
 });
-export type selfHelpValidation = Yup.InferType<typeof AddNewSelfHelpValidation>;
+export type selfHelpValidation = {
+	title: string;
+	description: string;
+	type: "IMAGE" | "VIDEOS" | string;
+	media: string[];
+	body: string[];
+};
 
 const AddNewSelfHelp = () => {
 	const [AddNewSelfHelp, addNewResult] = useAddNewSelfHelpMutation();

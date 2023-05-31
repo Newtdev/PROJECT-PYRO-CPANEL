@@ -120,7 +120,7 @@ const Main = ({ children }: { children: ReactNode }) => {
 	const headerName = location.state || "Dashboard";
 
 	return (
-		<section className="h-full w-[85%] px-6 py-4 overflow-y-auto">
+		<section className="h-full w-[85%] px-6 py-4 overflow-y-auto overflow-x-hidden">
 			<DashboardHeader header={headerName} />
 			{children}
 		</section>

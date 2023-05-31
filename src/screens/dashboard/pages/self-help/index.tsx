@@ -48,13 +48,12 @@ const headCells: readonly SelfHelpType[] = [
 // YUP VALIDATION FOR ADD BRANCH TYPE
 
 const SelfHelp = () => {
-	const [filteredValue, setFilteredValue] = useState<string>("");
+	// const [filteredValue, setFilteredValue] = useState<string>("");
 	const [pagination, setPagination] = useState({ newPage: 1 });
 	const navigate = useNavigate();
-	const { debouncedValue } = useDebounce(filteredValue, 700);
+	// const { debouncedValue } = useDebounce(filteredValue, 700);
 
 	const hqQueryResult = useFetchAllSelfHelpQuery({
-		query: debouncedValue,
 		page: pagination.newPage,
 	});
 
@@ -100,7 +99,7 @@ const SelfHelp = () => {
 	// TABLE FILTER TAB
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
+		return;
 	}
 	let dataToChildren: any = {
 		rows: handledAPIResponse?.neededData || [],
