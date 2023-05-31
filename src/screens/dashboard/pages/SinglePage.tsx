@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { cardBtnType } from "src/helpers/alias";
-// import walletBtn from "src/assets/img/walletbtn.svg";
 import User from "src/assets/img/User.svg";
 import Attendant from "src/assets/img/Attendanticon.svg";
 import Rating from "src/assets/img/Ratings.svg";
@@ -10,7 +9,7 @@ import ProfileCard from "src/components/ProfileCard";
 import { LoaderContainer } from "src/components/LoaderContainer";
 import { useFetchBranchQuery } from "src/api/manageBranchAPISlice";
 import useCustomLocation from "src/hooks/useCustomLocation";
-// import ViewWallet from "./ViewWallet";
+
 import AttendantProfile from "./Manage-branch/AttendantProfile";
 import BranchReview from "./Manage-branch/BranchReview";
 import {
@@ -37,7 +36,7 @@ export default function SinglePage() {
 				longitude: station?.location?.longitude,
 				state: station?.location?.state,
 			},
-			pumpAttendants: station.pumpAttendants,
+			pumpAttendants: station?.pumpAttendants,
 			rating: station?.ratings,
 			account: station?.wallets?.availableBalance,
 			walletInfo: {
@@ -103,7 +102,7 @@ export default function SinglePage() {
 					{/* {tabName.toLowerCase() === "view wallet" ? <ViewWallet /> : null} */}
 					{tabName.toLowerCase() === "attendant profile" ? (
 						<AttendantProfile
-							attendantData={handledAPIResponse.pumpAttendants}
+							attendantData={handledAPIResponse?.pumpAttendants}
 						/>
 					) : null}
 					{tabName.toLowerCase() === "ratings and reviews" ? (
@@ -128,7 +127,7 @@ const BranchAccountBalance = (props: {
 	return (
 		<div className="p-4 basis-[60%] rounded-[10px] bg-white grid grid-cols-1 gap-x-10 justify-items-center content-center mt-6 pl-6">
 			<div className="text-start text-[#002E66]">
-				<h3 className="text-[14px]my-">Availabe Balance</h3>
+				<h3 className="text-[14px]my-">Available Balance</h3>
 				<h2 className="text-[24px] font-bold">
 					{CurrencyFormatter(Number(props?.account))}
 				</h2>

@@ -11,7 +11,7 @@ export const DashboardCards = (props: cardType): ReactElement => (
 			</p>
 		</div>
 		<div>
-			<h1 className="text-start text-[#737587] text-[32px] font-[600]">
+			<h1 className="text-start text-[#737587] text-xl font-[600]">
 				{props.amount}
 			</h1>
 		</div>
