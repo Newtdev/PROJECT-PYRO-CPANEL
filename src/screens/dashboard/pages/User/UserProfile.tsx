@@ -26,7 +26,7 @@ export default function UserProfile() {
 				gender: result.gender,
 				phoneNumber: result.phoneNumber,
 			},
-			profilePicture: result.profilePicture.url,
+			profilePicture: result?.profilePicture?.url,
 		};
 	}, [userResult]);
 
@@ -54,6 +54,7 @@ export default function UserProfile() {
 										icon={dt.icon}
 										link={dt.link}
 										height={"98px"}
+										activeBtn={"View Profile"}
 										onClick={() => setShowCard(!showCard)}
 										showCard={showCard}
 									/>
@@ -66,7 +67,7 @@ export default function UserProfile() {
 						<ProfileCard
 							showBanner={false}
 							data={handleApiResponse?.profile || {}}
-							imageURL={handleApiResponse?.profilePicture}
+							imageURL={handleApiResponse?.profilePicture || ""}
 							showImage={true}
 						/>
 					) : null}

@@ -84,6 +84,7 @@ export default function SinglePage() {
 									name={dt.name}
 									icon={dt.icon}
 									height={"98px"}
+									activeBtn={tabName}
 									onClick={() => setTabName(dt.name)}
 									// showCard={showCard}
 								/>

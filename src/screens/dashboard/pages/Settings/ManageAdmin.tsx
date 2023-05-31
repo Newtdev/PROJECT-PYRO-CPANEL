@@ -437,31 +437,7 @@ const ManageAdmin = () => {
 						tableData={handledAPIResponse || []}>
 						<div className="h-full w-full">
 							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
-								<div>
-									<Box sx={{ width: "100%" }}>
-										<Tabs
-											value={value}
-											onChange={handleChange}
-											textColor="secondary"
-											indicatorColor="secondary"
-											className="px-4"
-											aria-label="secondary tabs example">
-											{tabData?.map((dt) => {
-												return (
-													<Tab
-														sx={{
-															fontSize: 14,
-														}}
-														key={dt.id}
-														value={dt.value}
-														label={dt.label}
-													/>
-												);
-											})}
-										</Tabs>
-									</Box>
-								</div>
-								<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
+								<div className="flex justify-end items-center h-11 text-sm pr-12 cursor-pointer w-full">
 									<Flag
 										color="error"
 										fontSize="large"

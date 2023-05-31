@@ -65,7 +65,7 @@ const DashboardHeader = (props: { header: string }) => {
 					<Collapse in={expanded} timeout="auto" unmountOnExit>
 						<div className="h-26 bg-white shadow-lg absolute right-0 top-14 w-44 text-[#393939]">
 							<div className="text-start w-full py-2 transition-all hover:bg-[#D9D9D9] hover:scale-[1.1] p-4">
-								<Link to="/">View Profile</Link>
+								<Link to="/settings">View Profile</Link>
 							</div>
 							<button
 								onClick={onLogOut}
@@ -120,10 +120,12 @@ const Main = ({ children }: { children: ReactNode }) => {
 	const headerName = location.state || "Dashboard";
 
 	return (
-		<section className="h-full w-[85%] px-6 py-4 overflow-y-auto overflow-x-hidden">
+		<main className="w-[85%] px-6 py-4 overflow-hidden">
 			<DashboardHeader header={headerName} />
-			{children}
-		</section>
+			<section className="max-w-full overflow-x-hidden h-full overflow-y-auto">
+				{children}
+			</section>
+		</main>
 	);
 };
 

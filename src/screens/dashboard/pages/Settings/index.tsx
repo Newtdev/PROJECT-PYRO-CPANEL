@@ -55,7 +55,7 @@ const Settings = () => {
 		{
 			id: 4,
 			icon: ResetPasword,
-			name: "Reset Password",
+			name: "Update Profile",
 			link: APP_ROUTE.RESET_PASSWORD,
 		},
 	];
@@ -93,9 +93,10 @@ const Settings = () => {
 									name={dt.name}
 									icon={dt.icon}
 									link={dt.link}
+									activeBtn={cardName}
 									height={"98px"}
 									onClick={() =>
-										dt?.name.toLowerCase() === "reset password"
+										dt?.name.toLowerCase() === "update profile"
 											? setShowAddModal(true)
 											: setName(dt.name)
 									}
@@ -167,7 +168,7 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 			id: props.id,
 			accountStatus: {
 				status: "confirmed",
-				reason: "Test",
+				reason: "",
 			},
 		},
 		validateOnBlur: true,

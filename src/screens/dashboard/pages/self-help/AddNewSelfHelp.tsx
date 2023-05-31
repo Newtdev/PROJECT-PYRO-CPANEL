@@ -123,7 +123,7 @@ const AddNewSelfHelp = () => {
 		<section>
 			<form
 				onSubmit={Formik.handleSubmit}
-				className=" flex flex-col justify-center items-center px-4 h-fit w-2/3 mx-auto">
+				className=" flex flex-col justify-center items-center px-10 mt-4 h-fit w-2/3 mx-auto bg-white py-4 rounded-lg ">
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
 					<FormInput
 						id="title"

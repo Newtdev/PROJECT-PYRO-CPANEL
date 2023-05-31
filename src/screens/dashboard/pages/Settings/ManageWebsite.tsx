@@ -56,6 +56,7 @@ type onChangeTypes = string;
 const tabData = [
 	{ id: 1, value: "one", label: "Edit website info" },
 	{ id: 2, value: "two", label: "Edit website handles" },
+	{ id: 3, value: "three", label: "FAQs" },
 ];
 
 // WEBSITE CONTACT US, SOCIALS AND FAQS DATASET
@@ -249,7 +250,7 @@ export default function ManageWebsite() {
 	);
 
 	return (
-		<form onSubmit={Formik.handleSubmit}>
+		<form className="h-full" onSubmit={Formik.handleSubmit}>
 			<div className="flex justify-between items-center mt-6">
 				<div>
 					<CustomTabs
@@ -270,7 +271,7 @@ export default function ManageWebsite() {
 				</div>
 			</div>
 			{value === "one" ? (
-				<div className="grid lg:grid-cols-2 gap-x-10">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
 					{ManageWebsitesData.map((_v, i) => (
 						<div className="h-72 w-full mb-6 overflow-hidden ">
 							<Label
@@ -291,11 +292,11 @@ export default function ManageWebsite() {
 			) : null}
 
 			{value === "two" ? (
-				<div className=" w-[90%]">
-					<div className=" gap-x-10 mt-14 ">
+				<div className=" w-[90%] h-full overflow-y-scroll">
+					<div className=" gap-x-10 mt-2 ">
 						<div>
 							<h1 className="text-lg font-bold">Company contact info</h1>
-							<div className="grid grid-cols-4 gap-x-4">
+							<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
 								{websiteFormData.slice(0, 3).map((_v, i) => (
 									<div>
 										<FormInput
@@ -320,7 +321,7 @@ export default function ManageWebsite() {
 						{/* SOCIALS */}
 						<div className="mt-16">
 							<h1 className="text-lg font-bold">Company socials handles</h1>
-							<div className="grid grid-cols-3 gap-x-4">
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4">
 								{websiteFormData.slice(-4)?.map((_v, i) => (
 									<div>
 										<FormInput
@@ -342,55 +343,58 @@ export default function ManageWebsite() {
 							</div>
 						</div>
 					</div>
-					<div className=" h-full w-full mt-14 ">
-						<h1 className="text-lg font-bold">Frequently asked question</h1>
-						<div>
-							{Formik.values.faqs?.map((_v, i) => (
-								<div className="flex w-full flex-row items-center">
-									<div className="w-full grid gap-x-4 grid-cols-2">
-										<FormInput
-											width="w-full"
-											id={`faqs.[${i}].question`}
-											name={`Question ${i + 1}`}
-											type="text"
-											styles={styles}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values.faqs[i].question}
-											onBlur={Formik.handleBlur}
-											// disabled={_v.disabled}
-											// error={Formik.errors?.faqs[i]?.question || ""}
-											// touched={Formik.touched.faqs[i]?.question || ""}
-										/>
-										<FormInput
-											width="w-full"
-											id={`faqs.[${i}].answer`}
-											name={`Answer ${i + 1}`}
-											type="text"
-											styles={styles}
-											labelStyles={labelStyles}
-											onChange={Formik.handleChange}
-											value={Formik.values?.faqs[i]?.answer || ""}
-											onBlur={Formik.handleBlur}
-											// disabled={_v.disabled}
-											// error={Formik.errors?.faqs[i]?.question || ""}
-											// touched={Formik.touched.faqs[i]?.question || ""}
-										/>
-									</div>
+				</div>
+			) : null}
 
-									<div
-										className="flex items-center justify-evenly w-24 text-black cursor-pointer mt-14"
-										onClick={() => removeMoreFAQ(i)}>
-										<RemoveCircleOutlineSharp />
-									</div>
+			{value === "three" ? (
+				<div className=" h-full w-full mt-14 ">
+					<h1 className="text-lg font-bold">Frequently asked question</h1>
+					<div>
+						{Formik.values.faqs?.map((_v, i) => (
+							<div className="flex w-full flex-row items-center">
+								<div className="w-full grid gap-x-4 grid-cols-2">
+									<FormInput
+										width="w-full"
+										id={`faqs.[${i}].question`}
+										name={`Question ${i + 1}`}
+										type="text"
+										styles={styles}
+										labelStyles={labelStyles}
+										onChange={Formik.handleChange}
+										value={Formik.values.faqs[i].question}
+										onBlur={Formik.handleBlur}
+										// disabled={_v.disabled}
+										// error={Formik.errors?.faqs[i]?.question || ""}
+										// touched={Formik.touched.faqs[i]?.question || ""}
+									/>
+									<FormInput
+										width="w-full"
+										id={`faqs.[${i}].answer`}
+										name={`Answer ${i + 1}`}
+										type="text"
+										styles={styles}
+										labelStyles={labelStyles}
+										onChange={Formik.handleChange}
+										value={Formik.values?.faqs[i]?.answer || ""}
+										onBlur={Formik.handleBlur}
+										// disabled={_v.disabled}
+										// error={Formik.errors?.faqs[i]?.question || ""}
+										// touched={Formik.touched.faqs[i]?.question || ""}
+									/>
 								</div>
-							))}
-							<span
-								className="inline-block py-2 px-6 rounded-lg justify-self-start cursor-pointer mt-6 text-white bg-[#002E66] ml-auto"
-								onClick={addMoreFAQ}>
-								Add more FAQs
-							</span>
-						</div>
+
+								<div
+									className="flex items-center justify-evenly w-24 text-black cursor-pointer mt-14"
+									onClick={() => removeMoreFAQ(i)}>
+									<RemoveCircleOutlineSharp />
+								</div>
+							</div>
+						))}
+						<span
+							className="inline-block py-2 px-6 rounded-lg justify-self-start cursor-pointer mt-6 text-white bg-[#002E66] ml-auto"
+							onClick={addMoreFAQ}>
+							Add more FAQs
+						</span>
 					</div>
 				</div>
 			) : null}

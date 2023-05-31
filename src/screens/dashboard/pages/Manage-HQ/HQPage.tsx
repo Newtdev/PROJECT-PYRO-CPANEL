@@ -81,6 +81,7 @@ export default function HQPage() {
 									icon={dt.icon}
 									link={dt.link}
 									height={"98px"}
+									activeBtn={cardName}
 									onClick={() => setCardName(dt?.name)}
 									// showCard={cardName}
 								/>

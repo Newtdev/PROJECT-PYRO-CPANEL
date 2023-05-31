@@ -23,6 +23,7 @@ export type cardBtnType = {
 	height?: number | string;
 
 	onClick?: MouseEventHandler<HTMLDivElement> | undefined;
+	activeBtn?: string;
 	// setShowCard?: Dispatch<SetStateAction<boolean>>;
 	showCard?: boolean;
 };

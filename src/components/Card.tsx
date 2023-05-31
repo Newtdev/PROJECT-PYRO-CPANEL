@@ -19,9 +19,14 @@ export const DashboardCards = (props: cardType): ReactElement => (
 );
 
 export const CardButton = (props: cardBtnType) => {
+	const activeCard =
+		props.activeBtn?.toLowerCase() === props.name.toLowerCase();
+
 	return (
 		<div
-			className="rounded-lg bg-white py-4 px-6 flex flex-col justify-between transition-all hover:border-2 hover:border-[#002E66] focus:border-2 focus:border-[#002E66] shadow-lg cursor-pointer"
+			className={`${
+				activeCard ? "border-2 border-[#002E66]" : "border-white"
+			} rounded-lg bg-white py-4 px-6 flex flex-col justify-between transition-all hover:border-2 hover:border-[#002E66] focus:border-2 focus:border-[#002E66] shadow-lg cursor-pointer`}
 			onClick={props.onClick}
 			style={{ height: props.height }}>
 			<div className="flex items-center justify-center h-full ">

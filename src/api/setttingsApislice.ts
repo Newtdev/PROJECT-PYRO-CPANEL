@@ -13,7 +13,7 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 		}),
 		getAllAdmin: builder.query({
 			query: (params) =>
-				`${API_ROUTE.ADMIN}?limit=5&search=${params.query}&page=${params.page}`,
+				`${API_ROUTE.ADMIN}?limit=4&search=${params.query}&page=${params.page}`,
 			providesTags: (result) =>
 				providesTagList(result.data.data, RTKTAG.ADMIN) as any,
 		}),
