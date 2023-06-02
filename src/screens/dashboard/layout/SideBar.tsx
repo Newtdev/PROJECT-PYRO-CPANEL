@@ -95,24 +95,19 @@ const linksData = [
 ];
 const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 	let path = useLocation();
-	let routePath = path?.state;
-	let searchPath = path?.search;
+	let firstRoute = path.pathname.split("/")[0];
+	let nextRoute = path.pathname.split("/")[1];
 
 	const active = useMemo(() => {
-		if (!searchPath) {
-			return routePath === name;
-		}
-		return routePath === searchPath;
-	}, [name, routePath, searchPath]);
-
-	// console.log(name);
-	// console.log(path.pathname.toLowerCase().split("/"));
+		const selectedLink = name.split(" ").join("").toLowerCase();
+		if (!firstRoute) return nextRoute.toLowerCase() === selectedLink;
+		else return firstRoute.toLowerCase() === selectedLink;
+	}, [firstRoute, name, nextRoute]);
 
 	const activeLink = active ? "font-[600]" : "font-normal";
 	return (
 		<div className=" flex items-center ">
 			{active ? <Indicator /> : false}
-
 			<Link
 				to={link}
 				state={name}

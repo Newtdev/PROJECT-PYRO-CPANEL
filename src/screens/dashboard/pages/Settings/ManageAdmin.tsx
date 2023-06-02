@@ -314,7 +314,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 };
 const ManageAdmin = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
-	const [value, setValue] = React.useState<string>("one");
+
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const [pagination, setPagination] = useState({ newPage: 1 });
 	const navigate = useNavigate();
@@ -362,10 +362,6 @@ const ManageAdmin = () => {
 
 	// API TO GET ALL HQ INFORMATION
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue(newValue);
-	};
-
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setPagination((prev) => {
 			return { ...prev, newPage };
@@ -373,10 +369,6 @@ const ManageAdmin = () => {
 	};
 
 	// TABLE FILTER TAB
-	const tabData: { id: string | number; value: string; label: string }[] = [
-		{ id: 1, value: "one", label: "All" },
-		{ id: 1, value: "two", label: "Most popular" },
-	];
 
 	function fn(data: { [index: string]: string | number }) {
 		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
