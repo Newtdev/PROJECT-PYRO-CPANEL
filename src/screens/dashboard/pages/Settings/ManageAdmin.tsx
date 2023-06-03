@@ -371,7 +371,7 @@ const ManageAdmin = () => {
 	// TABLE FILTER TAB
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/manageHQ/${data?.id}`, { state: data?.name });
+		return;
 	}
 
 	let dataToChildren: any = {

@@ -132,7 +132,7 @@ const Transactions = () => {
 	const navigate = useNavigate();
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/user/${data?.id}`, { state: data?.firstName });
+		navigate(`/users/${data?.id}`, { state: data?.firstName });
 	}
 
 	const handleSelectChange = (event: { target: { value: string } }) => {

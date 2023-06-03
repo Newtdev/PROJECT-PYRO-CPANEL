@@ -11,9 +11,12 @@ import {
 	ErrorNotification,
 	handleNotification,
 } from "src/helpers/helperFunction";
+import { useHqLoginMutation } from "src/api/hqAuthSlice";
+import { useCallback } from "react";
 
-const Login = () => {
+const Login = (props: { host: string }) => {
 	const [login, loginResult] = useLoginMutation();
+	const [hqLogin, loginHqResult] = useHqLoginMutation();
 	const navigate = useNavigate();
 
 	const loginValidation = Yup.object().shape({
@@ -28,11 +31,33 @@ const Login = () => {
 			.required(),
 	});
 
-	const handleRequst = async (values: Values) => {
+	const Login = useCallback(
+		async (values: Values) => {
+			if (props.host === "hq") {
+				return hqLogin(values).unwrap();
+			} else {
+				return login(values).unwrap();
+			}
+		},
+		[hqLogin, login, props.host]
+	);
+
+	const handleAdminRequest = async (values: Values) => {
 		try {
-			await login(values).unwrap();
+			await Login(values);
+
 			navigate("/");
 		} catch (error: ErrorType | any) {
+			handleNotification(error);
+		}
+	};
+	const handleHQRequest = async (values: Values) => {
+		try {
+			await hqLogin(values).unwrap();
+
+			navigate("/");
+		} catch (error: ErrorType | any) {
+			console.log(error);
 			handleNotification(error);
 		}
 	};
@@ -46,7 +71,11 @@ const Login = () => {
 		validateOnBlur: true,
 		validationSchema: loginValidation,
 		onSubmit: (values) => {
-			handleRequst(values);
+			handleAdminRequest(values);
+			// if (props.host === "admin") {
+			// } else {
+			// 	handleHQRequest(values);
+			// }
 		},
 	});
 
@@ -73,7 +102,7 @@ const Login = () => {
 							onChange={Formik.handleChange}
 							value={Formik.values.email}
 							onBlur={Formik.handleBlur}
-							disabled={loginResult.isLoading}
+							disabled={loginResult.isLoading || loginHqResult.isLoading}
 							error={Formik.errors.email}
 							touched={Formik.touched.email}
 						/>
@@ -88,13 +117,13 @@ const Login = () => {
 							touched={Formik.touched.password}
 							error={Formik.errors.password}
 							styles="my-2 "
-							disabled={loginResult.isLoading}
+							disabled={loginResult.isLoading || loginHqResult.isLoading}
 						/>
 						<div className="w-[70%] mt-2">
 							<Button
 								text="LOG IN"
-								disabled={loginResult.isLoading}
-								showModal={loginResult.isLoading}
+								disabled={loginResult.isLoading || loginHqResult.isLoading}
+								showModal={loginResult.isLoading || loginHqResult.isLoading}
 								className="h-[62px] font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
 								type="submit"
 							/>

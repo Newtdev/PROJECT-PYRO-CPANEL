@@ -1,4 +1,10 @@
-import React, { ChangeEvent, Fragment, useMemo, useState } from "react";
+import React, {
+	ChangeEvent,
+	Fragment,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import AdminProfile from "src/assets/img/AdminProfile.svg";
 import ManageWebsites from "src/assets/img/ManageWebsite.svg";
 import ManageAdmins from "src/assets/img/ManageAdmin.svg";
@@ -18,8 +24,13 @@ import { HighlightOffOutlined } from "@mui/icons-material";
 import { Lines } from "src/components/Icons";
 import { Button } from "src/components/Button";
 import * as Yup from "yup";
-import { useFormik } from "formik";
-import { PasswordInput, TextArea } from "src/components/inputs";
+import { FormikValues, useFormik } from "formik";
+import {
+	FormInput,
+	PasswordInput,
+	SelectInput,
+	TextArea,
+} from "src/components/inputs";
 import { Upload } from "src/components/Upload";
 import {
 	convert2base64,
@@ -28,6 +39,7 @@ import {
 } from "src/helpers/helperFunction";
 import Image from "src/components/Image";
 import ManageWebsite from "./ManageWebsite";
+import { ShowVideoAndImage } from "src/components/RenderImagePreview";
 
 const Settings = () => {
 	const [cardName, setName] = useState<string>("profile");
@@ -119,7 +131,7 @@ const Settings = () => {
 						<ManageWebsite />
 					) : null}
 					{showModal ? (
-						<ResetPassword close={CloseModal} id={handledAPIResponse.id} />
+						<ResetPassword close={CloseModal} data={handledAPIResponse} />
 					) : null}
 				</LoaderContainer>
 			</article>
@@ -129,22 +141,70 @@ const Settings = () => {
 
 export default Settings;
 
-const AddbranchValidation = Yup.object({
-	oldPassword: Yup.string().label("Old password").required(),
-	password: Yup.string().label("Password").required(),
-	confirmPassword: Yup.string().label("Password"),
-	avatar: Yup.string().notRequired(),
-	id: Yup.string().notRequired(),
-	accountStatus: Yup.object({
-		status: Yup.string().notRequired(),
-		reason: Yup.string().notRequired(),
+const AddbranchValidation: any = [
+	Yup.object({
+		firstName: Yup.string().label("First name").required(),
+		lastName: Yup.string().label("Last name").required(),
+		phoneNumber: Yup.string()
+			.label("phone number")
+			// .length(, "invalid")
+			.required(),
+		email: Yup.string().label("email").email().required(),
 	}),
-});
+	Yup.object({
+		oldPassword: Yup.string().label("Old password").required(),
+		password: Yup.string().label("Password").required(),
+		confirmPassword: Yup.string().label("Password"),
+		avatar: Yup.string().notRequired(),
+		id: Yup.string().notRequired(),
+		accountStatus: Yup.object({
+			status: Yup.string().notRequired(),
+			reason: Yup.string().notRequired(),
+		}),
+		role: Yup.string<
+			| "super_admin"
+			| "sub_admin"
+			| "hQ_admin"
+			| "transaction_admin"
+			| "support_admin"
+		>().defined(),
+	}),
+];
+
+// Yup.object({
+// 	firstName: Yup.string().label("First name").required(),
+// 	lastName: Yup.string().label("Last name").required(),
+// 	phoneNumber: Yup.string()
+// 		.label("phone number")
+// 		// .length(, "invalid")
+// 		.required(),
+// 	email: Yup.string().label("email").email().required(),
+// 	oldPassword: Yup.string().label("Old password").required(),
+// 	password: Yup.string().label("Password").required(),
+// 	confirmPassword: Yup.string().label("Password"),
+// 	avatar: Yup.string().notRequired(),
+// 	id: Yup.string().notRequired(),
+// 	accountStatus: Yup.object({
+// 		status: Yup.string().notRequired(),
+// 		reason: Yup.string().notRequired(),
+// 	}),
+// 	role: Yup.string<
+// 		| "super_admin"
+// 		| "sub_admin"
+// 		| "hQ_admin"
+// 		| "transaction_admin"
+// 		| "support_admin"
+// 	>().defined(),
+// });
 
 export type UpdateAdminTypes = Yup.InferType<typeof AddbranchValidation>;
 
-const ResetPassword = (props: { close: () => void; id: string }) => {
+const ResetPassword = (props: {
+	close: () => void;
+	data: { [index: string]: string | number | any };
+}) => {
 	const [updateAdmin, addNewResult] = useUpdateAdminMutation();
+	const [step, setStep] = useState(0);
 
 	async function addNewAdmin(values: UpdateAdminTypes) {
 		try {
@@ -159,13 +219,18 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 		}
 	}
 
-	const Formik = useFormik<UpdateAdminTypes>({
+	const Formik = useFormik<FormikValues>({
 		initialValues: {
+			firstName: "",
+			lastName: "",
+			email: "",
+			phoneNumber: "",
+			role: "super_admin",
 			oldPassword: "",
 			password: "",
 			confirmPassword: "",
 			avatar: "",
-			id: props.id,
+			id: props.data?.id,
 			accountStatus: {
 				status: "confirmed",
 				reason: "",
@@ -173,9 +238,12 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
-		validationSchema: AddbranchValidation,
+		// validationSchema: AddbranchValidation[step],
 		onSubmit: (values) => {
-			addNewAdmin(values);
+			if (step === 1) {
+				addNewAdmin(values);
+			}
+			setStep(1);
 		},
 	});
 	const styles =
@@ -184,6 +252,75 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
 
 	const FormData = [
+		{
+			id: "firstName",
+			name: "Admin's firstname",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.firstName && Formik.touched.firstName
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.firstName,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			error: Formik.errors.firstName,
+			touched: Formik.touched.firstName,
+		},
+		{
+			id: "lastName",
+			name: "Admin's lastname",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.lastName && Formik.touched.lastName
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.lastName,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			error: Formik.errors.lastName,
+			touched: Formik.touched.lastName,
+		},
+		{
+			id: "email",
+			name: "Admin's email",
+			type: "email",
+			styles: `${styles} ${
+				Formik.errors.email && Formik.touched.email
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.email,
+			onBlur: Formik.handleBlur,
+
+			disabled: addNewResult.isLoading,
+			error: Formik.errors.email,
+			touched: Formik.touched.email,
+		},
+		{
+			id: "phoneNumber",
+			name: "Admin's phone number",
+			type: "text",
+			styles: `${styles} ${
+				Formik.errors.phoneNumber && Formik.touched.phoneNumber
+					? "border-red-500"
+					: "border-gray-300"
+			}`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.phoneNumber,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			error: Formik.errors.phoneNumber,
+			touched: Formik.touched.phoneNumber,
+		},
 		{
 			id: "oldPassword",
 			name: "Old password",
@@ -243,10 +380,27 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 		Formik.setFieldValue("avatar", await convert2base64(e.target.files[0]));
 	}
 
+	// Populate input with previous data
+	useEffect(() => {
+		if (!props.data) {
+			return;
+		}
+
+		Formik.setValues({
+			...props.data.profile,
+			avatar: props.data.profile.avatar,
+			id: props.data.id,
+		});
+
+		return () => {
+			Formik.setValues({});
+		};
+	}, [props]);
+
 	return (
 		<Modal>
 			<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-				<div className="w-[50%] max-w-[511px] h-[95%] flex flex-col justify-center rounded-[20px] pb-10  bg-white">
+				<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10  bg-white">
 					<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
 						<h1>Update Admin Info</h1>
 						<button onClick={props.close} disabled={false}>
@@ -261,58 +415,111 @@ const ResetPassword = (props: { close: () => void; id: string }) => {
 					</div>
 					<form
 						onSubmit={Formik.handleSubmit}
-						className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto pt-4">
-						<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-							{FormData.map((_v, i) => (
-								<PasswordInput
-									width="w-full"
-									id={_v.id}
-									name={_v.name}
-									type={"text"}
-									styles={_v.styles}
-									labelStyles={_v.labelStyles}
-									onChange={_v.onChange}
-									value={_v.value}
-									onBlur={_v.onBlur}
-									disabled={_v.disabled}
-									error={_v.error}
-									touched={_v.touched}
-								/>
-							))}
-						</div>
-
-						<div className="w-full h-full">
-							<TextArea
-								labelStyles={labelStyles}
-								name="Reason"
-								id="accountStatus.reason"
-								onChange={Formik.handleChange}
-								value={Formik.values.accountStatus.reason}
-								disabled={false}
-							/>
-						</div>
-						{Formik.values.avatar ? (
-							<div>
-								<Image
-									image={Formik.values.avatar || ""}
-									width={200}
-									height={200}
+						className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto">
+						{step === 0 ? (
+							<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+								{FormData.slice(0, 4).map((_v, i) => (
+									<FormInput
+										width="w-full"
+										id={_v.id}
+										name={_v.name}
+										type={"text"}
+										styles={_v.styles}
+										labelStyles={_v.labelStyles}
+										onChange={_v.onChange}
+										value={_v.value}
+										onBlur={_v.onBlur}
+										disabled={_v.disabled}
+										// error={_v.error}
+										// touched={_v.touched}
+									/>
+								))}
+								<SelectInput
+									labelStyles={labelStyles}
+									data={[
+										"super_admin",
+										"sub_admin",
+										"HQ_admin",
+										"transaction_admin",
+										"support_admin",
+									]}
+									disabled={addNewResult.isLoading}
+									value={Formik.values.role}
+									onChange={Formik.handleChange}
+									name="Select role"
+									id="role"
 								/>
 							</div>
 						) : null}
+						{step === 1 ? (
+							<div className="grid grid-cols-1 w-full gap-x-2 content-center pt-4">
+								{FormData.slice(-3).map((_v, i) => (
+									<PasswordInput
+										width="w-full"
+										id={_v.id}
+										name={_v.name}
+										type={"text"}
+										styles={_v.styles}
+										labelStyles={_v.labelStyles}
+										onChange={_v.onChange}
+										value={_v.value}
+										onBlur={_v.onBlur}
+										disabled={_v.disabled}
+										// error={_v.error}
+										// touched={_v.touched}
+									/>
+								))}
 
-						<div className="w-full h-24 mt-4">
-							<Upload
-								name="avatar"
-								onChange={(e: ChangeEvent<HTMLInputElement>) => {
-									uploadAvatar(e);
-								}}
-							/>
-						</div>
+								<div className="w-full h-full">
+									<TextArea
+										labelStyles={labelStyles}
+										name="Reason"
+										id="accountStatus.reason"
+										onChange={(e) => {
+											Formik.setFieldValue(
+												"accountStatus.reason",
+												e.target.value
+											);
+											Formik.setFieldValue("accountStatus.status", "confirmed");
+										}}
+										value={Formik.values?.accountStatus?.reason || ""}
+										disabled={false}
+									/>
+								</div>
+								{Formik.values.avatar ? (
+									<div>
+										<Image
+											image={Formik.values.avatar || ""}
+											width={100}
+											height={100}
+											styles="mx-auto object-fit"
+										/>
+									</div>
+								) : null}
+
+								<div className="w-full h-24 mt-4">
+									<Upload
+										name="avatar"
+										onChange={(e: ChangeEvent<HTMLInputElement>) => {
+											uploadAvatar(e);
+										}}
+									/>
+								</div>
+							</div>
+						) : null}
 
 						<div className="w-full">
+							{step === 0 ? (
+								<Button
+									text="Back"
+									disabled={addNewResult?.isLoading}
+									onClick={() => setStep(() => 0)}
+									className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
+									type="button"
+								/>
+							) : null}
 							<Button
-								text={"Submit"}
+								text={step === 1 ? "Submit" : "Next"}
 								disabled={addNewResult?.isLoading}
 								showModal={addNewResult?.isLoading}
 								className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"

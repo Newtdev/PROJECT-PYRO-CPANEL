@@ -15,6 +15,8 @@ export enum API_ROUTE {
 	NOTIFICATION = "system-admin/notification",
 	TICKET = "system-admin/ticket",
 	FEEDS = "system-admin/feed",
+
+	HQ_ADMIN_LOGIN = "auth/station/login-email",
 }
 
 export enum APP_ROUTE {
@@ -28,11 +30,11 @@ export enum APP_ROUTE {
 	SELF_HELP = "/self-help",
 	SETTINGS = "/settings",
 	USER = "/users",
-	USER_PROFILE = "/user/:name",
-	USER_WALLET = "/user/:name/wallet",
+	USER_PROFILE = "/users/:name",
+	USER_WALLET = "/users/:name/wallet",
 	MANAGEHQ = "/manageHQ",
 	MANAGE_SINGLE_HQ = "/manageHQ/:id",
-	MANAGE_SINGLE_BRANCH = "/branch/:id",
+	MANAGE_SINGLE_BRANCH = "/manageBranch/:id",
 	BRANCHES = "/branches",
 	VIEW_WALLET = "/view/wallet",
 	ATTENDANT_PROFILE = "branch/:id/attendant",

@@ -13,6 +13,7 @@ import HqBranch from "./HqBranch";
 export default function HQPage() {
 	const { slicedPath } = useCustomLocation();
 	const [cardName, setCardName] = useState<string>("view profile");
+
 	const singleHqResult = useFetchSingleHQQuery(slicedPath[2]);
 
 	const HQData: cardBtnType[] = [

@@ -128,7 +128,7 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	];
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/branch/${data?.id}`, { state: data.name });
+		navigate(`/manageBranch/${data?.id}`, { state: data.name });
 	}
 
 	// CONFIRMATION OF WHAT IS SELECTED
