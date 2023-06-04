@@ -14,30 +14,27 @@ import Login from "./screens/authentication/Login";
 import { decryptData } from "./helpers/encryptData";
 
 const Entry = lazy(() => import("./screens/protected"));
-type saveUserTypes = {
-	token: string | null;
-	user: string | null;
-};
 
 function App() {
 	const domainHost = useMemo(() => {
 		return window.location.host.split(".")[0];
 	}, []);
 
-	const dats = useMemo(() => {
-		let userInfo: saveUserTypes = decryptData("fuleap-user-info") || {};
+	const persisteUserInfo = useMemo(() => {
+		let userInfo = decryptData("fuleap-user-info") || {};
+
 		if (Object.keys(userInfo).length === 0) {
-			return {};
+			return;
 		}
 		return JSON.parse(userInfo);
 	}, []);
 
-	console.log(dats);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		if (!dats) return;
-		dispatch(setCredentials(dats));
+		if (!persisteUserInfo) return;
+		dispatch(setCredentials(persisteUserInfo));
+		/* eslint-disable react-hooks/exhaustive-deps */
 	}, [dispatch]);
 
 	return (

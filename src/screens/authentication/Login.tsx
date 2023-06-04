@@ -46,11 +46,12 @@ const Login = (props: { host: string }) => {
 		[hqLogin, login, props.host]
 	);
 
-	// const rememberedLoginDetails = useMemo(() => {
-	// 	const data = decryptData("fuleap-remember-info") || {};
-	// 	if (!data) return;
-	// 	return JSON.parse(data);
-	// }, []);
+	const rememberedLoginDetails = useMemo(() => {
+		const data = decryptData("fuleap-remember-info");
+
+		if (data === undefined || Object.keys(data).length === 0) return;
+		return JSON.parse(data);
+	}, []);
 	const handleRequest = async (values: LoginValidationtype) => {
 		try {
 			await Login(values);
@@ -63,8 +64,8 @@ const Login = (props: { host: string }) => {
 
 	const Formik = useFormik<Values>({
 		initialValues: {
-			email: "",
-			password: "",
+			email: rememberedLoginDetails?.email || "",
+			password: rememberedLoginDetails?.password || "",
 		},
 		validateOnChange: true,
 		validateOnBlur: true,
