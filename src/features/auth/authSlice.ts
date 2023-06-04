@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { authAPISlice } from "src/api/authApiSlice";
 import { settingsAPISlice } from "src/api/setttingsApislice";
 import { loginResponseType } from "src/helpers/alias";
+import { encryptData } from "src/helpers/encryptData";
 import { RootState } from "src/store/store";
 
 const authSlice = createSlice({
@@ -20,8 +21,8 @@ const authSlice = createSlice({
 	reducers: {
 		setCredentials: (state, action) => {
 			state.systemAdmin = action.payload.user;
-			state.token.accessToken = action.payload.token;
-			state.token.refreshToken = action.payload.token.refreshToken;
+			state.token.accessToken = action.payload?.token;
+			state.token.refreshToken = action.payload?.token?.refreshToken;
 			// state.systemAdmin.role = action.payload?.systemAdmin.role;
 		},
 
@@ -30,7 +31,7 @@ const authSlice = createSlice({
 			state.systemAdmin.firstName = "";
 			state.systemAdmin.lastName = "";
 			state.token.accessToken = null;
-			sessionStorage.removeItem("fuleap-user-info");
+			localStorage.removeItem("fuleap-user-info");
 		},
 	},
 
@@ -39,16 +40,15 @@ const authSlice = createSlice({
 			authAPISlice.endpoints.login.matchFulfilled,
 			(state, action) => {
 				state.systemAdmin = action.payload?.systemAdmin;
-				state.token.accessToken = action.payload.token.accessToken;
-				state.token.refreshToken = action.payload.token.refreshToken;
+				state.token.accessToken = action.payload?.token?.accessToken;
+				state.token.refreshToken = action.payload?.token?.refreshToken;
 				// state.systemAdmin.role = action.payload?.systemAdmin.role;
-
-				sessionStorage.setItem(
-					"fuleap-user-info",
-					JSON.stringify({
-						token: action.payload.token.accessToken,
-						user: action.payload?.systemAdmin,
-					})
+				encryptData(
+					{
+						token: action.payload.token.accessToken || "",
+						user: action.payload?.systemAdmin || null,
+					},
+					"fuleap-user-info"
 				);
 			}
 		);

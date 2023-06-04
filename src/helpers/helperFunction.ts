@@ -141,3 +141,8 @@ export function formatDateToSocialMediaStandard(date: number | Date) {
 		addSuffix: true,
 	});
 }
+
+export const ForgetPasswordKey =
+	process.env.REACT_APP_FORGET_PASSWORD_SECRET_KEY;
+
+// export const UserInfoKey = process.env.REACT_APP_FORGET_PASSWORD_SECRET_KEY;

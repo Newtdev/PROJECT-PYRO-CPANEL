@@ -4,35 +4,39 @@ import { useLoginMutation } from "src/api/authApiSlice";
 import Logo from "src/assets/img/logo.svg";
 import { Button } from "src/components/Button";
 import Image from "src/components/Image";
-import { ErrorType, passwordRegex, Values } from "src/helpers/alias";
+import { ErrorType, Values } from "src/helpers/alias";
 import { FormInput, PasswordInput, CheckBox } from "../../components/inputs";
 import * as Yup from "yup";
 import {
-	ErrorNotification,
+	ForgetPasswordKey,
 	handleNotification,
 } from "src/helpers/helperFunction";
 import { useHqLoginMutation } from "src/api/hqAuthSlice";
-import { useCallback } from "react";
+import { ChangeEvent, useCallback, useMemo } from "react";
+import { decryptData, encryptData } from "src/helpers/encryptData";
+
+const loginValidation = Yup.object().shape({
+	email: Yup.string().label("Email").email().required(),
+	password: Yup.string()
+		.label("Password")
+		.min(8)
+		// .matches(
+		// 	passwordRegex,
+		// 	"must contain atleast one uppercase, lowercase, number and symbol"
+		// )
+		.required(),
+});
+
+type LoginValidationtype = Yup.InferType<typeof loginValidation>;
 
 const Login = (props: { host: string }) => {
 	const [login, loginResult] = useLoginMutation();
 	const [hqLogin, loginHqResult] = useHqLoginMutation();
 	const navigate = useNavigate();
-
-	const loginValidation = Yup.object().shape({
-		email: Yup.string().label("Email").email().required(),
-		password: Yup.string()
-			.label("Password")
-			.min(8)
-			// .matches(
-			// 	passwordRegex,
-			// 	"must contain atleast one uppercase, lowercase, number and symbol"
-			// )
-			.required(),
-	});
+	// const savedInfo = decryptData();
 
 	const Login = useCallback(
-		async (values: Values) => {
+		async (values: LoginValidationtype) => {
 			if (props.host === "hq") {
 				return hqLogin(values).unwrap();
 			} else {
@@ -42,22 +46,17 @@ const Login = (props: { host: string }) => {
 		[hqLogin, login, props.host]
 	);
 
-	const handleAdminRequest = async (values: Values) => {
+	// const rememberedLoginDetails = useMemo(() => {
+	// 	const data = decryptData("fuleap-remember-info") || {};
+	// 	if (!data) return;
+	// 	return JSON.parse(data);
+	// }, []);
+	const handleRequest = async (values: LoginValidationtype) => {
 		try {
 			await Login(values);
 
 			navigate("/");
 		} catch (error: ErrorType | any) {
-			handleNotification(error);
-		}
-	};
-	const handleHQRequest = async (values: Values) => {
-		try {
-			await hqLogin(values).unwrap();
-
-			navigate("/");
-		} catch (error: ErrorType | any) {
-			console.log(error);
 			handleNotification(error);
 		}
 	};
@@ -71,18 +70,18 @@ const Login = (props: { host: string }) => {
 		validateOnBlur: true,
 		validationSchema: loginValidation,
 		onSubmit: (values) => {
-			handleAdminRequest(values);
-			// if (props.host === "admin") {
-			// } else {
-			// 	handleHQRequest(values);
-			// }
+			handleRequest(values);
 		},
 	});
+
+	function handleCheckBox(e: ChangeEvent<HTMLInputElement>) {
+		encryptData({ ...Formik.values }, "fuleap-remember-info");
+	}
 
 	return (
 		<section className="max-w-screen h-screen">
 			<article className="h-full w-full flex flex-col justify-center backgroundImage">
-				<div className="w-full mx-auto flex h-[690px] rounded-[30px] flex-col items-center sm:w-[570px] bg-white">
+				<div className=" mx-auto flex h-[90%] max-h-[690px] rounded-[30px] flex-col items-center w-[90%] sm:max-w-[570px] bg-white">
 					<div className=" mt-[53px]">
 						<div className="mb-6">
 							<Image image={Logo} width={51} height={62} styles="mx-auto" />
@@ -130,7 +129,7 @@ const Login = (props: { host: string }) => {
 						</div>
 						<div className="flex justify-between w-[70%] items-center text-[16px] font-normal">
 							<div className="flex items-center">
-								<CheckBox />
+								<CheckBox onChange={handleCheckBox} />
 								<p className="text-[#000000]">Remember me</p>
 							</div>
 							<div>

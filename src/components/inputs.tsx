@@ -110,9 +110,10 @@ export const PasswordInput = (props: inputType) => {
 	);
 };
 
-export const CheckBox = (): ReactElement => (
+export const CheckBox = ({ onChange }): ReactElement => (
 	<Checkbox
 		defaultChecked
+		onChange={onChange}
 		sx={{
 			color: "#002E66",
 			borderRadius: "38px",
