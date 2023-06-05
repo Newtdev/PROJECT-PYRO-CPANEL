@@ -169,7 +169,7 @@ const Transactions = () => {
 	return (
 		<section>
 			<article>
-				<div className=" mt-6 h-20">
+				<div className=" mt-6">
 					<div className="w-fit flex items-center">
 						<div className="w-[109px] h-11">
 							<Button

@@ -180,7 +180,7 @@ const Transactions = () => {
 	return (
 		<section>
 			<article>
-				<div className=" mt-6 h-20">
+				<div className=" mt-6 ">
 					<div className="w-fit flex items-center">
 						<div className="w-[109px]  h-11">
 							<Button
@@ -192,7 +192,7 @@ const Transactions = () => {
 							/>
 						</div>
 					</div>
-					<div className="h-full w-full bg-white mt-6 shadow-lg rounded-t-lg">
+					<div className="h-full  w-full bg-white mt-6 shadow-lg rounded-t-lg">
 						<div className="h-full w-full flex justify-between items-center py-6 px-6">
 							<div>
 								<CustomTabs

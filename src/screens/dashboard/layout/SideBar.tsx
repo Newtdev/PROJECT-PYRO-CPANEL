@@ -122,8 +122,8 @@ const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 const SideBar = () => {
 	const navigate = useNavigate();
 	return (
-		<aside className="h-full flex flex-col justify-center w-[260px]">
-			<div className=" w-[217px] h-[95%] rounded-[20px] bg-[#002E66] ml-6">
+		<aside className="h-screen flex flex-col justify-center w-[260px] fixed left-0">
+			<div className=" w-[217px] h-full my-4 rounded-[20px] bg-[#002E66] ml-6">
 				<div className="w-full pt-4 text-start px-7 text-white">
 					<ArrowBack color="inherit" onClick={() => navigate(-1)} />
 				</div>
