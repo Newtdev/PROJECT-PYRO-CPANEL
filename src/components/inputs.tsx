@@ -1,5 +1,5 @@
 import { Checkbox, IconButton } from "@mui/material";
-import { ChangeEvent, ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import { ReactElement } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { SearchIcon } from "./Icons";
@@ -110,7 +110,11 @@ export const PasswordInput = (props: inputType) => {
 	);
 };
 
-export const CheckBox = ({ onChange }): ReactElement => (
+export const CheckBox = ({
+	onChange,
+}: {
+	onChange: ChangeEventHandler<HTMLInputElement>;
+}): ReactElement => (
 	<Checkbox
 		defaultChecked
 		onChange={onChange}

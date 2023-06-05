@@ -141,7 +141,7 @@ const Settings = () => {
 
 export default Settings;
 
-const AddbranchValidation: any = [
+const AddbranchValidation = [
 	Yup.object({
 		firstName: Yup.string().label("First name").required(),
 		lastName: Yup.string().label("Last name").required(),
@@ -171,6 +171,7 @@ const AddbranchValidation: any = [
 	}),
 ];
 
+interface FormTypes {}
 // Yup.object({
 // 	firstName: Yup.string().label("First name").required(),
 // 	lastName: Yup.string().label("Last name").required(),
@@ -197,7 +198,7 @@ const AddbranchValidation: any = [
 // 	>().defined(),
 // });
 
-export type UpdateAdminTypes = Yup.InferType<typeof AddbranchValidation>;
+// export type UpdateAdminTypes = Yup.InferType<typeof AddbranchValidation[]>;
 
 const ResetPassword = (props: {
 	close: () => void;
@@ -206,7 +207,7 @@ const ResetPassword = (props: {
 	const [updateAdmin, addNewResult] = useUpdateAdminMutation();
 	const [step, setStep] = useState(0);
 
-	async function addNewAdmin(values: UpdateAdminTypes) {
+	async function addNewAdmin(values: FormikValues) {
 		try {
 			const response = await updateAdmin(values).unwrap();
 			if (response) {
@@ -238,12 +239,13 @@ const ResetPassword = (props: {
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
-		// validationSchema: AddbranchValidation[step],
+		validationSchema: AddbranchValidation[step],
 		onSubmit: (values) => {
 			if (step === 1) {
 				addNewAdmin(values);
+			} else {
+				setStep(() => 1);
 			}
-			setStep(1);
 		},
 	});
 	const styles =
@@ -395,8 +397,9 @@ const ResetPassword = (props: {
 		return () => {
 			Formik.setValues({});
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props]);
-
+	console.log(Formik.errors);
 	return (
 		<Modal>
 			<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
