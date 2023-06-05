@@ -1,6 +1,6 @@
 import { InvalidateTag, providesTagList } from "src/helpers/helperFunction";
 import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
-import { UpdateAdminTypes } from "src/screens/dashboard/pages/Settings";
+// import { UpdateAdminTypes } from "src/screens/dashboard/pages/Settings";
 import { AddAdminTypes } from "src/screens/dashboard/pages/Settings/ManageAdmin";
 import { apiSlice } from "./apiSlice";
 
@@ -27,7 +27,7 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 				InvalidateTag(result?.data?.id, RTKTAG.ADMIN) as any,
 		}),
 		updateAdmin: builder.mutation({
-			query: ({ id, ...body }: UpdateAdminTypes): string | any => ({
+			query: ({ id, ...body }: any): string | any => ({
 				url: `${API_ROUTE.ADMIN}/${id}`,
 				method: "PATCH",
 				body,
