@@ -44,9 +44,9 @@ export const AdminRoute = (host) => {
 		{
 			path: APP_ROUTE.DASHBOARD,
 			element: (
-				// <AdminProtectedComp host={host}>
-				<Dashboard />
-				// </AdminProtectedComp>
+				<AdminProtectedComp host={host}>
+					<Dashboard />
+				</AdminProtectedComp>
 			),
 		},
 		{
