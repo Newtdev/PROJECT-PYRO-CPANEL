@@ -50,9 +50,29 @@ export enum APP_ROUTE {
 	FEEDS = "/feeds",
 }
 
+export enum HQ_APP_ROUTE {
+	BRANCH = "/manageBranch",
+	TRANSACTIONS = "/transactions",
+	SUPPORT = "/support",
+	NOTIFICATION = "/notification",
+	SETTINGS = "/settings",
+}
+
+export enum HQ_API_ENPOINTS {
+	BRANCH = "station/branch",
+	// TRANSACTIONS = "/transactions",
+	// SUPPORT = "/support",
+	// NOTIFICATION = "/notification",
+	// SETTINGS = "/settings",
+}
 export enum PERMISSION {
 	HQ = "hq_admin",
 	SYSTEM_ADMIN = "engineer",
+}
+
+export enum SUB_DOMAIN {
+	HQ = "hq",
+	SYSTEM_ADMIN = "admin",
 }
 
 export enum RTKTAG {
@@ -63,4 +83,8 @@ export enum RTKTAG {
 	NOTIFICATION = "NOTIFICATION",
 	SELP_HELP = "SELF_HELP",
 	FEEDS = "FEEDS",
+}
+
+export enum KEYS {
+	USER_INFO = "fuleap-user-info",
 }

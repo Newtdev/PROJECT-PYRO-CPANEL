@@ -11,7 +11,7 @@ import {
 	ForgetPasswordKey,
 	handleNotification,
 } from "src/helpers/helperFunction";
-import { useHqLoginMutation } from "src/api/hqAuthSlice";
+import { useHqLoginMutation } from "src/hq-admin/hq-api/hqAuthSlice";
 import { ChangeEvent, useCallback, useMemo } from "react";
 import { decryptData, encryptData } from "src/helpers/encryptData";
 

@@ -1,5 +1,5 @@
 import { InvalidateTag, providesTagList } from "src/helpers/helperFunction";
-import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
+import { API_ROUTE, RTKTAG } from "src/helpers/Constant";
 // import { UpdateAdminTypes } from "src/screens/dashboard/pages/Settings";
 import { AddAdminTypes } from "src/screens/dashboard/pages/Settings/ManageAdmin";
 import { apiSlice } from "./apiSlice";

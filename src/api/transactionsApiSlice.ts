@@ -1,4 +1,4 @@
-import { API_ROUTE } from "src/helpers/Routes";
+import { API_ROUTE } from "src/helpers/Constant";
 import { apiSlice } from "./apiSlice";
 
 export const settingsAPISlice = apiSlice.injectEndpoints({

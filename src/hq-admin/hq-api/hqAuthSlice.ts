@@ -1,6 +1,6 @@
 import { loginResponseType, Values } from "src/helpers/alias";
-import { API_ROUTE } from "src/helpers/Routes";
-import { apiSlice } from "./apiSlice";
+import { API_ROUTE } from "src/helpers/Constant";
+import { apiSlice } from "../../api/apiSlice";
 
 export const hqAuthAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({

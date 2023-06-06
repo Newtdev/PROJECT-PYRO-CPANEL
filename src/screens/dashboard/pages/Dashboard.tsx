@@ -5,7 +5,7 @@ import { CardButton, DashboardCards } from "src/components/Card";
 import branchBtn from "src/assets/img/branchbtn.svg";
 import walletBtn from "src/assets/img/walletbtn.svg";
 import { cardBtnType } from "src/helpers/alias";
-import { APP_ROUTE } from "src/helpers/Routes";
+import { APP_ROUTE } from "src/helpers/Constant";
 
 const Dashboard = () => {
 	const cardBtnData: cardBtnType[] = [

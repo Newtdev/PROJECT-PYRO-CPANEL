@@ -1,5 +1,5 @@
 import { loginResponseType, Values } from "src/helpers/alias";
-import { API_ROUTE } from "src/helpers/Routes";
+import { API_ROUTE } from "src/helpers/Constant";
 import { apiSlice } from "./apiSlice";
 
 export const authAPISlice = apiSlice.injectEndpoints({

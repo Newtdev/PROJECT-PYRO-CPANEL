@@ -11,7 +11,7 @@ import ManageAdmins from "src/assets/img/ManageAdmin.svg";
 import ResetPasword from "src/assets/img/ResetPasword.svg";
 import { CardButton } from "src/components/Card";
 import { cardBtnType, ErrorType } from "src/helpers/alias";
-import { APP_ROUTE } from "src/helpers/Routes";
+import { APP_ROUTE } from "src/helpers/Constant";
 import {
 	useGetAdminQuery,
 	useUpdateAdminMutation,

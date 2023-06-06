@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { Navigate, Route } from "react-router-dom";
 
-import { APP_ROUTE } from "src/helpers/Routes";
+import { APP_ROUTE } from "src/helpers/Constant";
 import { Dashboard } from "src/screens";
 import Feeds from "src/screens/dashboard/pages/feeds";
 // import HQPage from "src/screens/dashboard/pages/Manage-HQ/HQPage";
@@ -101,12 +101,3 @@ export const AdminRoute = (host) => {
 		<Route path={route.path} index element={route.element} />
 	));
 };
-
-// export const HQRoute = () => {
-// 	return (
-// 		<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
-// 			<Route path={APP_ROUTE.SETTINGS} element={<Settings />} />
-// 			<Route path={APP_ROUTE.NOTIFICATION} element={<Notification />} /> */}
-// 		</Route>
-// 	);
-// };

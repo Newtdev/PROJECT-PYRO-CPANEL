@@ -14,7 +14,7 @@ import { TableLoader } from "src/components/LoaderContainer";
 import { handleDateFormat } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useFetchAllSelfHelpQuery } from "src/api/selfHelpApislice";
-import { APP_ROUTE } from "src/helpers/Routes";
+import { APP_ROUTE } from "src/helpers/Constant";
 
 interface SelfHelpType {
 	id: "title" | "description" | "likes" | "createdAt";

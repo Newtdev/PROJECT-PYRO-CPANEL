@@ -28,6 +28,7 @@ export type cardBtnType = {
 	showCard?: boolean;
 };
 export type loginResponseType = {
+	user: any;
 	systemAdmin: {
 		avatar: any;
 		role: null;

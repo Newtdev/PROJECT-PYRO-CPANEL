@@ -1,7 +1,7 @@
 //FETCH_ALL_USER
 
 import { InvalidateTag, providesTagList } from "src/helpers/helperFunction";
-import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
+import { API_ROUTE, RTKTAG } from "src/helpers/Constant";
 import { apiSlice } from "./apiSlice";
 
 export const feedsAPISlice = apiSlice.injectEndpoints({

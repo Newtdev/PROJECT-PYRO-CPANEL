@@ -1,4 +1,4 @@
-import { API_ROUTE, RTKTAG } from "src/helpers/Routes";
+import { API_ROUTE, RTKTAG } from "src/helpers/Constant";
 import { apiSlice } from "./apiSlice";
 import { providesTagList } from "src/helpers/helperFunction";
 

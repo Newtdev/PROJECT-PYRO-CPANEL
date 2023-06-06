@@ -13,18 +13,22 @@ import {
 	Support,
 	Transactions,
 } from "src/components/Icons";
-import { APP_ROUTE } from "src/helpers/Routes";
+import { loginResponseType } from "src/helpers/alias";
+import { APP_ROUTE, HQ_APP_ROUTE, PERMISSION } from "src/helpers/Constant";
+import { useAuth } from "src/hooks/useAuth";
 
 type linkTypes = {
 	name: string;
 	link: string;
 	Icon: ReactElement;
+	priviledges?: string[];
 };
 
 const linksData = [
 	{
 		id: 1,
 		name: "Dashboard",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
 		route: "Dashboard",
 		Icon: <Home />,
 		link: APP_ROUTE.DASHBOARD,
@@ -34,26 +38,32 @@ const linksData = [
 		name: "Manage HQ",
 		route: "Manage HQ",
 		Icon: <HQIcon />,
+		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		link: APP_ROUTE.MANAGEHQ,
 	},
 	{
 		id: 2,
 		name: "Manage Branch",
 		route: "Manage Branch",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
 		Icon: <Branch />,
 		link: APP_ROUTE.BRANCH,
+		hq_link: HQ_APP_ROUTE.BRANCH,
 	},
 	{
 		id: 3,
 		name: "Transactions",
 		route: "Transactions",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
 		Icon: <Transactions />,
 		link: APP_ROUTE.TRANSACTIONS,
+		hq_link: HQ_APP_ROUTE.TRANSACTIONS,
 	},
 	{
 		id: 8,
 		name: "Users",
 		route: "Users",
+		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		Icon: <Transactions />,
 		link: APP_ROUTE.USER,
 	},
@@ -61,20 +71,25 @@ const linksData = [
 		id: 4,
 		name: "Support",
 		route: "Support",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
 		Icon: <Support />,
 		link: APP_ROUTE.SUPPORT,
+		hq_link: HQ_APP_ROUTE.SUPPORT,
 	},
 	{
 		id: 5,
 		name: "Notification",
 		route: "Notification",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
 		Icon: <Notification />,
 		link: APP_ROUTE.NOTIFICATION,
+		hq_link: HQ_APP_ROUTE.NOTIFICATION,
 	},
 	{
 		id: 6,
 		name: "Self Help",
 		route: "self Help",
+		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		Icon: <Help />,
 		link: APP_ROUTE.SELF_HELP,
 	},
@@ -83,20 +98,25 @@ const linksData = [
 		name: "Feeds",
 		route: "Feeds",
 		Icon: <Help />,
+		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		link: APP_ROUTE.FEEDS,
 	},
 	{
 		id: 7,
 		name: "Settings",
 		route: "Settings",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
 		Icon: <Settings />,
 		link: APP_ROUTE.SETTINGS,
+		hq_link: HQ_APP_ROUTE.SETTINGS,
 	},
 ];
 const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 	let path = useLocation();
-	let firstRoute = path.pathname.split("/")[0];
-	let nextRoute = path.pathname.split("/")[1];
+
+	const firstRoutePath = path.pathname.split("/");
+	let firstRoute = firstRoutePath[0];
+	let nextRoute = firstRoutePath[1];
 
 	const active = useMemo(() => {
 		const selectedLink = name.split(" ").join("").toLowerCase();
@@ -121,6 +141,20 @@ const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 
 const SideBar = () => {
 	const navigate = useNavigate();
+	const { user } = useAuth();
+
+	const handlePriviledge = () => {
+		return linksData?.map((dt, i) =>
+			dt.priviledges.filter((_v) => _v === user?.role).length > 0 ? (
+				<DashboardLink
+					name={dt?.name}
+					link={user?.role !== "hq_admin" ? dt?.link : dt?.hq_link}
+					Icon={dt.Icon}
+				/>
+			) : null
+		);
+	};
+	console.log(handlePriviledge());
 	return (
 		<aside className="h-screen flex flex-col justify-center w-[260px] fixed left-0">
 			<div className=" w-[217px] h-full my-4 rounded-[20px] bg-[#002E66] ml-6">
@@ -128,11 +162,7 @@ const SideBar = () => {
 					<ArrowBack color="inherit" onClick={() => navigate(-1)} />
 				</div>
 
-				{linksData?.map((dt, i) => {
-					return (
-						<DashboardLink name={dt?.name} link={dt?.link} Icon={dt.Icon} />
-					);
-				})}
+				{handlePriviledge()}
 			</div>
 		</aside>
 	);

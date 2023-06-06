@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { authAPISlice } from "src/api/authApiSlice";
 import { settingsAPISlice } from "src/api/setttingsApislice";
 import { loginResponseType } from "src/helpers/alias";
+import { KEYS } from "src/helpers/Constant";
 import { encryptData } from "src/helpers/encryptData";
+import { hqAuthAPISlice } from "src/hq-admin/hq-api/hqAuthSlice";
 import { RootState } from "src/store/store";
 
 const authSlice = createSlice({
@@ -15,7 +17,7 @@ const authSlice = createSlice({
 			lastName: "",
 			avatar: { url: "" },
 		},
-		token: { accessToken: null, refreshToken: null },
+		token: { accessToken: null },
 	} as loginResponseType,
 
 	reducers: {
@@ -31,7 +33,7 @@ const authSlice = createSlice({
 			state.systemAdmin.firstName = "";
 			state.systemAdmin.lastName = "";
 			state.token.accessToken = null;
-			localStorage.removeItem("fuleap-user-info");
+			localStorage.removeItem(KEYS.USER_INFO);
 		},
 	},
 
@@ -41,14 +43,30 @@ const authSlice = createSlice({
 			(state, action) => {
 				state.systemAdmin = action.payload?.systemAdmin;
 				state.token.accessToken = action.payload?.token?.accessToken;
-				state.token.refreshToken = action.payload?.token?.refreshToken;
+
 				// state.systemAdmin.role = action.payload?.systemAdmin.role;
 				encryptData(
 					{
 						token: action.payload.token.accessToken || "",
 						user: action.payload?.systemAdmin || null,
 					},
-					"fuleap-user-info"
+					KEYS.USER_INFO
+				);
+			}
+		);
+		builder.addMatcher(
+			hqAuthAPISlice.endpoints.hqLogin.matchFulfilled,
+			(state, action) => {
+				state.systemAdmin = action.payload?.user;
+				state.token.accessToken = action.payload?.token?.accessToken;
+
+				// state.systemAdmin.role = action.payload?.systemAdmin.role;
+				encryptData(
+					{
+						token: action.payload.token.accessToken || "",
+						user: action.payload?.user || null,
+					},
+					KEYS.USER_INFO
 				);
 			}
 		);

@@ -6,7 +6,7 @@ import User from "src/assets/img/User.svg";
 import { cardBtnType, ProfiledataType } from "src/helpers/alias";
 import ProfileCard from "src/components/ProfileCard";
 import { CardButton } from "src/components/Card";
-import { APP_ROUTE } from "src/helpers/Routes";
+import { APP_ROUTE } from "src/helpers/Constant";
 import { useFetchUserQuery } from "src/api/manageUserApi";
 import { LoaderContainer } from "src/components/LoaderContainer";
 

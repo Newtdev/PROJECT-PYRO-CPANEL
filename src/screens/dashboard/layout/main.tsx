@@ -38,7 +38,7 @@ const DashboardHeader = (props: { header: string }) => {
 	}
 
 	return (
-		<div className="w-full flex justify-between items-center mb-2 ">
+		<div className="w-full flex justify-between items-center mb-2">
 			<h1 className="text-start text-[#002E66] text-base md:text-lg lg:text-[30px] font-[700] leading-[45px] w-full">
 				{props.header}
 			</h1>
@@ -120,9 +120,9 @@ const Main = ({ children }: { children: ReactNode }) => {
 	const headerName = location.state || "Dashboard";
 
 	return (
-		<main className="w-[80%] py-4 overflow-x-hidden">
+		<main className="lg:w-[82%] 2xl:w-[85%] py-4 overflow-x-hidden h-full">
 			<DashboardHeader header={headerName} />
-			<section className="w-[100%]  h-fit overflow-x-hidden px-3 ">
+			<section className="w-[100%] h-full overflow-x-hidden px-3 ">
 				{children}
 			</section>
 		</main>

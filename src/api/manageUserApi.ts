@@ -1,6 +1,6 @@
 //FETCH_ALL_USER
 
-import { API_ROUTE } from "src/helpers/Routes";
+import { API_ROUTE } from "src/helpers/Constant";
 import { apiSlice } from "./apiSlice";
 
 export const manageUserAPISlice = apiSlice.injectEndpoints({
