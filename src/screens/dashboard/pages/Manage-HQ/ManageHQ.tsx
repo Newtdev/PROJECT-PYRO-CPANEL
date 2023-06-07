@@ -7,9 +7,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Button } from "src/components/Button";
-import { useFormik } from "formik";
+import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
-import { FlagModal, Modal } from "src/components/ModalComp";
+import { FlagModal, FormModal, Modal } from "src/components/ModalComp";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { Lines } from "src/components/Icons";
 import { useNavigate } from "react-router-dom";
@@ -49,17 +49,17 @@ const headCells: readonly HeadCell[] = [
 	{
 		id: "hqAddress",
 		minWidth: 170,
-		label: "Branches",
+		label: "HQ address",
 	},
 	{
 		id: "phoneNumber",
 		minWidth: 170,
-		label: "Category",
+		label: "Phone number",
 	},
 	{
 		id: "state",
 		minWidth: 170,
-		label: "Category",
+		label: "State",
 	},
 ];
 
@@ -236,27 +236,14 @@ const ManageHQ = () => {
 					)}
 
 					{showAddModal ? (
-						<Modal>
-							<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-								<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-									<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-										<h1>Create HQ</h1>
-										<button
-											onClick={() => setShowAddModal(false)}
-											disabled={false}>
-											<HighlightOffOutlinedIcon
-												fontSize="large"
-												className="text-black cursor-pointer"
-											/>
-										</button>
-									</div>
-									<div className="w-full">
-										<Lines />
-									</div>
-									<AddNewHQ close={closeAddHQModal} />{" "}
-								</div>
-							</div>
-						</Modal>
+						// <Modal>
+
+						// </Modal>
+						<FormModal
+							name="Create HQ"
+							onClick={() => setShowAddModal((prevState) => !prevState)}>
+							<AddNewHQ close={closeAddHQModal} />{" "}
+						</FormModal>
 					) : null}
 				</div>
 			</article>
@@ -267,37 +254,39 @@ const ManageHQ = () => {
 export default ManageHQ;
 
 // YUP VALIDATION FOR ADD BRANCH TYPE
-const AddbranchValidation = Yup.object({
-	firstName: Yup.string().label("First name").required(),
-	lastName: Yup.string().label("Last name").required(),
-	phoneNumber: Yup.string()
-		.label("phone number")
-		.length(11, "invalid")
-		.required(),
-	email: Yup.string().label("Email").email().required(),
-	password: Yup.string().label("Password").required(),
-	// gender: Yup.string<"male" | "female">().nullable().defined(),
-	gender: Yup.string().label("Gender").required(),
-	accountType: Yup.string().label("Password").notRequired(),
-	stationHQ: Yup.object({
-		name: Yup.string().label("HQ name").required(),
-		email: Yup.string().label("HQ email").email().required(),
+const AddbranchValidation = [
+	Yup.object({
+		firstName: Yup.string().label("First name").required(),
+		lastName: Yup.string().label("Last name").required(),
 		phoneNumber: Yup.string()
 			.label("phone number")
 			.length(11, "invalid")
 			.required(),
-		hqAddress: Yup.string().label("HQ address").required(),
-		state: Yup.string().label("State").required(),
+		email: Yup.string().label("Email").email().required(),
+		password: Yup.string().label("Password").required(),
+		// gender: Yup.string<"male" | "female">().nullable().defined(),
+		gender: Yup.string().label("Gender").required(),
 	}),
-	// stationHQ.
-});
-export type addBranchSchema = Yup.InferType<typeof AddbranchValidation>;
+	Yup.object({
+		accountType: Yup.string().label("Password").notRequired(),
+		stationHQ: Yup.object({
+			name: Yup.string().label("HQ name").required(),
+			email: Yup.string().label("HQ email").email().required(),
+			phoneNumber: Yup.string()
+				.label("phone number")
+				.length(11, "invalid")
+				.required(),
+			hqAddress: Yup.string().label("HQ address").required(),
+			state: Yup.string().label("State").required(),
+		}),
+	}),
+];
 
 const AddNewHQ = (props: { close: () => void }) => {
 	const [step, setStep] = useState<number>(0);
 	const [AddNewHq, addNewResult] = useAddNewHQMutation();
 
-	async function addNewHQ(values: addBranchSchema) {
+	async function addNewHQ(values: FormikValues) {
 		try {
 			const response = await AddNewHq(values).unwrap();
 			if (response) {
@@ -310,26 +299,26 @@ const AddNewHQ = (props: { close: () => void }) => {
 		}
 	}
 
-	const Formik = useFormik<addBranchSchema>({
+	const Formik = useFormik<FormikValues>({
 		initialValues: {
-			firstName: "AYM",
-			lastName: "Shafa",
-			email: "aym@shafa.com",
-			phoneNumber: "08051334098",
-			password: "Test@1234",
-			gender: "male",
-			accountType: "stationHq",
+			firstName: "",
+			lastName: "",
+			email: "",
+			phoneNumber: "",
+			password: "",
+			gender: "",
+			accountType: "",
 			stationHQ: {
-				name: "AYM Shafa",
-				email: "info@aymshafa.com",
-				phoneNumber: "08051334098",
-				hqAddress: "Testing hq address",
-				state: "Abuja",
+				name: "",
+				email: "",
+				phoneNumber: "",
+				hqAddress: "",
+				state: "",
 			},
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
-		validationSchema: AddbranchValidation,
+		validationSchema: AddbranchValidation[step],
 		onSubmit: (values) => {
 			if (step === 1) {
 				addNewHQ(values);
@@ -452,95 +441,95 @@ const AddNewHQ = (props: { close: () => void }) => {
 			id: "stationHQ.name",
 			name: "Branch name",
 			type: "text",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.name && Formik.touched?.stationHQ?.name
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.name && Formik.touched?.stationHQ?.name
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
 			value: Formik.values?.stationHQ?.name,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
-			error: Formik.errors?.stationHQ?.name,
-			touched: Formik.touched?.stationHQ?.name,
+			// error: Formik.errors?.stationHQ?.name,
+			// touched: Formik.touched?.stationHQ?.name,
 		},
 		{
 			id: "stationHQ.email",
 			name: "Branch email",
 			type: "email",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.email && Formik.touched.email
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.email && Formik.touched.email
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
 			value: Formik.values?.stationHQ?.email,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.email,
-			touched: Formik.touched.stationHQ?.hqAddress,
+			// error: Formik.errors.stationHQ?.email,
+			// touched: Formik.touched.stationHQ?.hqAddress,
 		},
 		{
 			id: "stationHQ.phoneNumber",
 			name: "Branch phone number",
 			type: "text",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.phoneNumber &&
-				Formik.touched.stationHQ?.phoneNumber
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.phoneNumber &&
+			// 	Formik.touched.stationHQ?.phoneNumber
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
 			value: Formik.values.stationHQ?.phoneNumber,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.email,
-			touched: Formik.touched.stationHQ?.email,
+			// error: Formik.errors.stationHQ?.email,
+			// touched: Formik.touched.stationHQ?.email,
 		},
 		{
 			id: "stationHQ.hqAddress",
 			name: "Branch address",
 			type: "text",
-			styles: `${styles} ${
-				Formik.errors?.stationHQ?.hqAddress &&
-				Formik.touched?.stationHQ?.hqAddress
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.hqAddress &&
+			// 	Formik.touched?.stationHQ?.hqAddress
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
 			value: Formik.values.stationHQ?.hqAddress,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.hqAddress,
-			touched: Formik.touched.stationHQ?.hqAddress,
+			// error: Formik.errors.stationHQ?.hqAddress,
+			// touched: Formik.touched.stationHQ?.hqAddress,
 		},
 		{
 			id: "stationHQ.state",
 			name: "State",
 			type: "text",
-			styles: `${styles} ${
-				Formik.errors.stationHQ?.state && Formik.touched.stationHQ?.state
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
+			// styles: `${styles} ${
+			// 	Formik.errors.stationHQ?.state && Formik.touched.stationHQ?.state
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
 			labelStyles: labelStyles,
 			onChange: Formik.handleChange,
 			value: Formik.values.stationHQ?.state,
 			onBlur: Formik.handleBlur,
 			disabled: addNewResult?.isLoading,
-			error: Formik.errors.stationHQ?.state,
-			touched: Formik.touched.stationHQ?.state,
+			// error: Formik.errors.stationHQ?.state,
+			// touched: Formik.touched.stationHQ?.state,
 		},
 	];
 
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}
-			className="w-full flex flex-col justify-center items-center px-4 h-full">
+			className="w-full flex flex-col justify-center items-center px-4 pb-4">
 			{step === 0 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
 					{FormData.slice(0, 6).map((dt, i) => (
@@ -554,8 +543,8 @@ const AddNewHQ = (props: { close: () => void }) => {
 							value={dt.value}
 							onBlur={dt.onBlur}
 							disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
+							// error={dt.error}
+							// touched={dt.touched}
 						/>
 					))}
 				</div>
@@ -573,8 +562,8 @@ const AddNewHQ = (props: { close: () => void }) => {
 							value={dt.value}
 							onBlur={dt.onBlur}
 							disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
+							// error={dt.error}
+							// touched={dt.touched}
 						/>
 					))}
 				</div>

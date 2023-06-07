@@ -1,8 +1,7 @@
-import { loginResponseType, Values } from "src/helpers/alias";
+import { apiSlice } from "src/api/apiSlice";
 import { HQ_API_ENPOINTS } from "src/helpers/Constant";
-import { apiSlice } from "../../api/apiSlice";
 
-export const hqManageApiSlice = apiSlice.injectEndpoints({
+export const hQManageBranchApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		hqBranch: builder.mutation({
 			query: (value): any => ({
@@ -10,7 +9,13 @@ export const hqManageApiSlice = apiSlice.injectEndpoints({
 				method: "POST",
 			}),
 		}),
+		fetchHQBranch: builder.query({
+			query: (id) => HQ_API_ENPOINTS.BRANCH,
+			// providesTags: (result) =>
+			// 	providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
+		}),
 	}),
 });
 
-export const { useHqBranchMutation } = hqManageApiSlice;
+export const { useHqBranchMutation, useFetchHQBranchQuery } =
+	hQManageBranchApiSlice;

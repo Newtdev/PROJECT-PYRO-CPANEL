@@ -47,9 +47,7 @@ function App() {
 				<Routes>
 					<Route path={APP_ROUTE.LOGIN} element={<Login host={domainHost} />} />
 					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
-						{domainHost === SUB_DOMAIN.SYSTEM_ADMIN
-							? AdminRoute(domainHost)
-							: HQ_Route(domainHost)}
+						{AdminRoute(domainHost)}
 					</Route>
 				</Routes>
 			</Suspense>

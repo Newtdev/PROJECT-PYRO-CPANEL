@@ -8,7 +8,7 @@ export const notificationAPISlice = apiSlice.injectEndpoints({
 			query: (params) =>
 				`${API_ROUTE.NOTIFICATION}?page=${params?.page}&limit=7&orderBy=createdAt:desc`,
 			providesTags: (result) =>
-				providesTagList(result.data.data, RTKTAG.NOTIFICATION) as any,
+				providesTagList(result?.data?.data, RTKTAG.NOTIFICATION) as any,
 		}),
 		sendNotification: builder.mutation({
 			query: (body: any): string | any => ({

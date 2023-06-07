@@ -60,6 +60,7 @@ export enum HQ_APP_ROUTE {
 
 export enum HQ_API_ENPOINTS {
 	BRANCH = "station/branch",
+	SETTINGS = "station",
 	// TRANSACTIONS = "/transactions",
 	// SUPPORT = "/support",
 	// NOTIFICATION = "/notification",

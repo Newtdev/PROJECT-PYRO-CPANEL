@@ -1,7 +1,9 @@
+import { HighlightOffOutlined } from "@mui/icons-material";
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "./Button";
+import { Lines } from "./Icons";
 
 interface modalType {
 	styles?: string | undefined;
@@ -45,5 +47,38 @@ export const FlagModal = ({
 				/>
 			</div>
 		</div>
+	);
+};
+
+export const FormModal = ({
+	children,
+	name,
+	onClick,
+}: {
+	children: ReactNode;
+	name: string;
+	onClick: any;
+}) => {
+	return (
+		<Modal>
+			<div className="absolute w-full h-screen overflow-y-auto z-[600] right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
+				<div className="w-[50%] max-w-[511px] rounded-[20px] h-[90%] bg-white overflow-y-auto overflow-x-hidden">
+					<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
+						<h1>{name}</h1>
+						<button onClick={onClick} disabled={false}>
+							<HighlightOffOutlined
+								fontSize="large"
+								className="text-black cursor-pointer"
+							/>
+						</button>
+					</div>
+					<div className="w-full">
+						<Lines />
+					</div>
+					<div className="h-full">{children}</div>
+					{/* <AddNewHQ close={closeAddHQModal} />{" "} */}
+				</div>
+			</div>
+		</Modal>
 	);
 };

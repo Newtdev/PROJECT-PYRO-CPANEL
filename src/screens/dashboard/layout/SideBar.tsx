@@ -54,7 +54,7 @@ const linksData = [
 		id: 3,
 		name: "Transactions",
 		route: "Transactions",
-		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
+		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		Icon: <Transactions />,
 		link: APP_ROUTE.TRANSACTIONS,
 		hq_link: HQ_APP_ROUTE.TRANSACTIONS,
@@ -71,10 +71,9 @@ const linksData = [
 		id: 4,
 		name: "Support",
 		route: "Support",
-		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
+		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		Icon: <Support />,
 		link: APP_ROUTE.SUPPORT,
-		hq_link: HQ_APP_ROUTE.SUPPORT,
 	},
 	{
 		id: 5,
@@ -148,7 +147,7 @@ const SideBar = () => {
 			dt.priviledges.filter((_v) => _v === user?.role).length > 0 ? (
 				<DashboardLink
 					name={dt?.name}
-					link={user?.role !== "hq_admin" ? dt?.link : dt?.hq_link}
+					link={user?.role !== "hq_admin" ? dt?.link : dt?.hq_link || ""}
 					Icon={dt.Icon}
 				/>
 			) : null

@@ -1,6 +1,6 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
+import Main from "./Main";
 
-import Main from "./main";
 import SideBar from "./SideBar";
 
 const Layout = ({ children }: any): ReactElement => {

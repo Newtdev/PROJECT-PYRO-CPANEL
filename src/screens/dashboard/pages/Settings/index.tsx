@@ -399,7 +399,7 @@ const ResetPassword = (props: {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props]);
-	console.log(Formik.errors);
+
 	return (
 		<Modal>
 			<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
