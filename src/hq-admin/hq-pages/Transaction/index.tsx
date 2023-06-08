@@ -51,8 +51,8 @@ const headCells: readonly HeadCellTypes[] = [
 	},
 ];
 
-export default function Transaction() {
-	const allTransactionsResult = useGetAllHQTransactionsQuery("");
+export default function Transaction({ id }: { id: string }) {
+	const allTransactionsResult = useGetAllHQTransactionsQuery(id, { skip: !id });
 	const [transactionData, setTransactionData] = useState<{}>({});
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 
@@ -127,15 +127,6 @@ export default function Transaction() {
 						</div>
 					</div>
 					<div className="h-full  w-full bg-white mt-6 shadow-lg rounded-t-lg">
-						<div className="h-full w-full flex justify-between items-center py-6 px-6">
-							{/* <div>
-								<SelectInput
-									tabData={filterData}
-									filteredValue={info.source}
-									onChange={handleSelectChange}
-								/>
-							</div> */}
-						</div>
 						<TableLoader
 							data={allTransactionsResult}
 							tableData={handledAPIResponse || []}>

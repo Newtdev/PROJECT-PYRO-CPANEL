@@ -141,7 +141,9 @@ export default function SingleBranch() {
 							info={handledAPIResponse}
 						/>
 					) : null}
-					{tabName.toLowerCase() === "transactions" ? <Transaction /> : null}
+					{tabName.toLowerCase() === "transactions" ? (
+						<Transaction id={slicedPath[2]} />
+					) : null}
 				</LoaderContainer>
 
 				{showModal ? (
