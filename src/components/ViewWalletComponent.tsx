@@ -5,7 +5,7 @@ import React, { ReactElement, useState } from "react";
 import EnhancedTable from "src/components/Table";
 import { Data, TransactionsType } from "src/helpers/alias";
 import { CurrencyFormatter } from "src/helpers/helperFunction";
-import { DropDownComponent } from "src/screens/dashboard/layout/Main";
+import { DropDownComponent } from "src/screens/dashboard/layout/MainPage";
 
 type TabType = { id: string | number; value: string; label: string };
 

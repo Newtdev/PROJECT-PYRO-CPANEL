@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import Main from "./Main";
+import Main from "./MainPage";
 
 import SideBar from "./SideBar";
 
