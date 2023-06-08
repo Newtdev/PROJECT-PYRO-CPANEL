@@ -6,6 +6,7 @@ import { Dashboard } from "src/screens";
 
 import { HQProtectedComp } from "src/screens/protected/HqProtected";
 import ManageHQBranch from "../hq-pages/Manage-branch";
+import SingleBranch from "../hq-pages/Manage-branch/SingleBranch";
 import Notification from "../hq-pages/Notification";
 import HqSetting from "../hq-pages/Settings";
 
@@ -41,15 +42,15 @@ export const HQ_Route = (host: string) => {
 	return [
 		{
 			path: APP_ROUTE.DASHBOARD,
-			element: (
-				// <AdminProtectedComp host={host}>
-				<Dashboard />
-				// </AdminProtectedComp>
-			),
+			element: <Dashboard />,
 		},
 		{
 			path: HQ_APP_ROUTE.BRANCH,
 			element: <ManageHQBranch />,
+		},
+		{
+			path: HQ_APP_ROUTE.SINGLE_BRANCH,
+			element: <SingleBranch />,
 		},
 
 		{

@@ -13,7 +13,6 @@ import {
 	Support,
 	Transactions,
 } from "src/components/Icons";
-import { loginResponseType } from "src/helpers/alias";
 import { APP_ROUTE, HQ_APP_ROUTE, PERMISSION } from "src/helpers/Constant";
 import { useAuth } from "src/hooks/useAuth";
 
@@ -22,6 +21,7 @@ type linkTypes = {
 	link: string;
 	Icon: ReactElement;
 	priviledges?: string[];
+	route: string;
 };
 
 const linksData = [
@@ -110,7 +110,7 @@ const linksData = [
 		hq_link: HQ_APP_ROUTE.SETTINGS,
 	},
 ];
-const DashboardLink = ({ name, link, Icon }: linkTypes) => {
+const DashboardLink = ({ name, link, Icon, route }: linkTypes) => {
 	let path = useLocation();
 
 	const firstRoutePath = path.pathname.split("/");
@@ -118,10 +118,11 @@ const DashboardLink = ({ name, link, Icon }: linkTypes) => {
 	let nextRoute = firstRoutePath[1];
 
 	const active = useMemo(() => {
-		const selectedLink = name.split(" ").join("").toLowerCase();
+		const selectedLink = route.split(" ").join("-").toLowerCase();
+
 		if (!firstRoute) return nextRoute.toLowerCase() === selectedLink;
 		else return firstRoute.toLowerCase() === selectedLink;
-	}, [firstRoute, name, nextRoute]);
+	}, [firstRoute, route, nextRoute]);
 
 	const activeLink = active ? "font-[600]" : "font-normal";
 	return (
@@ -149,6 +150,7 @@ const SideBar = () => {
 					name={dt?.name}
 					link={user?.role !== "hq_admin" ? dt?.link : dt?.hq_link || ""}
 					Icon={dt.Icon}
+					route={dt.route}
 				/>
 			) : null
 		);

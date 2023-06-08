@@ -38,6 +38,11 @@ const Category: CategoryType | any = {
 
 const headCells: readonly HeadCellTypes[] = [
 	{
+		id: "name",
+		minWidth: 170,
+		label: "Station Name",
+	},
+	{
 		id: "walletId",
 		minWidth: 170,
 		label: "Wallet ID",
@@ -95,6 +100,7 @@ const Transactions = () => {
 		tab: "one",
 		who: "stations",
 		for: "station_branch",
+		populate: "stationBranch",
 	});
 	const [transactionData, setTransactionData] = useState<{}>({});
 
@@ -109,21 +115,26 @@ const Transactions = () => {
 			return { ...prev, source: event.target.value };
 		});
 	};
+	console.log(info);
 	const allTransactionsResult = useGetAllTransactionsQuery({
 		...{ ...info, ...value },
 	});
 
 	// HANDLE TAB CHANGE
 	const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue({
-			tab: newValue,
-			who: newValue === "two" ? "users" : "stations",
-			for: newValue === "two" ? "" : "station_branch",
+		setValue((prevState) => {
+			return {
+				...prevState,
+				tab: newValue,
+				who: newValue === "two" ? "users" : "stations",
+				for: newValue === "two" ? "" : "station_branch",
+			};
 		});
 	};
 
 	const handledAPIResponse = useMemo(() => {
 		const transactions = allTransactionsResult?.currentData?.transactions || [];
+
 		return transactions?.data?.reduce(
 			(acc: { [index: string]: string }[], cur: TransactionsType) => [
 				...acc,
@@ -134,6 +145,7 @@ const Transactions = () => {
 					type: cur.type,
 					category: Category[cur.category],
 					amount: CurrencyFormatter(Number(cur?.amount)),
+					name: cur?.stationBranch.name,
 
 					status: (
 						<p
@@ -157,10 +169,11 @@ const Transactions = () => {
 	// HANDLE CHANGE FOR PAGINATION
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setInfo((prev) => {
-			return { ...prev, newPage };
+			return { ...prev, page: newPage };
 		});
 	};
 
+	console.log(allTransactionsResult?.currentData);
 	const props = {
 		rows: handledAPIResponse || [],
 		headCells,

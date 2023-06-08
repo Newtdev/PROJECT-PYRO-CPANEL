@@ -25,7 +25,6 @@ const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 		api.dispatch(logOut());
 		// eslint-disable-next-line no-undef
 		const refreshResult = await baseQuery("api", api, extraOptions);
-		console.log(refreshResult);
 
 		if (refreshResult?.data) {
 			// const user = api.getState().auth.user;
@@ -40,6 +39,6 @@ const customBaseQuery = async (args: string, api: any, extraOptions: {}) => {
 export const apiSlice = createApi({
 	reducerPath: "api",
 	baseQuery: customBaseQuery,
-	tagTypes: ["MANAGE_HQ", "MANAGE_BRANCH", "FEEDS", "SELF_HELP"],
+	tagTypes: ["MANAGE_HQ", "MANAGE_BRANCH", "FEEDS", "SELF_HELP", "HQ_BRANCH"],
 	endpoints: (builder) => ({}),
 });

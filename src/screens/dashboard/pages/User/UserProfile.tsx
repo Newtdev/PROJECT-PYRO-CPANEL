@@ -55,7 +55,6 @@ export default function UserProfile() {
 										link={dt.link}
 										height={"98px"}
 										activeBtn={"View Profile"}
-										onClick={() => setShowCard(!showCard)}
 										showCard={showCard}
 									/>
 								</Fragment>

@@ -30,6 +30,7 @@ export type cardBtnType = {
 export type loginResponseType = {
 	user: any;
 	systemAdmin: {
+		stationHQ: any;
 		avatar: any;
 		role: null;
 		firstName: string | null;
@@ -72,6 +73,7 @@ export interface TransactionsType {
 	amount: string;
 	status: string | ReactElement;
 	createdAt: string;
+	stationBranch: { name: string };
 
 	// [index:string]:string | number
 }
@@ -115,6 +117,39 @@ export type ReviewDataType = {
 	value?: () => number | string;
 	star: number | string;
 }[];
+
+export interface ManageBranchType {
+	id: string;
+	name: string;
+	phoneNumber: string;
+	status: string;
+	location: {
+		lga: string;
+		address: string;
+		latitude: string;
+		longitude: string;
+		state: string;
+	};
+}
+
+export interface FormType {
+	name: string;
+	phoneNumber: string;
+	location: {
+		lga: string;
+		latitude: string;
+		longitude: string;
+		address: string;
+		state: string;
+	};
+	branchManager: {
+		firstName: string;
+		lastName: string;
+		phoneNumber: string;
+		email: string;
+		password: string;
+	};
+}
 
 // type ReadOnlyProps<T> = {
 // 	readonly [P in typeOf T]:T[P]

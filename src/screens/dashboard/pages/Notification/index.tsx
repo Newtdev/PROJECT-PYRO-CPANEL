@@ -266,7 +266,7 @@ const SendNotificationModal = (props: { name: string; close: () => void }) => {
 			onChange: Formik.handleChange,
 			value: Formik.values.sendTo,
 			onBlur: Formik.handleBlur,
-			disabled: sendNotificationResult?.isLoading,
+			disabled: true,
 			error: Formik.errors.sendTo,
 			touched: Formik.touched.sendTo,
 		},
@@ -303,6 +303,7 @@ const SendNotificationModal = (props: { name: string; close: () => void }) => {
 						onChange={_v.onChange}
 						onBlur={_v.onBlur}
 						error={_v.error}
+						disabled={_v.disabled}
 						touched={_v.touched}
 						styles={_v.styles}
 						labelStyles={_v.labelStyles}

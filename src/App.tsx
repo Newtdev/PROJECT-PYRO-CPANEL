@@ -35,19 +35,19 @@ function App() {
 
 	useEffect(() => {
 		if (!persisteUserInfo) return;
-		console.log(persisteUserInfo);
-
 		dispatch(setCredentials(persisteUserInfo));
 		/* eslint-disable react-hooks/exhaustive-deps */
 	}, [dispatch]);
-	console.log(domainHost, SUB_DOMAIN.SYSTEM_ADMIN);
+
 	return (
 		<div className="App">
 			<Suspense fallback="loading...">
 				<Routes>
 					<Route path={APP_ROUTE.LOGIN} element={<Login host={domainHost} />} />
 					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
-						{AdminRoute(domainHost)}
+						{domainHost === SUB_DOMAIN.SYSTEM_ADMIN
+							? AdminRoute(domainHost)
+							: HQ_Route(domainHost)}
 					</Route>
 				</Routes>
 			</Suspense>

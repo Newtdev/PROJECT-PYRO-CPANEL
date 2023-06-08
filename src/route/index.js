@@ -9,6 +9,7 @@ import ViewHQWallet from "src/screens/dashboard/pages/Manage-HQ/ViewHQWallet";
 import Notification from "src/screens/dashboard/pages/Notification";
 import AddNewSelfHelp from "src/screens/dashboard/pages/self-help/AddNewSelfHelp";
 import Support from "src/screens/dashboard/pages/support";
+import UserProfile from "src/screens/dashboard/pages/User/UserProfile";
 import UserWallet from "src/screens/dashboard/pages/User/UserWallet";
 import { AdminProtectedComp } from "src/screens/protected/AdminProtected";
 const Settings = lazy(() => import("../screens/dashboard/pages/Settings"));
@@ -93,6 +94,7 @@ export const AdminRoute = (host) => {
 		{ path: APP_ROUTE.SETTINGS, element: <Settings /> },
 		{ path: APP_ROUTE.NOTIFICATION, element: <Notification /> },
 		{ path: APP_ROUTE.USER, element: <Users /> },
+		{ path: APP_ROUTE.USER_PROFILE, element: <UserProfile /> },
 	].map((route, i) => (
 		<Route path={route.path} index element={route.element} />
 	));

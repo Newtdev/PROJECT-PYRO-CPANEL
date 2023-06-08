@@ -144,12 +144,6 @@ const Transactions = () => {
 		});
 	};
 
-	// TABLE FILTER TAB
-	const tabData: SelectType[] = [
-		{ id: 1, value: "All", label: "All" },
-		{ id: 2, value: "New", label: "New Registered" },
-	];
-
 	const props = {
 		rows: handledAPIResponse || [],
 		headCells,
@@ -182,28 +176,28 @@ const Transactions = () => {
 						</div>
 					</div>
 					<div className="h-fit w-full bg-white mt-6 shadow-lg rounded-t-lg">
-						<TableLoader data={userResult} tableData={handledAPIResponse || []}>
-							<div className="h-full w-full bg-white flex justify-between items-center py-6 px-6">
-								<div>
+						<div className="h-full w-full bg-white flex justify-between items-center py-6 px-6">
+							{/* <div>
 									<SelectInput
-										tabData={tabData}
-										filteredValue={filteredValue}
-										onChange={handleSelectChange}
+									tabData={tabData}
+									filteredValue={filteredValue}
+									onChange={handleSelectChange}
 									/>
-								</div>
+								</div> */}
 
-								<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
-									<SearchInput
-										name="branch-search"
-										placeholder="Search for Branch, HQ, User"
-										value={searchValue}
-										onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-											const target = e.target;
-											setSearchValue(target.value);
-										}}
-									/>
-								</div>
+							<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
+								<SearchInput
+									name="branch-search"
+									placeholder="Search"
+									value={searchValue}
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+										const target = e.target;
+										setSearchValue(target.value);
+									}}
+								/>
 							</div>
+						</div>
+						<TableLoader data={userResult} tableData={handledAPIResponse || []}>
 							<ViewWalletComp {...props} />
 						</TableLoader>
 					</div>

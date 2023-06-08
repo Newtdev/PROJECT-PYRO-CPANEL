@@ -10,12 +10,15 @@ import { LoaderContainer } from "src/components/LoaderContainer";
 import { useFetchBranchQuery } from "src/api/manageBranchAPISlice";
 import useCustomLocation from "src/hooks/useCustomLocation";
 
-import AttendantProfile from "./Manage-branch/AttendantProfile";
-import BranchReview from "./Manage-branch/BranchReview";
+// import AttendantProfile from "./Manage-branch/AttendantProfile";
+// import BranchReview from "./Manage-branch/BranchReview";
 import {
 	CurrencyFormatter,
 	splitByUpperCase,
 } from "src/helpers/helperFunction";
+import AttendantProfile from "src/screens/dashboard/pages/Manage-branch/AttendantProfile";
+import BranchReview from "src/screens/dashboard/pages/Manage-branch/BranchReview";
+import { useFetchSingleHQBranchQuery } from "src/hq-admin/hq-api/manageHqApiSlice";
 
 const BranchData: cardBtnType[] = [
 	{
@@ -41,10 +44,11 @@ const BranchData: cardBtnType[] = [
 	},
 ];
 
-export default function SinglePage() {
+export default function SingleBranch() {
 	const [tabName, setTabName] = useState<string>("branch profile");
 	const { slicedPath } = useCustomLocation();
-	const branchResult = useFetchBranchQuery(slicedPath[2]);
+	const branchResult = useFetchSingleHQBranchQuery(slicedPath[2]);
+	console.log(branchResult);
 
 	const handledAPIResponse = useMemo(() => {
 		const station = branchResult?.currentData?.station;

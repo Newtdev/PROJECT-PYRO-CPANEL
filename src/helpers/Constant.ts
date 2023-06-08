@@ -23,7 +23,7 @@ export enum APP_ROUTE {
 	LANDING_PAGE = "/",
 	DASHBOARD = "/",
 	LOGIN = "/login",
-	BRANCH = "/manageBranch",
+	BRANCH = "/manage-Branch",
 	TRANSACTIONS = "/transactions",
 	SUPPORT = "/support",
 	NOTIFICATION = "/notification",
@@ -32,9 +32,9 @@ export enum APP_ROUTE {
 	USER = "/users",
 	USER_PROFILE = "/users/:name",
 	USER_WALLET = "/users/:name/wallet",
-	MANAGEHQ = "/manageHQ",
-	MANAGE_SINGLE_HQ = "/manageHQ/:id",
-	MANAGE_SINGLE_BRANCH = "/manageBranch/:id",
+	MANAGEHQ = "/manage-HQ",
+	MANAGE_SINGLE_HQ = "/manage-HQ/:id",
+	MANAGE_SINGLE_BRANCH = "/manage-branch/:id",
 	BRANCHES = "/branches",
 	VIEW_WALLET = "/view/wallet",
 	ATTENDANT_PROFILE = "branch/:id/attendant",
@@ -51,7 +51,8 @@ export enum APP_ROUTE {
 }
 
 export enum HQ_APP_ROUTE {
-	BRANCH = "/manageBranch",
+	BRANCH = "/manage-branch",
+	SINGLE_BRANCH = "/manage-branch/:id",
 	TRANSACTIONS = "/transactions",
 	SUPPORT = "/support",
 	NOTIFICATION = "/notification",
@@ -59,7 +60,8 @@ export enum HQ_APP_ROUTE {
 }
 
 export enum HQ_API_ENPOINTS {
-	BRANCH = "station/branch",
+	BRANCH = "station/branches",
+	SINGLE_BRANCH = "station/branch",
 	SETTINGS = "station",
 	// TRANSACTIONS = "/transactions",
 	// SUPPORT = "/support",
@@ -84,6 +86,7 @@ export enum RTKTAG {
 	NOTIFICATION = "NOTIFICATION",
 	SELP_HELP = "SELF_HELP",
 	FEEDS = "FEEDS",
+	HQ_BRANCH = "BRANCH",
 }
 
 export enum KEYS {
