@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { cardBtnType } from "src/helpers/alias";
+import { cardBtnType, FormType } from "src/helpers/alias";
 import User from "src/assets/img/User.svg";
 import Attendant from "src/assets/img/Attendanticon.svg";
 import Rating from "src/assets/img/Ratings.svg";
@@ -7,18 +7,21 @@ import { CardButton } from "src/components/Card";
 import { useMemo } from "react";
 import ProfileCard from "src/components/ProfileCard";
 import { LoaderContainer } from "src/components/LoaderContainer";
-import { useFetchBranchQuery } from "src/api/manageBranchAPISlice";
 import useCustomLocation from "src/hooks/useCustomLocation";
-
-// import AttendantProfile from "./Manage-branch/AttendantProfile";
-// import BranchReview from "./Manage-branch/BranchReview";
 import {
 	CurrencyFormatter,
+	handleNotification,
 	splitByUpperCase,
+	SuccessNotification,
 } from "src/helpers/helperFunction";
 import AttendantProfile from "src/screens/dashboard/pages/Manage-branch/AttendantProfile";
 import BranchReview from "src/screens/dashboard/pages/Manage-branch/BranchReview";
-import { useFetchSingleHQBranchQuery } from "src/hq-admin/hq-api/manageHqApiSlice";
+import {
+	useFetchSingleHQBranchQuery,
+	useUpdateHqBranchDetailsMutation,
+} from "src/hq-admin/hq-api/manageHqApiSlice";
+import { FormModal } from "src/components/ModalComp";
+import { AddNewBranch } from "./Components";
 
 const BranchData: cardBtnType[] = [
 	{
@@ -46,13 +49,27 @@ const BranchData: cardBtnType[] = [
 
 export default function SingleBranch() {
 	const [tabName, setTabName] = useState<string>("branch profile");
+	const [showModal, setShowModal] = useState(false);
 	const { slicedPath } = useCustomLocation();
 	const branchResult = useFetchSingleHQBranchQuery(slicedPath[2]);
-	console.log(branchResult);
+	const station = branchResult?.currentData?.station;
+
+	const [updateBranchDetails, updateBranchDetailsResult] =
+		useUpdateHqBranchDetailsMutation();
+
+	async function updateBranch(values: FormType) {
+		try {
+			const response = await updateBranchDetails(values).unwrap();
+			if (response) {
+				SuccessNotification(response?.data?.message);
+				setShowModal(() => false);
+			}
+		} catch (error: any) {
+			handleNotification(error);
+		}
+	}
 
 	const handledAPIResponse = useMemo(() => {
-		const station = branchResult?.currentData?.station;
-
 		return {
 			profileData: {
 				name: station?.name,
@@ -79,7 +96,6 @@ export default function SingleBranch() {
 			{/* <LoaderContainer /> */}
 			<article className="w-full h-screen px-2">
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  py-3">
-					{/* {slicedPath[1] === "branch" ? ( */}
 					<>
 						{BranchData.map((dt) => (
 							<Fragment>
@@ -100,10 +116,11 @@ export default function SingleBranch() {
 					{tabName.toLowerCase() === "branch profile" ? (
 						<ProfileCard
 							data={handledAPIResponse.profileData || {}}
+							onClick={() => setShowModal(true)}
 							showImage={false}
 						/>
 					) : null}
-					{/* {tabName.toLowerCase() === "view wallet" ? <ViewWallet /> : null} */}
+
 					{tabName.toLowerCase() === "attendant profile" ? (
 						<AttendantProfile
 							attendantData={handledAPIResponse?.pumpAttendants}
@@ -119,6 +136,18 @@ export default function SingleBranch() {
 						/>
 					) : null}
 				</LoaderContainer>
+
+				{showModal ? (
+					<FormModal
+						name="Update branch details"
+						onClick={() => setShowModal((prevState) => !prevState)}>
+						<AddNewBranch
+							makeApiRequest={(values) => updateBranch(values)}
+							apiResult={updateBranchDetailsResult}
+							initalValue={station}
+						/>
+					</FormModal>
+				) : null}
 			</article>
 		</section>
 	);

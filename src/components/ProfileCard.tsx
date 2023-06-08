@@ -1,5 +1,6 @@
 import React from "react";
 import { splitByUpperCase } from "src/helpers/helperFunction";
+import { Button } from "./Button";
 import Image from "./Image";
 
 interface ProfileType {
@@ -9,6 +10,7 @@ interface ProfileType {
 	showBanner?: boolean | undefined;
 	showHeader?: boolean;
 	header?: string;
+	onClick?: () => void;
 }
 
 export default function ProfileCard(props: ProfileType) {
@@ -47,6 +49,15 @@ export default function ProfileCard(props: ProfileType) {
 						</div>
 					);
 				})}
+			</div>
+			<div className="h-11 ml-14 mt-4">
+				<Button
+					text="Update branch details"
+					className="h-full font-bold text-white rounded-[38px] px-6 hover: bg-[#002E66] flex items-center justify-center"
+					type="button"
+					showIcon={false}
+					onClick={props.onClick}
+				/>
 			</div>
 			{!!props.showImage ? (
 				<div>
