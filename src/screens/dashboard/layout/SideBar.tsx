@@ -153,7 +153,7 @@ const SideBar = () => {
 			) : null
 		);
 	};
-	console.log(handlePriviledge());
+
 	return (
 		<aside className="h-screen flex flex-col justify-center w-[260px] fixed left-0">
 			<div className=" w-[217px] h-full my-4 rounded-[20px] bg-[#002E66] ml-6">
