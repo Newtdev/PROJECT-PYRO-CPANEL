@@ -4,6 +4,7 @@ import { Button } from "src/components/Button";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import ViewWalletComp from "src/components/ViewWalletComponent";
 import {
+	Category,
 	CurrencyFormatter,
 	handleDateFormat,
 } from "src/helpers/helperFunction";
@@ -25,16 +26,6 @@ interface HeadCellTypes {
 	referenceId?: string | number;
 	doneby?: string;
 }
-
-interface CategoryType {
-	fuel_purchase: string;
-	wallet_transfer: string;
-}
-
-const Category: CategoryType | any = {
-	fuel_purchase: "Fuel purchase",
-	wallet_transfer: "Wallet transfer",
-};
 
 const headCells: readonly HeadCellTypes[] = [
 	{
@@ -115,7 +106,6 @@ const Transactions = () => {
 			return { ...prev, source: event.target.value };
 		});
 	};
-	console.log(info);
 	const allTransactionsResult = useGetAllTransactionsQuery({
 		...{ ...info, ...value },
 	});

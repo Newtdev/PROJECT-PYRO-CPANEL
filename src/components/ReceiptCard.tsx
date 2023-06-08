@@ -32,12 +32,7 @@ export default function ReceiptCard(props: any) {
 								);
 							})}
 						</div>
-						<div className=" w-32 pr-4 flex justify-between ml-14 mt-16 items-center ">
-							<Print />
-							<h1 className="text-blue-600">Print Recipt</h1>
-						</div>
 					</div>
-					{/* <ReceiptCard data={transactionData} /> */}
 				</div>
 			</div>
 		</Modal>

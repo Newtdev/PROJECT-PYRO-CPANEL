@@ -22,6 +22,7 @@ import {
 } from "src/hq-admin/hq-api/manageHqApiSlice";
 import { FormModal } from "src/components/ModalComp";
 import { AddNewBranch } from "./Components";
+import Transaction from "../Transaction";
 
 const BranchData: cardBtnType[] = [
 	{
@@ -44,6 +45,11 @@ const BranchData: cardBtnType[] = [
 		id: 5,
 		icon: Rating,
 		name: "Wallet Info",
+	},
+	{
+		id: 5,
+		icon: Rating,
+		name: "Transactions",
 	},
 ];
 
@@ -135,6 +141,7 @@ export default function SingleBranch() {
 							info={handledAPIResponse}
 						/>
 					) : null}
+					{tabName.toLowerCase() === "transactions" ? <Transaction /> : null}
 				</LoaderContainer>
 
 				{showModal ? (

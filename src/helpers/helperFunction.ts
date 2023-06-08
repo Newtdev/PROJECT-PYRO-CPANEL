@@ -146,3 +146,13 @@ export const ForgetPasswordKey =
 	process.env.REACT_APP_FORGET_PASSWORD_SECRET_KEY;
 
 // export const UserInfoKey = process.env.REACT_APP_FORGET_PASSWORD_SECRET_KEY;
+
+interface CategoryType {
+	fuel_purchase: string;
+	wallet_transfer: string;
+}
+
+export const Category: CategoryType | any = {
+	fuel_purchase: "Fuel purchase",
+	wallet_transfer: "Wallet transfer",
+};

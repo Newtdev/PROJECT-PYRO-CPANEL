@@ -63,7 +63,7 @@ export enum HQ_API_ENPOINTS {
 	BRANCH = "station/branches",
 	SINGLE_BRANCH = "station/branch",
 	SETTINGS = "station",
-	// TRANSACTIONS = "/transactions",
+	TRANSACTIONS = "station/transactions",
 	// SUPPORT = "/support",
 	NOTIFICATION = "station/notification",
 	// SETTINGS = "/settings",
