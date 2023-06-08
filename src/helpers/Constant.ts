@@ -65,7 +65,7 @@ export enum HQ_API_ENPOINTS {
 	SETTINGS = "station",
 	// TRANSACTIONS = "/transactions",
 	// SUPPORT = "/support",
-	// NOTIFICATION = "/notification",
+	NOTIFICATION = "station/notification",
 	// SETTINGS = "/settings",
 }
 export enum PERMISSION {

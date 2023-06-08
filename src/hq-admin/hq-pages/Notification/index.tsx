@@ -1,12 +1,8 @@
 import React, { ReactElement, useMemo, useState } from "react";
 import { HighlightOffOutlined } from "@mui/icons-material";
-import {
-	useFetchAllNotificationQuery,
-	useSendNotificationMutation,
-} from "src/api/notificationApiSlice";
 import { Lines } from "src/components/Icons";
 import { TableLoader } from "src/components/LoaderContainer";
-import { Modal } from "src/components/ModalComp";
+import { FormModal, Modal } from "src/components/ModalComp";
 import EnhancedTable from "src/components/Table";
 import {
 	handleDateFormat,
@@ -24,51 +20,16 @@ import { FormInput, TextArea } from "src/components/inputs";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "src/components/Button";
+import {
+	useFetchAllHQNotificationQuery,
+	useSendHQNotificationMutation,
+} from "src/hq-admin/hq-api/notificationApiSlice";
 
-interface SelfHelpType {
-	id: "title" | "message" | "for" | "createdAt";
-	label: string | ReactElement;
-	minWidth: number;
-}
-
-const headCells: readonly SelfHelpType[] = [
-	{
-		id: "title",
-		minWidth: 170,
-		label: "Title",
-	},
-	{
-		id: "message",
-		minWidth: 170,
-		label: "Message",
-	},
-	{
-		id: "for",
-		minWidth: 170,
-		label: "For",
-	},
-	{
-		id: "createdAt",
-		minWidth: 170,
-		label: "Date",
-	},
-];
 const HQData: cardBtnType[] = [
-	{
-		id: 1,
-		icon: HQ,
-		name: "Send to HQs",
-	},
-
 	{
 		id: 2,
 		icon: HQ,
 		name: "Send to Branch",
-	},
-	{
-		id: 3,
-		icon: HQ,
-		name: "Send to Users",
 	},
 ];
 
@@ -76,66 +37,6 @@ export default function Notification() {
 	//, stationHq, user
 	const [cardName, setCardName] = useState("");
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
-
-	const { handleSelectAllClick, selected, setSelected } =
-		useHandleSelectAllClick([]);
-	const [page, setPagination] = useState({ newPage: 1 });
-	const { isSelected } = useIsSelected(selected);
-
-	const { handleClick } = useHandleSingleSelect(selected, setSelected);
-	const { handleRowClick } = useHandleRowClick();
-
-	const notificationResult = useFetchAllNotificationQuery({
-		page: page.newPage,
-	});
-
-	// API TO GET ALL HQ INFORMATION
-
-	// console.log(notificationResult);
-
-	const handleChangePage = (event: unknown, newPage: number) => {
-		setPagination((prev) => {
-			return { ...prev, newPage };
-		});
-	};
-
-	const handledAPIResponse = useMemo(() => {
-		const hqProfile = notificationResult?.currentData?.data || [];
-		return hqProfile?.data?.reduce(
-			(
-				acc: { [index: string]: string }[],
-				cur: { [index: string]: string }
-			) => [
-				...acc,
-				{
-					id: cur?.id,
-					title: cur?.title,
-					message: cur?.message,
-					for: cur.for,
-					createdAt: handleDateFormat(cur?.createdAt),
-				},
-			],
-			[]
-		);
-	}, [notificationResult]);
-
-	let dataToChildren: any = {
-		rows: handledAPIResponse || [],
-		headCells,
-		handleRowClick,
-		showFlag: false,
-		showCheckBox: false,
-		isSelected,
-		handleClick,
-		handleSelectAllClick,
-		selected,
-		handleChangePage,
-		paginationData: {
-			totalPage: notificationResult?.currentData?.data.totalPages,
-			limit: notificationResult?.currentData?.data.limit,
-			page: notificationResult?.currentData?.data.page,
-		},
-	};
 
 	return (
 		<section>
@@ -149,60 +50,21 @@ export default function Notification() {
 							height={"98px"}
 							onClick={() => {
 								setShowAddModal(true);
-								switch (dt.name.trim().toLowerCase()) {
-									case "send to hqs":
-										setCardName("stationHQ");
-										break;
-									case "send to branch":
-										setCardName("stationBranch");
-										break;
-									default:
-										setCardName("user");
-										break;
-								}
 							}}
 						/>
 					))}
 				</div>
 
-				<div className="h-fit w-full bg-white">
-					<TableLoader
-						data={notificationResult || {}}
-						tableData={handledAPIResponse || []}>
-						<div className="h-full w-full">
-							<div className="relative">
-								<EnhancedTable {...dataToChildren} />
-							</div>
-						</div>
-					</TableLoader>
-
-					{showAddModal ? (
-						<Modal>
-							<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-								<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10 bg-white">
-									<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-										<h1>Send notification</h1>
-										<button
-											onClick={() => setShowAddModal(false)}
-											disabled={false}>
-											<HighlightOffOutlined
-												fontSize="large"
-												className="text-black cursor-pointer"
-											/>
-										</button>
-									</div>
-									<div className="w-full">
-										<Lines />
-									</div>
-									<SendNotificationModal
-										name={cardName}
-										close={() => setShowAddModal(false)}
-									/>
-								</div>
-							</div>
-						</Modal>
-					) : null}
-				</div>
+				{showAddModal ? (
+					<FormModal
+						name="Send Notification"
+						onClick={() => setShowAddModal(false)}>
+						<SendNotificationModal
+							name={cardName}
+							close={() => setShowAddModal(false)}
+						/>
+					</FormModal>
+				) : null}
 			</article>
 		</section>
 	);
@@ -218,7 +80,7 @@ export type addBranchSchema = Yup.InferType<typeof SendNotificationValidation>;
 
 const SendNotificationModal = (props: { name: string; close: () => void }) => {
 	const [sendNewNotification, sendNotificationResult] =
-		useSendNotificationMutation();
+		useSendHQNotificationMutation();
 
 	async function SendNotificationfunt(values: addBranchSchema) {
 		try {
@@ -238,7 +100,7 @@ const SendNotificationModal = (props: { name: string; close: () => void }) => {
 			title: "",
 			message: "",
 			notify: [],
-			sendTo: props.name,
+			sendTo: "stationBranch",
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
@@ -266,7 +128,7 @@ const SendNotificationModal = (props: { name: string; close: () => void }) => {
 			onChange: Formik.handleChange,
 			value: Formik.values.sendTo,
 			onBlur: Formik.handleBlur,
-			disabled: sendNotificationResult?.isLoading,
+			disabled: true,
 			error: Formik.errors.sendTo,
 			touched: Formik.touched.sendTo,
 		},
@@ -303,6 +165,7 @@ const SendNotificationModal = (props: { name: string; close: () => void }) => {
 						onChange={_v.onChange}
 						onBlur={_v.onBlur}
 						error={_v.error}
+						disabled={_v.disabled}
 						touched={_v.touched}
 						styles={_v.styles}
 						labelStyles={_v.labelStyles}

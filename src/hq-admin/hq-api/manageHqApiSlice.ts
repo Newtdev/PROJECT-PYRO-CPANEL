@@ -15,7 +15,7 @@ export const hQManageBranchApiSlice = apiSlice.injectEndpoints({
 		}),
 		updateHqBranchDetails: builder.mutation({
 			query: (body): any => ({
-				url: HQ_API_ENPOINTS.SINGLE_BRANCH,
+				url: `${HQ_API_ENPOINTS.SINGLE_BRANCH}`,
 				method: "PATCH",
 				body,
 			}),
