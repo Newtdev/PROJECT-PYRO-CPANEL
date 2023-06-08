@@ -10,8 +10,7 @@ import { Button } from "src/components/Button";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import { FlagModal, FormModal, Modal } from "src/components/ModalComp";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import { Lines } from "src/components/Icons";
+
 import { useNavigate } from "react-router-dom";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
@@ -62,6 +61,7 @@ const headCells: readonly HeadCell[] = [
 		label: "State",
 	},
 ];
+type ProfileType = { [index: string]: string };
 
 const ManageHQ = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
@@ -75,7 +75,6 @@ const ManageHQ = () => {
 		query: debouncedValue,
 		page: pagination.newPage,
 	});
-	type ProfileType = { [index: string]: string };
 	// hqQueryResult?.currentData?.hqProfile?.totalData;
 	const handledAPIResponse = useMemo(() => {
 		let neededData: ProfileType[] = [];
@@ -115,7 +114,6 @@ const ManageHQ = () => {
 	// TABLE FILTER TAB
 	const tabData: { id: string | number; value: string; label: string }[] = [
 		{ id: 1, value: "one", label: "All" },
-		{ id: 1, value: "two", label: "Most popular" },
 	];
 
 	function fn(data: { [index: string]: string | number }) {
@@ -150,7 +148,7 @@ const ManageHQ = () => {
 					<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
 						<SearchInput
 							name="branch-search"
-							placeholder="Search for names, branches, category"
+							placeholder="Search"
 							value={filteredValue}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								const target = e.target;

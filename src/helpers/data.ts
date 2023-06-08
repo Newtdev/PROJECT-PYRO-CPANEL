@@ -1,40 +1,9 @@
 import { type } from "os";
-import { ReactElement, ReactNode } from "react";
-import revenue from "src/assets/img/revenue.svg";
-import totalTransactions from "src/assets/img/totalTransactions.svg";
-import attendant from "src/assets/img/attendant.svg";
-import branches from "src/assets/img/branches.svg";
+
 import branchBtn from "src/assets/img/branchbtn.svg";
 import walletBtn from "src/assets/img/walletbtn.svg";
 import { cardType } from "./alias";
-import { CurrencyFormatter } from "./helperFunction";
 
-export const cardData: cardType[] = [
-	{
-		id: 1,
-		icon: revenue,
-		amount: CurrencyFormatter(Number("12000")),
-		name: "Total Revenue",
-	},
-	{
-		id: 2,
-		icon: totalTransactions,
-		amount: CurrencyFormatter(Number("12000")),
-		name: "Total Transactions",
-	},
-	{
-		id: 3,
-		icon: attendant,
-		amount: CurrencyFormatter(Number("12000")),
-		name: "Attendants",
-	},
-	{
-		id: 4,
-		icon: branches,
-		amount: "1230",
-		name: "Attendants",
-	},
-];
 export const cardBtnData: cardType[] = [
 	{
 		id: 1,

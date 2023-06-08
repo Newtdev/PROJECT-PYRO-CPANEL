@@ -1,4 +1,4 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+// import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import React, { ReactElement, useState } from "react";
 
@@ -64,7 +64,7 @@ export default function ViewWalletComp(props: WalletProps) {
 			<article className="w-full">
 				{props.showCard ? (
 					<div className="w-full flex flex-col gap-6 lg:flex-row">
-						<BalanceCard {...props.accountInformation} />
+						{/* <BalanceCard {...props.accountInformation} /> */}
 						<InflowCard {...props.accountInformation} />
 					</div>
 				) : null}
@@ -80,52 +80,52 @@ export default function ViewWalletComp(props: WalletProps) {
 	);
 }
 
-export const BalanceCard = (props: { balance: number }) => {
-	const [showPassword, setShowPassword] = useState<boolean>(false);
+// export const BalanceCard = (props: { balance: number }) => {
+// 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
-	const handleClickShowPassword = () => {
-		setShowPassword(() => !showPassword);
-	};
+// 	const handleClickShowPassword = () => {
+// 		setShowPassword(() => !showPassword);
+// 	};
 
-	const handleMouseDownPassword = (
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
-		event.preventDefault();
-	};
+// 	const handleMouseDownPassword = (
+// 		event: React.MouseEvent<HTMLButtonElement>
+// 	) => {
+// 		event.preventDefault();
+// 	};
 
-	return (
-		<div className="bg-[#636685] h-[152px] w-[50%] max-w-[442px] rounded-[20px]">
-			<div className="flex flex-row p-6 items-center h-full">
-				<div className="text-start overflow-auto basis-[70%] text-white pl-4 ">
-					{showPassword ? (
-						<h2 className="text-[40px] font-bold">
-							{CurrencyFormatter(Number(props?.balance))}
-						</h2>
-					) : (
-						<p className="text-[40px] font-bold">**********</p>
-					)}
+// 	return (
+// 		<div className="bg-[#636685] h-[152px] w-[50%] max-w-[442px] rounded-[20px]">
+// 			<div className="flex flex-row p-6 items-center h-full">
+// 				<div className="text-start overflow-auto basis-[70%] text-white pl-4 ">
+// 					{showPassword ? (
+// 						<h2 className="text-[40px] font-bold">
+// 							{CurrencyFormatter(Number(props?.balance))}
+// 						</h2>
+// 					) : (
+// 						<p className="text-[40px] font-bold">**********</p>
+// 					)}
 
-					<h3 className="text-[20px] font-bold">Balance</h3>
-				</div>
-				<div className=" basis-[30%]">
-					<IconButton
-						size="large"
-						aria-label="toggle password visibility"
-						onClick={handleClickShowPassword}
-						sx={{ color: "white" }}
-						onMouseDown={handleMouseDownPassword}
-						edge="end">
-						{showPassword ? (
-							<VisibilityOff fontSize="medium" color="inherit" />
-						) : (
-							<Visibility fontSize="medium" />
-						)}
-					</IconButton>
-				</div>
-			</div>
-		</div>
-	);
-};
+// 					<h3 className="text-[20px] font-bold">Balance</h3>
+// 				</div>
+// 				<div className=" basis-[30%]">
+// 					<IconButton
+// 						size="large"
+// 						aria-label="toggle password visibility"
+// 						onClick={handleClickShowPassword}
+// 						sx={{ color: "white" }}
+// 						onMouseDown={handleMouseDownPassword}
+// 						edge="end">
+// 						{showPassword ? (
+// 							<VisibilityOff fontSize="medium" color="inherit" />
+// 						) : (
+// 							<Visibility fontSize="medium" />
+// 						)}
+// 					</IconButton>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	);
+// };
 
 export const InflowCard = (props: { amountIn: number; amountOut: number }) => {
 	const [expanded, setExpanded] = useState<boolean>(false);

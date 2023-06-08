@@ -1,28 +1,61 @@
 import { BarChartComp, Chart } from "src/components/Chart";
-import { cardData, data, datas } from "src/helpers/data";
+import { data, datas } from "src/helpers/data";
+import { ReactElement, ReactNode } from "react";
+import revenue from "src/assets/img/revenue.svg";
+import totalTransactions from "src/assets/img/totalTransactions.svg";
+import attendant from "src/assets/img/attendant.svg";
+import branches from "src/assets/img/branches.svg";
+
 import { Fragment } from "react";
 import { CardButton, DashboardCards } from "src/components/Card";
 import branchBtn from "src/assets/img/branchbtn.svg";
 import walletBtn from "src/assets/img/walletbtn.svg";
-import { cardBtnType } from "src/helpers/alias";
+import { cardBtnType, cardType } from "src/helpers/alias";
 import { APP_ROUTE } from "src/helpers/Constant";
+import { CurrencyFormatter } from "src/helpers/helperFunction";
 
+const cardData: cardType[] = [
+	{
+		id: 1,
+		icon: revenue,
+		amount: CurrencyFormatter(Number("12000")),
+		name: "Total Revenue",
+	},
+	{
+		id: 2,
+		icon: totalTransactions,
+		amount: CurrencyFormatter(Number("12000")),
+		name: "Total HQ Transactions",
+	},
+	{
+		id: 3,
+		icon: attendant,
+		amount: "1290",
+		name: "HQs",
+	},
+	{
+		id: 4,
+		icon: branches,
+		amount: "1230",
+		name: "Users",
+	},
+];
+
+// const cardBtnData: cardBtnType[] = [
+// 	{
+// 		id: 1,
+// 		icon: branchBtn,
+// 		name: "Branches",
+// 		link: APP_ROUTE.BRANCHES,
+// 	},
+// 	{
+// 		id: 2,
+// 		icon: walletBtn,
+// 		name: "View Wallet",
+// 		link: APP_ROUTE.VIEW_WALLET,
+// 	},
+// ];
 const Dashboard = () => {
-	const cardBtnData: cardBtnType[] = [
-		{
-			id: 1,
-			icon: branchBtn,
-			name: "Branches",
-			link: APP_ROUTE.BRANCHES,
-		},
-		{
-			id: 2,
-			icon: walletBtn,
-			name: "View Wallet",
-			link: APP_ROUTE.VIEW_WALLET,
-		},
-	];
-
 	return (
 		<section>
 			{/* <LoaderContainer /> */}
@@ -68,7 +101,7 @@ const Dashboard = () => {
 									/>
 								</Fragment>
 							))}
-							{cardBtnData.map((dt) => (
+							{/* {cardBtnData.map((dt) => (
 								<Fragment>
 									<CardButton
 										name={dt.name}
@@ -77,7 +110,7 @@ const Dashboard = () => {
 										height={"134px"}
 									/>
 								</Fragment>
-							))}
+							))} */}
 						</div>
 					</div>
 				</div>
