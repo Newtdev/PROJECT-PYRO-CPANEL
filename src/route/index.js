@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { Navigate, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import { APP_ROUTE } from "src/helpers/Constant";
 import { Dashboard } from "src/screens";

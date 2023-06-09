@@ -62,11 +62,11 @@ export enum HQ_APP_ROUTE {
 export enum HQ_API_ENPOINTS {
 	BRANCH = "station/branches",
 	SINGLE_BRANCH = "station/branch",
-	SETTINGS = "station",
+
 	TRANSACTIONS = "station/transactions",
 	// SUPPORT = "/support",
 	NOTIFICATION = "station/notification",
-	// SETTINGS = "/settings",
+	SETTINGS = "station/update-user",
 }
 export enum PERMISSION {
 	HQ = "hq_admin",

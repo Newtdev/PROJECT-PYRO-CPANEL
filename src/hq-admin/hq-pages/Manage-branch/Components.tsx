@@ -12,6 +12,7 @@ export const AddNewBranch = (props: {
 }) => {
 	const [step, setStep] = useState<number>(0);
 
+	console.log(props.initalValue);
 	const Formik = useFormik<FormType>({
 		initialValues: {
 			name: "",
@@ -47,11 +48,8 @@ export const AddNewBranch = (props: {
 
 	useEffect(() => {
 		if (!props.initalValue) return;
-		console.log(props.initalValue);
+
 		// Formik.setValues({ ...props.initalValue });
-		// return () => {
-		// 	second;
-		// };
 	}, []);
 
 	const styles =

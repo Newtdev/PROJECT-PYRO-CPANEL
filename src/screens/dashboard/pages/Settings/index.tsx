@@ -171,35 +171,6 @@ const AddbranchValidation = [
 	}),
 ];
 
-interface FormTypes {}
-// Yup.object({
-// 	firstName: Yup.string().label("First name").required(),
-// 	lastName: Yup.string().label("Last name").required(),
-// 	phoneNumber: Yup.string()
-// 		.label("phone number")
-// 		// .length(, "invalid")
-// 		.required(),
-// 	email: Yup.string().label("email").email().required(),
-// 	oldPassword: Yup.string().label("Old password").required(),
-// 	password: Yup.string().label("Password").required(),
-// 	confirmPassword: Yup.string().label("Password"),
-// 	avatar: Yup.string().notRequired(),
-// 	id: Yup.string().notRequired(),
-// 	accountStatus: Yup.object({
-// 		status: Yup.string().notRequired(),
-// 		reason: Yup.string().notRequired(),
-// 	}),
-// 	role: Yup.string<
-// 		| "super_admin"
-// 		| "sub_admin"
-// 		| "hQ_admin"
-// 		| "transaction_admin"
-// 		| "support_admin"
-// 	>().defined(),
-// });
-
-// export type UpdateAdminTypes = Yup.InferType<typeof AddbranchValidation[]>;
-
 const ResetPassword = (props: {
 	close: () => void;
 	data: { [index: string]: string | number | any };

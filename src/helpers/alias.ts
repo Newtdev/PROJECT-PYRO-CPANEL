@@ -30,6 +30,9 @@ export type cardBtnType = {
 export type loginResponseType = {
 	user: any;
 	systemAdmin: {
+		id: any;
+		email: any;
+		phoneNumber: any;
 		stationHQ: any;
 		avatar: any;
 		role: null;
@@ -148,6 +151,23 @@ export interface FormType {
 		phoneNumber: string;
 		email: string;
 		password: string;
+	};
+}
+
+export interface UpdateHQAdminType {
+	firstName?: string;
+	lastName: string;
+	email: string;
+	phoneNumber: string;
+	role?: "hq_admin";
+	oldPassword?: string;
+	password?: string;
+	confirmPassword?: string;
+	avatar: string;
+	id: string;
+	accountStatus?: {
+		status: string;
+		reason: string;
 	};
 }
 

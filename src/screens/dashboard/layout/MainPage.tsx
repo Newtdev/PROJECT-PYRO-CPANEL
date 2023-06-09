@@ -38,13 +38,13 @@ const DashboardHeader = (props: { header: string }) => {
 	}
 
 	return (
-		<div className="w-full flex justify-between items-center mb-2 fixed  h-24 top-0 pr-24 bg-white">
+		<div className=" flex justify-between items-center mb-2 fixed w-[82vw] h-24 top-0 bg-white pr-10">
 			<h1 className="text-start text-[#002E66] text-base md:text-lg lg:text-[30px] font-[700] leading-[45px] w-full">
 				{props.header}
 			</h1>
-			<div className="w-full flex items-center justify-end gap-4 pr-[20.33px]">
-				<div className="flex items-center justify-between lg:w-[60%] max-w-full relative ">
-					<p className="font-normal text-sm lg:text-[18px] text-[#393939] w-full ">
+			<div className="w-full flex items-center justify-end  gap-4">
+				<div className="flex items-center justify-between  relative ">
+					<p className="font-normal text-sm lg:text-[18px] text-[#393939] mr-4 ">
 						{user?.firstName} {user?.lastName}
 					</p>
 					<div className="h-[50px] w-[65px] flex justify-center items-center rounded-full">
@@ -65,7 +65,9 @@ const DashboardHeader = (props: { header: string }) => {
 					<Collapse in={expanded} timeout="auto" unmountOnExit>
 						<div className="h-26 bg-white shadow-lg absolute right-0 top-14 w-44 text-[#393939]">
 							<div className="text-start w-full py-2 transition-all hover:bg-[#D9D9D9] hover:scale-[1.1] p-4">
-								<Link to="/settings">View Profile</Link>
+								<Link to="/settings" state="Settings">
+									View Profile
+								</Link>
 							</div>
 							<button
 								onClick={onLogOut}

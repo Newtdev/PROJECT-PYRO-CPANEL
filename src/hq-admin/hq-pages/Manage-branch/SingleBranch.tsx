@@ -124,6 +124,7 @@ export default function SingleBranch() {
 							data={handledAPIResponse.profileData || {}}
 							onClick={() => setShowModal(true)}
 							showImage={false}
+							showButton={true}
 						/>
 					) : null}
 
