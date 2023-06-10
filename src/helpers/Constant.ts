@@ -15,6 +15,9 @@ export enum API_ROUTE {
 	NOTIFICATION = "system-admin/notification",
 	TICKET = "system-admin/ticket",
 	FEEDS = "system-admin/feed",
+	FORGOT_PASSWORD = "auth/system-admin/forgot-password",
+	RESET_PASSWORD = "auth/system-admin/reset-password",
+	RESEND_OTP = "auth/service-provider/resend-otp",
 
 	HQ_ADMIN_LOGIN = "auth/station/login-email",
 }
@@ -23,6 +26,7 @@ export enum APP_ROUTE {
 	LANDING_PAGE = "/",
 	DASHBOARD = "/",
 	LOGIN = "/login",
+	FORGOT_PASSWORD = "/forgot-password",
 	BRANCH = "/manage-Branch",
 	TRANSACTIONS = "/transactions",
 	SUPPORT = "/support",
@@ -45,7 +49,7 @@ export enum APP_ROUTE {
 	ADMIN_PROFILE = "/admin/profile",
 	MANAGE_ADMIN = "/manage/admin",
 	MANAGE_WEBSITE = "/manage/website",
-	RESET_PASSWORD = "/reset/password",
+	RESET_PASSWORD = "/reset-password",
 	ADD_NEW_SELF_HELP = "/add/new/self-help",
 	FEEDS = "/feeds",
 }
@@ -67,6 +71,9 @@ export enum HQ_API_ENPOINTS {
 	// SUPPORT = "/support",
 	NOTIFICATION = "station/notification",
 	SETTINGS = "station/update-user",
+	FORGOT_PASSWORD = "auth/station/forgot-password",
+	RESET_PASSWORD = "auth/station/reset-password",
+	RESEND_OTP = "auth/station/resend-otp",
 }
 export enum PERMISSION {
 	HQ = "hq_admin",

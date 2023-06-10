@@ -13,6 +13,8 @@ import { AdminRoute } from "./route";
 import Login from "./screens/authentication/Login";
 import { decryptData } from "./helpers/encryptData";
 import { HQ_Route } from "./hq-admin/hq-route";
+import ForgotPassword from "./screens/authentication/ForgotPassword";
+import ResetPassword from "./screens/authentication/ResetPassword";
 
 const Entry = lazy(() => import("./screens/protected"));
 
@@ -44,6 +46,14 @@ function App() {
 			<Suspense fallback="loading...">
 				<Routes>
 					<Route path={APP_ROUTE.LOGIN} element={<Login host={domainHost} />} />
+					<Route
+						path={APP_ROUTE.FORGOT_PASSWORD}
+						element={<ForgotPassword host={domainHost} />}
+					/>
+					<Route
+						path={APP_ROUTE.RESET_PASSWORD}
+						element={<ResetPassword host={domainHost} />}
+					/>
 					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
 						{domainHost === SUB_DOMAIN.SYSTEM_ADMIN
 							? AdminRoute(domainHost)
