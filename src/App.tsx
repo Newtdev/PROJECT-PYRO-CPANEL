@@ -16,6 +16,7 @@ import { HQ_Route } from "./hq-admin/hq-route";
 import ForgotPassword from "./screens/authentication/ForgotPassword";
 import ResetPassword from "./screens/authentication/ResetPassword";
 import { LandingPage } from "./screens";
+import AboutUs from "./screens/landing-page/AboutUs";
 
 const Entry = lazy(() => import("./screens/protected"));
 
@@ -46,6 +47,7 @@ function App() {
 			<Suspense fallback="loading...">
 				<Routes>
 					<Route path={APP_ROUTE.LANDING_PAGE} element={<LandingPage />} />
+					<Route path={APP_ROUTE.ABOUT_US} element={<AboutUs />} />
 					<Route path={APP_ROUTE.LOGIN} element={<Login host={domainHost} />} />
 					<Route
 						path={APP_ROUTE.FORGOT_PASSWORD}

@@ -13,6 +13,11 @@ import Payment3 from "../../assets/img/Payment3.svg";
 import Payment4 from "../../assets/img/Payment4.svg";
 import Photo1 from "../../assets/img/Photo.svg";
 import image from "../../assets/img/DoubleImage.svg";
+import FooterLogo from "../../assets/img/FooterLogo.svg";
+import facebook from "../../assets/img/facebook.svg";
+import instagram from "../../assets/img/instagram.svg";
+import twitter from "../../assets/img/twitter.svg";
+import linkedin from "../../assets/img/linkedin.svg";
 
 function Menu() {
 	return (
@@ -38,9 +43,27 @@ const links = [
 	{ id: 3, link: "contact", name: "Contact Us" },
 	{ id: 4, link: "blog", name: "Blog" },
 ];
+const FooterLinks = [
+	{ id: 1, link: "/", name: "Home" },
+	{ id: 2, link: "about", name: "About Us" },
+	{ id: 3, link: "contact", name: "Contact" },
+	{ id: 4, link: "policy", name: "Privacy policy" },
+	{ id: 4, link: "terms", name: "Terms of use" },
+];
+
+const socialMediaLink = [
+	{ id: 1, link: "/", icon: facebook },
+	{ id: 2, link: "/", icon: twitter },
+	{ id: 1, link: "/", icon: linkedin },
+	{ id: 1, link: "/", icon: instagram },
+];
 
 // WEBSITE LAYOUT
-const Layout = ({ children }: { children: ReactElement }): ReactElement => {
+export const Layout = ({
+	children,
+}: {
+	children: ReactElement;
+}): ReactElement => {
 	const [show, setShow] = useState(true);
 
 	const slide = !show ? "translate-x-full" : "translate-x-0";
@@ -82,7 +105,57 @@ const Layout = ({ children }: { children: ReactElement }): ReactElement => {
 				</nav>
 			</header>
 			{children}
-			<footer></footer>
+			<footer className="bg-primary">
+				<article className="w-[96%] h-[35vh] md:h-[40vh] mx-auto rounded-lg mt-0.5 grid grid-cols-1 gap-6 md:px-0 overflex-x-hidden">
+					<div className="h-full w-full">
+						<div className="">
+							<img
+								src={FooterLogo}
+								className="w-[60%] md:w-[240px] object-contain mx-auto"
+								alt=""
+							/>
+						</div>
+						<div className="md:w-[40%] lg:w-[40%] mx-auto">
+							<ul className="flex justify-between items-center w-full">
+								{FooterLinks.map((v) => (
+									<li
+										className="text-white text-[9px] md:text-sm font-bold text-start hover:shadow-lg transition-all"
+										key={v.id}>
+										<Link to={v.link}>{v.name}</Link>
+									</li>
+								))}
+							</ul>
+						</div>
+						<div className="text-[9px] md:text-sm mt-4 text-white md:my-6">
+							<p>
+								With FULEAP, you can streamline your operations, enhance your
+								customer experience, and maximize profits.
+							</p>
+						</div>
+						<div className="flex justify-center items-center mt-4">
+							{socialMediaLink.map((v) => (
+								<Link to={v.link}>
+									<img
+										key={v.id}
+										src={v.icon}
+										className="h-6 w-6 md:w-10 mr-2"
+										alt=""
+									/>
+								</Link>
+							))}
+						</div>
+					</div>
+				</article>
+				<div className="w-full flex justify-between items-end">
+					{[1, 2].map((_, i) => (
+						<span
+							key={i}
+							className={`inline-block w-[40%] md:w-[45%] h-3 bg-black ${
+								i === 0 ? "rounded-tr-xl" : "rounded-tl-xl"
+							}`}></span>
+					))}
+				</div>
+			</footer>
 		</section>
 	);
 };
@@ -363,7 +436,7 @@ const Ratings = () => {
 					{rate.map((v) => (
 						<div
 							key={v.id}
-							className="md:w-56 md:h-4  flex flex-col justify-center items-center py-4 md:py-2">
+							className="md:w-56  flex flex-col justify-center items-center py-4 md:py-2">
 							<h1 className="font-bold text-primary text-3xl md:text-4xl lg:text-6xl">
 								{v.rate}
 							</h1>
