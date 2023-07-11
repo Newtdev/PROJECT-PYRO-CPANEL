@@ -15,6 +15,7 @@ import { decryptData } from "./helpers/encryptData";
 import { HQ_Route } from "./hq-admin/hq-route";
 import ForgotPassword from "./screens/authentication/ForgotPassword";
 import ResetPassword from "./screens/authentication/ResetPassword";
+import { LandingPage } from "./screens";
 
 const Entry = lazy(() => import("./screens/protected"));
 
@@ -40,11 +41,11 @@ function App() {
 		dispatch(setCredentials(persisteUserInfo));
 		/* eslint-disable react-hooks/exhaustive-deps */
 	}, [dispatch]);
-
 	return (
 		<div className="App">
 			<Suspense fallback="loading...">
 				<Routes>
+					<Route path={APP_ROUTE.LANDING_PAGE} element={<LandingPage />} />
 					<Route path={APP_ROUTE.LOGIN} element={<Login host={domainHost} />} />
 					<Route
 						path={APP_ROUTE.FORGOT_PASSWORD}
@@ -55,10 +56,15 @@ function App() {
 						element={<ResetPassword host={domainHost} />}
 					/>
 					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
-						{/* {domainHost === SUB_DOMAIN.SYSTEM_ADMIN */}
-						{AdminRoute(domainHost)}
-						{/* ? */}
-						{/* : HQ_Route(domainHost)} */}
+						{/* {domainHost === SUB_DOMAIN.SYSTEM_ADMIN
+							? AdminRoute(domainHost)
+							: HQ_Route(domainHost)} */}
+						{domainHost === SUB_DOMAIN.SYSTEM_ADMIN
+							? AdminRoute(domainHost)
+							: null}
+						{domainHost === SUB_DOMAIN.HQ ? HQ_Route(domainHost) : null}
+						{/* {domainHost !== SUB_DOMAIN.HQ ||
+							domainHost !== SUB_DOMAIN.SYSTEM_ADMIN? <Navigate} */}
 					</Route>
 				</Routes>
 			</Suspense>

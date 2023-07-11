@@ -24,7 +24,7 @@ export enum API_ROUTE {
 
 export enum APP_ROUTE {
 	LANDING_PAGE = "/",
-	DASHBOARD = "/",
+	DASHBOARD = "/dashboard/*",
 	LOGIN = "/login",
 	FORGOT_PASSWORD = "/forgot-password",
 	BRANCH = "/manage-Branch",
