@@ -55,7 +55,7 @@ const Login = (props: { host: string }) => {
 	const handleRequest = async (values: LoginValidationtype) => {
 		try {
 			await Login(values);
-			navigate("/dashboard");
+			navigate("/");
 		} catch (error: ErrorType | any) {
 			handleNotification(error);
 		}
