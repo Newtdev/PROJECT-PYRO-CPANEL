@@ -34,7 +34,7 @@ const DashboardHeader = (props: { header: string }) => {
 
 	function onLogOut() {
 		dispatch(logOut());
-		navigate("/");
+		navigate("/login");
 	}
 
 	return (

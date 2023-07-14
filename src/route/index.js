@@ -41,6 +41,7 @@ const BranchReview = lazy(() =>
 );
 
 export const AdminRoute = (host) => {
+	console.log("admin");
 	return [
 		{
 			path: APP_ROUTE.DASHBOARD,
@@ -50,14 +51,14 @@ export const AdminRoute = (host) => {
 			path: APP_ROUTE.BRANCH,
 			element: <ManageBranch />,
 		},
-		{
-			path: APP_ROUTE.BRANCH,
-			element: <ManageBranch />,
-		},
-		{
-			path: APP_ROUTE.BRANCH,
-			element: <ManageBranch />,
-		},
+		// {
+		// 	path: APP_ROUTE.BRANCH,
+		// 	element: <ManageBranch />,
+		// },
+		// {
+		// 	path: APP_ROUTE.BRANCH,
+		// 	element: <ManageBranch />,
+		// },
 		{
 			path: APP_ROUTE.MANAGEHQ,
 			element: <ManageHQ />,

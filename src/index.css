@@ -21,3 +21,27 @@ body {
 	background-size: cover;
 	background-repeat: no-repeat;
 }
+
+.slick-prev {
+	width: 50px;
+	left: 0;
+	top: 40%;
+	position: absolute;
+	height: 50px;
+	background-color: #002e66;
+	z-index: 1;
+	border-radius: 50%;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.slick-next {
+	width: 50px;
+	right: 0;
+	top: 40%;
+	position: absolute;
+	height: 50px;
+	background: #002e66;
+	z-index: 1;
+	border-radius: 50%;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}

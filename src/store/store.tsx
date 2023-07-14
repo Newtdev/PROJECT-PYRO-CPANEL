@@ -4,7 +4,6 @@ import { reducer } from "./reducer";
 
 export const store = configureStore({
 	reducer,
-
 	middleware: (getDefaultMiddleware): any =>
 		getDefaultMiddleware().concat(apiSlice.middleware),
 	devTools: true,
