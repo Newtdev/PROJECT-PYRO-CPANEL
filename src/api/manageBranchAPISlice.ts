@@ -5,7 +5,7 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllBranch: builder.query({
 			query: (params) =>
-				`${API_ROUTE.GET_ALL_BRANCH}?search=${params?.query}&page=${params?.page}`,
+				`${API_ROUTE.GET_ALL_BRANCH}?search=${params?.query}&page=${params?.page}&limit=6`,
 			providesTags: (result) =>
 				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),

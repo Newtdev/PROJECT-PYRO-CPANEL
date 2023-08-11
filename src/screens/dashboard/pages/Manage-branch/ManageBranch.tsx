@@ -134,9 +134,9 @@ const ManageBranch = () => {
 		selected,
 		handleChangePage,
 		paginationData: {
-			totalPage: handledAPIResponse?.response?.totalPages,
-			limit: handledAPIResponse?.response?.limit,
-			page: handledAPIResponse?.response?.page,
+			totalPage: handledAPIResponse?.response?.stationBranches?.totalPages,
+			limit: handledAPIResponse?.response?.stationBranches?.limit,
+			page: handledAPIResponse?.response?.stationBranches?.page,
 		},
 	};
 

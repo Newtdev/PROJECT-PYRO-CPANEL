@@ -5,7 +5,7 @@ export const settingsAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getAllTransactions: builder.query({
 			query: (params) =>
-				`${API_ROUTE.FETCH_ALL_TRANSACTION}?limit=8&page=${params.page}&source=${params?.source}&orderBy=createdAt:desc&who=${params.who}&for=${params.for}&populate=${params.populate}`,
+				`${API_ROUTE.FETCH_ALL_TRANSACTION}?limit=6&page=${params.page}&source=${params?.source}&orderBy=createdAt:desc&who=${params.who}&for=${params.for}&populate=${params.populate}`,
 		}),
 	}),
 });

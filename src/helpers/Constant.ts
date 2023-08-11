@@ -84,7 +84,7 @@ export enum PERMISSION {
 
 export enum SUB_DOMAIN {
 	HQ = "hq",
-	SYSTEM_ADMIN = "admin",
+	SYSTEM_ADMIN = "localhost:3000",
 }
 
 export enum RTKTAG {
