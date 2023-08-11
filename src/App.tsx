@@ -60,13 +60,15 @@ function App() {
 						element={<ResetPassword host={domainHost} />}
 					/>
 					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
+						{AdminRoute(domainHost)}
 						{/* {domainHost === SUB_DOMAIN.SYSTEM_ADMIN
 							? AdminRoute(domainHost)
 							: HQ_Route(domainHost)} */}
+						{/* {console.log(domainHost)}
 						{domainHost === SUB_DOMAIN.SYSTEM_ADMIN
 							? AdminRoute(domainHost)
 							: null}
-						{domainHost === SUB_DOMAIN.HQ ? HQ_Route(domainHost) : null}
+						{domainHost === SUB_DOMAIN.HQ ? HQ_Route(domainHost) : null} */}
 						{/* {domainHost !== SUB_DOMAIN.HQ ||
 							domainHost !== SUB_DOMAIN.SYSTEM_ADMIN? <Navigate} */}
 					</Route>

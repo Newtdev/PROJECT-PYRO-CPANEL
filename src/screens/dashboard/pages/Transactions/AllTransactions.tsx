@@ -163,7 +163,6 @@ const Transactions = () => {
 		});
 	};
 
-	console.log(allTransactionsResult?.currentData);
 	const props = {
 		rows: handledAPIResponse || [],
 		headCells,
