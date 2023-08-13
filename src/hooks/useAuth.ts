@@ -7,6 +7,7 @@ import { useAppSelector } from "./reduxhooks";
 
 export const useAuth = () => {
 	const user = useAppSelector(selectCurrentLoginUser);
+
 	return useMemo(() => ({ user }), [user]);
 };
 

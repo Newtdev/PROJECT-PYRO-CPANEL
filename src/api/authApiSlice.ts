@@ -47,6 +47,12 @@ export const authAPISlice = apiSlice.injectEndpoints({
 				},
 			}),
 		}),
+		dashboardInfo: builder.query({
+			query: (value): any => ({
+				url: API_ROUTE.DASHBOARD_INFO,
+				method: "GET",
+			}),
+		}),
 	}),
 });
 
@@ -55,4 +61,5 @@ export const {
 	useForgotPasswordMutation,
 	useResendOTPMutation,
 	useResetPasswordMutation,
+	useDashboardInfoQuery,
 } = authAPISlice;

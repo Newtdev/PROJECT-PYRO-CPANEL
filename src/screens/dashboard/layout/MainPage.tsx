@@ -47,14 +47,15 @@ const DashboardHeader = (props: { header: string }) => {
 					<p className="font-normal text-sm lg:text-[18px] text-[#393939] mr-4 ">
 						{user?.firstName} {user?.lastName}
 					</p>
-					<div className="h-[50px] w-[65px] flex justify-center items-center rounded-full">
-						<Image
+
+					{/* <div className="h-[50px] w-[65px] flex justify-center items-center rounded-full"> */}
+					{/* <Image
 							width="100%"
 							height="100%"
 							image={user?.avatar?.url}
 							styles="rounded-full h-full w-full"
-						/>
-					</div>
+						/> */}
+					{/* </div> */}
 					<ExpandMore
 						expand={expanded}
 						onClick={handleExpandClick}

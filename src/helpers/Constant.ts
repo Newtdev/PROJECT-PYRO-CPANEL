@@ -18,6 +18,7 @@ export enum API_ROUTE {
 	FORGOT_PASSWORD = "auth/system-admin/forgot-password",
 	RESET_PASSWORD = "auth/system-admin/reset-password",
 	RESEND_OTP = "auth/service-provider/resend-otp",
+	DASHBOARD_INFO = "system-admin/dashboard-summary",
 
 	HQ_ADMIN_LOGIN = "auth/station/login-email",
 }
