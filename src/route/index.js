@@ -1,44 +1,34 @@
-import { lazy } from "react";
 import { Route } from "react-router-dom";
 
 import { APP_ROUTE } from "src/helpers/Constant";
+import ManageHQBranch from "src/hq-admin/hq-pages/Manage-branch";
 import { Dashboard } from "src/screens";
 import Feeds from "src/screens/dashboard/pages/feeds";
 // import HQPage from "src/screens/dashboard/pages/Manage-HQ/HQPage";
 import ViewHQWallet from "src/screens/dashboard/pages/Manage-HQ/ViewHQWallet";
 import Notification from "src/screens/dashboard/pages/Notification";
+import SelfHelp from "src/screens/dashboard/pages/self-help";
 import AddNewSelfHelp from "src/screens/dashboard/pages/self-help/AddNewSelfHelp";
+import Settings from "src/screens/dashboard/pages/Settings";
+import SinglePage from "src/screens/dashboard/pages/SinglePage";
 import Support from "src/screens/dashboard/pages/support";
 import UserProfile from "src/screens/dashboard/pages/User/UserProfile";
 import UserWallet from "src/screens/dashboard/pages/User/UserWallet";
+import AllTransactions from "../screens/dashboard/pages/Transactions/AllTransactions";
 import { AdminProtectedComp } from "src/screens/protected/AdminProtected";
-const Settings = lazy(() => import("../screens/dashboard/pages/Settings"));
-const SelfHelp = lazy(() => import("../screens/dashboard/pages/self-help"));
-const HQPage = lazy(() =>
-	import("../screens/dashboard/pages/Manage-HQ/HQPage")
-);
+import HQPage from "../screens/dashboard/pages/Manage-HQ/HQPage";
+import BranchReview from "../screens/dashboard/pages/Manage-branch/BranchReview";
+import Users from "../screens/dashboard/pages/User";
+import ManageBranch from "../screens/dashboard/pages/Manage-branch/ManageBranch";
+import ManageHQ from "../screens/dashboard/pages/Manage-HQ/ManageHQ";
 // const UserWallet = lazy(
 // 	() => import("./screens/dashboard/pages/User/UserWallet")
 // );
 // const ViewHQWallet = lazy(
 // 	() => import("./screens/dashboard/pages/Manage-HQ/ViewHQWallet")
 // );
-const AllTransactions = lazy(() =>
-	import("../screens/dashboard/pages/Transactions/AllTransactions")
-);
-const Users = lazy(() => import("../screens/dashboard/pages/User"));
 
-const ManageBranch = lazy(() =>
-	import("../screens/dashboard/pages/Manage-branch/ManageBranch")
-);
-const ManageHQ = lazy(() =>
-	import("../screens/dashboard/pages/Manage-HQ/ManageHQ")
-);
-const SinglePage = lazy(() => import("../screens/dashboard/pages/SinglePage"));
-
-const BranchReview = lazy(() =>
-	import("../screens/dashboard/pages/Manage-branch/BranchReview")
-);
+// const SinglePage = lazy(() => import("../screens/dashboard/pages/SinglePage"));
 
 export const AdminRoute = (host) => {
 	return [
@@ -48,7 +38,7 @@ export const AdminRoute = (host) => {
 		},
 		{
 			path: APP_ROUTE.BRANCH,
-			element: <ManageBranch />,
+			element: <ManageHQBranch />,
 		},
 		// {
 		// 	path: APP_ROUTE.BRANCH,
