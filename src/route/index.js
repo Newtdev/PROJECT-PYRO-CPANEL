@@ -2,7 +2,7 @@ import { Route } from "react-router-dom";
 
 import { APP_ROUTE } from "src/helpers/Constant";
 import ManageHQBranch from "src/hq-admin/hq-pages/Manage-branch";
-import { Dashboard } from "src/screens";
+import { Dashboard, ManageBranch } from "src/screens";
 import Feeds from "src/screens/dashboard/pages/feeds";
 // import HQPage from "src/screens/dashboard/pages/Manage-HQ/HQPage";
 import ViewHQWallet from "src/screens/dashboard/pages/Manage-HQ/ViewHQWallet";
@@ -19,7 +19,6 @@ import { AdminProtectedComp } from "src/screens/protected/AdminProtected";
 import HQPage from "../screens/dashboard/pages/Manage-HQ/HQPage";
 import BranchReview from "../screens/dashboard/pages/Manage-branch/BranchReview";
 import Users from "../screens/dashboard/pages/User";
-import ManageBranch from "../screens/dashboard/pages/Manage-branch/ManageBranch";
 import ManageHQ from "../screens/dashboard/pages/Manage-HQ/ManageHQ";
 // const UserWallet = lazy(
 // 	() => import("./screens/dashboard/pages/User/UserWallet")
@@ -36,18 +35,18 @@ export const AdminRoute = (host) => {
 			path: APP_ROUTE.DASHBOARD,
 			element: <Dashboard />,
 		},
+		// {
+		// 	path: APP_ROUTE.BRANCH,
+		// 	element: <ManageHQBranch />,
+		// },
+		// {
+		// 	path: APP_ROUTE.BRANCH,
+		// 	element: <ManageBranch />,
+		// },
 		{
 			path: APP_ROUTE.BRANCH,
-			element: <ManageHQBranch />,
+			element: <ManageBranch />,
 		},
-		// {
-		// 	path: APP_ROUTE.BRANCH,
-		// 	element: <ManageBranch />,
-		// },
-		// {
-		// 	path: APP_ROUTE.BRANCH,
-		// 	element: <ManageBranch />,
-		// },
 		{
 			path: APP_ROUTE.MANAGEHQ,
 			element: <ManageHQ />,

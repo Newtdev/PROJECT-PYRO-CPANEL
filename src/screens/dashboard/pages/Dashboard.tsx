@@ -29,7 +29,6 @@ import { cardType } from "src/helpers/alias";
 // ];
 const Dashboard = () => {
 	const response = useDashboardInfoQuery("");
-	console.log("response", response?.data?.data);
 
 	const cardData: cardType[] = [
 		{

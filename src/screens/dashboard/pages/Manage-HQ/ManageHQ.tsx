@@ -1,7 +1,7 @@
 import { Flag } from "@mui/icons-material";
 import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
-import { FormInput, SearchInput } from "src/components/inputs";
+import { FormInput, SearchInput, SelectInput } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -325,6 +325,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			}
 		},
 	});
+
 	const styles =
 		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
 	const labelStyles =
@@ -417,24 +418,24 @@ const AddNewHQ = (props: { close: () => void }) => {
 			error: Formik.errors.password,
 			touched: Formik.touched.password,
 		},
-		{
-			id: "gender",
-			name: "Manager's gender",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.gender && Formik.touched.gender
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.gender,
-			onBlur: Formik.handleBlur,
+		// {
+		// 	id: "gender",
+		// 	name: "Manager's gender",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.gender && Formik.touched.gender
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.gender,
+		// 	onBlur: Formik.handleBlur,
 
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.gender,
-			touched: Formik.touched.gender,
-		},
+		// 	disabled: addNewResult?.isLoading,
+		// 	error: Formik.errors.gender,
+		// 	touched: Formik.touched.gender,
+		// },
 		{
 			id: "stationHQ.name",
 			name: "Branch name",
@@ -530,21 +531,31 @@ const AddNewHQ = (props: { close: () => void }) => {
 			className="w-full flex flex-col justify-center items-center px-4 pb-4">
 			{step === 0 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(0, 6).map((dt, i) => (
-						<FormInput
-							id={dt.id}
-							name={dt.name}
-							type={dt.type}
-							styles={dt.styles}
-							labelStyles={dt.labelStyles}
-							onChange={dt.onChange}
-							value={dt.value}
-							onBlur={dt.onBlur}
-							disabled={dt.disabled}
-							// error={dt.error}
-							// touched={dt.touched}
-						/>
+					{FormData.slice(0, 5).map((dt, i) => (
+						<>
+							<FormInput
+								id={dt.id}
+								name={dt.name}
+								type={dt.type}
+								styles={dt.styles}
+								labelStyles={dt.labelStyles}
+								onChange={dt.onChange}
+								value={dt.value}
+								onBlur={dt.onBlur}
+								disabled={dt.disabled}
+								// error={dt.error}
+								// touched={dt.touched}
+							/>
+						</>
 					))}
+					<SelectInput
+						id="gender"
+						data={["Male", "Female"]}
+						labelStyles={labelStyles}
+						name="Select gender"
+						onChange={Formik.handleChange}
+						value={Formik.values.type}
+					/>
 				</div>
 			) : null}
 			{step === 1 ? (
