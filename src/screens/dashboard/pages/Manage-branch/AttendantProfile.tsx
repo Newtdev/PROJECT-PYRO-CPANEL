@@ -17,84 +17,11 @@ interface dataType {
 	phoneNumber: string;
 }
 
-const data: dataType[] = [
-	{
-		id: 1,
-		firstName: "Casar",
-		phoneNumber: "239-454-2989",
-
-		lastName: "Spearman",
-	},
-	{
-		id: 2,
-		firstName: "Holt",
-		phoneNumber: "129-667-9496",
-
-		lastName: "Molloy",
-	},
-	{
-		id: 3,
-		firstName: "Andras",
-		phoneNumber: "346-305-2210",
-
-		lastName: "Jacobbe",
-	},
-	{
-		id: 4,
-		firstName: "Tully",
-		phoneNumber: "233-101-4059",
-
-		lastName: "Earengey",
-	},
-	{
-		id: 5,
-		firstName: "Briggs",
-		phoneNumber: "855-166-1582",
-
-		lastName: "Le feaver",
-	},
-	{
-		id: 6,
-		firstName: "Abdel",
-		phoneNumber: "680-728-4672",
-
-		lastName: "Sprigging",
-	},
-	{
-		id: 7,
-		firstName: "Delaney",
-		phoneNumber: "333-280-5466",
-
-		lastName: "Greeson",
-	},
-	{
-		id: 8,
-		firstName: "Simon",
-		phoneNumber: "123-398-3798",
-
-		lastName: "Oxer",
-	},
-	{
-		id: 9,
-		firstName: "Levi",
-		phoneNumber: "820-109-5899",
-
-		lastName: "Molder",
-	},
-	{
-		id: 10,
-		firstName: "Geoffry",
-		phoneNumber: "744-625-0000",
-
-		lastName: "Voff",
-	},
-];
-
 export default function AttendantProfile(props: {
 	attendantData: { [index: string]: string | any }[];
 }) {
 	const { handleSelectAllClick, selected, setSelected } =
-		useHandleSelectAllClick(data);
+		useHandleSelectAllClick(props.attendantData);
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const [showFlagModal, setShowFlagModal] = useState<boolean>(false);
 	const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -115,9 +42,13 @@ export default function AttendantProfile(props: {
 						<Checkbox
 							color="primary"
 							indeterminate={
-								selected.length > 0 && selected.length < data.length
+								selected.length > 0 &&
+								selected.length < props.attendantData.length
 							}
-							checked={data.length > 0 && selected.length === data.length}
+							checked={
+								props.attendantData?.length > 0 &&
+								selected.length === props.attendantData?.length
+							}
 							onChange={handleSelectAllClick}
 							inputProps={{
 								"aria-label": "select all desserts",
@@ -149,37 +80,47 @@ export default function AttendantProfile(props: {
 						</div>
 					</div>
 				</div>
-				<div className="w-full grid lg:grid-cols-3 md:grid-cols-2 gap-x-4 gap-y-4 mt-6">
-					{props?.attendantData?.map((v) => (
-						<div key={v?.id}>
-							<div className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66]">
-								<div className="basis-[40%] flex items-start justify-start">
-									<Checkbox
-										color="primary"
-										onClick={(event) => {
-											event.stopPropagation();
-											handleClick(event, v.firstName);
-										}}
-										checked={isSelected(v.firstName)}
-									/>
-									<div className="w-[90px] h-[90px] rounded-full self-center object-fit bg-[#D9D9D9] flex justify-center items-center">
-										<h1 className="text-xl text-center font-extrabold">
-											{v.firstName.charAt(0)}
-											{v.lastName.charAt(0)}
-										</h1>
+				<>
+					{props.attendantData.length === 0 ? (
+						<div className="mt-24">
+							<h1>No Attendent Available</h1>
+						</div>
+					) : (
+						<div className="w-full grid lg:grid-cols-3 md:grid-cols-2 gap-x-4 gap-y-4 mt-6">
+							{props?.attendantData?.map((v) => (
+								<div key={v?.id}>
+									<div className="h-[157px] max-w-[429px] bg-white rounded-lg flex flex-row transition-all hover:border-2 hover:border-[#002E66]">
+										<div className="basis-[40%] flex items-start justify-start">
+											<Checkbox
+												color="primary"
+												onClick={(event) => {
+													event.stopPropagation();
+													handleClick(event, v.firstName);
+												}}
+												checked={isSelected(v.firstName)}
+											/>
+											<div className="w-[90px] h-[90px] rounded-full self-center object-fit bg-[#D9D9D9] flex justify-center items-center">
+												<h1 className="text-xl text-center font-extrabold">
+													{v.firstName.charAt(0)}
+													{v.lastName.charAt(0)}
+												</h1>
+											</div>
+										</div>
+										<div className="basis-[60%] flex flex-col py-10 pl-4 justify-between items-start text-start">
+											<h2 className="text-[#002E66] text-[16px] font-bold">
+												{v?.firstName} {v?.lastName}
+											</h2>
+											<p className="text-[#1E1E1E] text-[14px]">
+												{v?.phoneNumber}
+											</p>
+											<p className="text-[#4E8280] text-[12px]">1093 Orders</p>
+										</div>
 									</div>
 								</div>
-								<div className="basis-[60%] flex flex-col py-10 pl-4 justify-between items-start text-start">
-									<h2 className="text-[#002E66] text-[16px] font-bold">
-										{v?.firstName} {v?.lastName}
-									</h2>
-									<p className="text-[#1E1E1E] text-[14px]">{v?.phoneNumber}</p>
-									<p className="text-[#4E8280] text-[12px]">1093 Orders</p>
-								</div>
-							</div>
+							))}
 						</div>
-					))}
-				</div>
+					)}
+				</>
 
 				{showFlagModal && (
 					<Modal>
