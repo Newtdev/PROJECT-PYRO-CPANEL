@@ -1,7 +1,12 @@
 import { Flag } from "@mui/icons-material";
 import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
-import { FormInput, SearchInput, SelectInput } from "src/components/inputs";
+import {
+	FormInput,
+	PasswordInput,
+	SearchInput,
+	SelectInput,
+} from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -26,6 +31,7 @@ import {
 	SuccessNotification,
 } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
+import { customAlphabet, nanoid } from "nanoid";
 
 interface HeadCell {
 	id: string;
@@ -253,6 +259,19 @@ export default ManageHQ;
 // YUP VALIDATION FOR ADD BRANCH TYPE
 const AddbranchValidation = [
 	Yup.object({
+		accountType: Yup.string().label("Password").notRequired(),
+		stationHQ: Yup.object({
+			name: Yup.string().label("HQ name").required(),
+			email: Yup.string().label("HQ email").email().required(),
+			phoneNumber: Yup.string()
+				.label("phone number")
+				.length(11, "invalid")
+				.required(),
+			hqAddress: Yup.string().label("HQ address").required(),
+			state: Yup.string().label("State").required(),
+		}),
+	}),
+	Yup.object({
 		firstName: Yup.string().label("First name").required(),
 		lastName: Yup.string().label("Last name").required(),
 		phoneNumber: Yup.string()
@@ -269,19 +288,6 @@ const AddbranchValidation = [
 		// 	.required("Password is required!"),
 		// gender: Yup.string<"male" | "female">().nullable().defined(),
 		gender: Yup.string().label("Gender").required(),
-	}),
-	Yup.object({
-		accountType: Yup.string().label("Password").notRequired(),
-		stationHQ: Yup.object({
-			name: Yup.string().label("HQ name").required(),
-			email: Yup.string().label("HQ email").email().required(),
-			phoneNumber: Yup.string()
-				.label("phone number")
-				.length(11, "invalid")
-				.required(),
-			hqAddress: Yup.string().label("HQ address").required(),
-			state: Yup.string().label("State").required(),
-		}),
 	}),
 ];
 
@@ -304,13 +310,6 @@ const AddNewHQ = (props: { close: () => void }) => {
 
 	const Formik = useFormik<FormikValues>({
 		initialValues: {
-			firstName: "",
-			lastName: "",
-			email: "",
-			phoneNumber: "",
-			password: "",
-			gender: "",
-			accountType: "stationHq",
 			stationHQ: {
 				name: "",
 				email: "",
@@ -318,6 +317,13 @@ const AddNewHQ = (props: { close: () => void }) => {
 				hqAddress: "",
 				state: "",
 			},
+			firstName: "",
+			lastName: "",
+			email: "",
+			phoneNumber: "",
+			password: "",
+			gender: "",
+			accountType: "stationHq",
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
@@ -331,14 +337,82 @@ const AddNewHQ = (props: { close: () => void }) => {
 		},
 	});
 
-	console.log(Formik.errors, Formik.values.password);
-
 	const styles =
 		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
 	const labelStyles =
 		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
 
 	const FormData = [
+		{
+			id: "stationHQ.name",
+			name: "HQ name",
+			type: "text",
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.name && Formik.touched?.stationHQ?.name
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values?.stationHQ?.name,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			// error: Formik.errors?.stationHQ?.name,
+			// touched: Formik.touched?.stationHQ?.name,
+		},
+		{
+			id: "stationHQ.email",
+			name: "HQ email",
+			type: "email",
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.email && Formik.touched.email
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values?.stationHQ?.email,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			// error: Formik.errors.stationHQ?.email,
+			// touched: Formik.touched.stationHQ?.hqAddress,
+		},
+		{
+			id: "stationHQ.phoneNumber",
+			name: "HQ phone number",
+			type: "text",
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.phoneNumber &&
+			// 	Formik.touched.stationHQ?.phoneNumber
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.stationHQ?.phoneNumber,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			// error: Formik.errors.stationHQ?.email,
+			// touched: Formik.touched.stationHQ?.email,
+		},
+		{
+			id: "stationHQ.hqAddress",
+			name: "HQ address",
+			type: "text",
+			// styles: `${styles} ${
+			// 	Formik.errors?.stationHQ?.hqAddress &&
+			// 	Formik.touched?.stationHQ?.hqAddress
+			// 		? "border-red-500"
+			// 		: "border-gray-300"
+			// }`,
+			labelStyles: labelStyles,
+			onChange: Formik.handleChange,
+			value: Formik.values.stationHQ?.hqAddress,
+			onBlur: Formik.handleBlur,
+			disabled: addNewResult?.isLoading,
+			// error: Formik.errors.stationHQ?.hqAddress,
+			// touched: Formik.touched.stationHQ?.hqAddress,
+		},
 		{
 			id: "firstName",
 			name: "Manager's firstname",
@@ -408,137 +482,63 @@ const AddNewHQ = (props: { close: () => void }) => {
 			error: Formik.errors.phoneNumber,
 			touched: Formik.touched.phoneNumber,
 		},
-		{
-			id: "password",
-			name: "Manager's password",
-			type: "password",
-			styles: `${styles} ${
-				Formik.errors.password && Formik.touched.password
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.password,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			error: Formik.errors.password,
-			touched: Formik.touched.password,
-		},
-		// {
-		// 	id: "gender",
-		// 	name: "Manager's gender",
-		// 	type: "text",
-		// 	styles: `${styles} ${
-		// 		Formik.errors.gender && Formik.touched.gender
-		// 			? "border-red-500"
-		// 			: "border-gray-300"
-		// 	}`,
-		// 	labelStyles: labelStyles,
-		// 	onChange: Formik.handleChange,
-		// 	value: Formik.values.gender,
-		// 	onBlur: Formik.handleBlur,
-
-		// 	disabled: addNewResult?.isLoading,
-		// 	error: Formik.errors.gender,
-		// 	touched: Formik.touched.gender,
-		// },
-		{
-			id: "stationHQ.name",
-			name: "Branch name",
-			type: "text",
-			// styles: `${styles} ${
-			// 	Formik.errors?.stationHQ?.name && Formik.touched?.stationHQ?.name
-			// 		? "border-red-500"
-			// 		: "border-gray-300"
-			// }`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values?.stationHQ?.name,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			// error: Formik.errors?.stationHQ?.name,
-			// touched: Formik.touched?.stationHQ?.name,
-		},
-		{
-			id: "stationHQ.email",
-			name: "Branch email",
-			type: "email",
-			// styles: `${styles} ${
-			// 	Formik.errors?.stationHQ?.email && Formik.touched.email
-			// 		? "border-red-500"
-			// 		: "border-gray-300"
-			// }`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values?.stationHQ?.email,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			// error: Formik.errors.stationHQ?.email,
-			// touched: Formik.touched.stationHQ?.hqAddress,
-		},
-		{
-			id: "stationHQ.phoneNumber",
-			name: "Branch phone number",
-			type: "text",
-			// styles: `${styles} ${
-			// 	Formik.errors?.stationHQ?.phoneNumber &&
-			// 	Formik.touched.stationHQ?.phoneNumber
-			// 		? "border-red-500"
-			// 		: "border-gray-300"
-			// }`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.stationHQ?.phoneNumber,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			// error: Formik.errors.stationHQ?.email,
-			// touched: Formik.touched.stationHQ?.email,
-		},
-		{
-			id: "stationHQ.hqAddress",
-			name: "Branch address",
-			type: "text",
-			// styles: `${styles} ${
-			// 	Formik.errors?.stationHQ?.hqAddress &&
-			// 	Formik.touched?.stationHQ?.hqAddress
-			// 		? "border-red-500"
-			// 		: "border-gray-300"
-			// }`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.stationHQ?.hqAddress,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			// error: Formik.errors.stationHQ?.hqAddress,
-			// touched: Formik.touched.stationHQ?.hqAddress,
-		},
-		{
-			id: "stationHQ.state",
-			name: "State",
-			type: "text",
-			// styles: `${styles} ${
-			// 	Formik.errors.stationHQ?.state && Formik.touched.stationHQ?.state
-			// 		? "border-red-500"
-			// 		: "border-gray-300"
-			// }`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.stationHQ?.state,
-			onBlur: Formik.handleBlur,
-			disabled: addNewResult?.isLoading,
-			// error: Formik.errors.stationHQ?.state,
-			// touched: Formik.touched.stationHQ?.state,
-		},
 	];
 
+	const states = [
+		"Abuja",
+		"Abia",
+		"Adamawa",
+		"Akwa Ibom",
+		"Anambra",
+		"Bauchi",
+		"Bayelsa",
+		"Benue",
+		"Borno",
+		"Cross River",
+		"Delta",
+		"Ebonyi",
+		"Edo",
+		"Ekiti",
+		"Enugu",
+		"Gombe",
+		"Imo",
+		"Jigawa",
+		"Kaduna",
+		"Kano",
+		"Katsina",
+		"Kebbi",
+		"Kogi",
+		"Kwara",
+		"Lagos",
+		"Nasarawa",
+		"Niger",
+		"Ogun",
+		"Ondo",
+		"Osun",
+		"Oyo",
+		"Plateau",
+		"Rivers",
+		"Sokoto",
+		"Taraba",
+		"Yobe",
+		"Zamfara",
+	];
+	const generatePassword = () => {
+		const characters =
+			"1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
+		const pwdCharacters = customAlphabet(characters, 14);
+		const pwd = pwdCharacters();
+		console.log(pwd);
+		return pwd;
+	};
+	console.log(Formik.errors);
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}
 			className="w-full flex flex-col justify-center items-center px-4 pb-4">
 			{step === 0 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(0, 5).map((dt, i) => (
+					{FormData.slice(0, 4).map((dt, i) => (
 						<>
 							<FormInput
 								id={dt.id}
@@ -556,20 +556,23 @@ const AddNewHQ = (props: { close: () => void }) => {
 						</>
 					))}
 					<SelectInput
-						id="gender"
-						data={["Male", "Female"]}
+						id="state"
+						data={states}
 						labelStyles={labelStyles}
-						name="Select gender"
+						name="Select state"
 						onChange={(e) =>
-							Formik.setFieldValue("gender", e.target.value?.toLowerCase())
+							Formik.setFieldValue(
+								"stationHQ.state",
+								e.target.value?.toLowerCase()
+							)
 						}
-						value={Formik.values.type}
+						value={Formik.values.state}
 					/>
 				</div>
 			) : null}
 			{step === 1 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(-5).map((dt, i) => (
+					{FormData.slice(-4).map((dt, i) => (
 						<FormInput
 							id={dt.id}
 							name={dt.name}
@@ -584,6 +587,48 @@ const AddNewHQ = (props: { close: () => void }) => {
 							// touched={dt.touched}
 						/>
 					))}
+					<PasswordInput
+						width="w-full"
+						id="password"
+						name={"Password"}
+						type={"text"}
+						styles={` ${
+							Formik.errors.password && Formik.touched.password
+								? "border-red-500"
+								: "border-gray-300"
+						}`}
+						labelStyles={labelStyles}
+						onChange={(e) => {
+							Formik.setFieldValue("password", e.target.value);
+							Formik.setFieldValue("confirmPassword", e.target.value);
+						}}
+						value={Formik.values.password}
+						onBlur={Formik.handleBlur}
+						disabled={addNewResult.isLoading}
+						// error={Formik.errors.password}
+						// touched={Formik.touched.password}
+					/>
+					<Button
+						text="Generate password"
+						disabled={addNewResult.isLoading}
+						// showModal={loginResult.isLoading}
+						className="h-[41px] mt-6 font-bold bg-white border border-[#002E66] rounded-[38px] w-full hover: text-[#002E66]"
+						type="button"
+						onClick={() => {
+							Formik.setFieldValue("password", generatePassword());
+							// Formik.setFieldValue("confirmPassword", generatePassword());
+						}}
+					/>
+					<SelectInput
+						id="gender"
+						data={["Male", "Female"]}
+						labelStyles={labelStyles}
+						name="Select gender"
+						onChange={(e) =>
+							Formik.setFieldValue("gender", e.target.value?.toLowerCase())
+						}
+						value={Formik.values.type}
+					/>
 				</div>
 			) : null}
 

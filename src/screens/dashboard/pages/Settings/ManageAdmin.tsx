@@ -87,13 +87,7 @@ const AddbranchValidation = Yup.object({
 	email: Yup.string().label("Email").email().required(),
 	password: Yup.string().label("Password").required(),
 	confirmPassword: Yup.string().label("Password").required(),
-	role: Yup.string<
-		| "super_admin"
-		| "sub_admin"
-		| "hQ_admin"
-		| "transaction_admin"
-		| "support_admin"
-	>().defined(),
+	role: Yup.string<"super_admin" | "sub_admin">().defined(),
 
 	// stationHQ.
 });

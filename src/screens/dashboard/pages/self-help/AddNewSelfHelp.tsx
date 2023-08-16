@@ -58,7 +58,7 @@ const AddNewSelfHelp = () => {
 		},
 	});
 	const styles =
-		"h-[38px] py-6 rounded-lg w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
+		"h-[38px] py-6 rounded-full w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
 	const labelStyles =
 		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
 

@@ -62,8 +62,8 @@ export const FormModal = ({
 	return (
 		<Modal>
 			<div className="absolute w-full  h-screen overflow-y-auto z-[600] right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-				<div className="w-[50%] max-w-[511px] rounded-[20px] max-h-[95%] h-fit bg-white overflow-y-auto overflow-x-hidden">
-					<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
+				<div className="w-[50%] max-w-[511px] rounded-[20px] max-h-full  h-fit bg-white overflow-y-auto overflow-x-hidden">
+					<div className="w-full h-16 px-6 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
 						<h1>{name}</h1>
 						<button onClick={onClick} disabled={false}>
 							<HighlightOffOutlined
@@ -75,7 +75,7 @@ export const FormModal = ({
 					<div className="w-full">
 						<Lines />
 					</div>
-					<div className="h-fit pb-6">{children}</div>
+					<div className="h-fit pb-16">{children}</div>
 				</div>
 			</div>
 		</Modal>
