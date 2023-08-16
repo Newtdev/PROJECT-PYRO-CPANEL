@@ -10,7 +10,6 @@ import { Button } from "src/components/Button";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import { FlagModal, FormModal, Modal } from "src/components/ModalComp";
-
 import { useNavigate } from "react-router-dom";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
@@ -261,7 +260,13 @@ const AddbranchValidation = [
 			.length(11, "invalid")
 			.required(),
 		email: Yup.string().label("Email").email().required(),
-		password: Yup.string().label("Password").required(),
+		// password: Yup.string()
+		// 	.min(6, "The password is too short")
+		// 	.matches(
+		// 		/^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*])(?=.{8,})/,
+		// 		"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+		// 	)
+		// 	.required("Password is required!"),
 		// gender: Yup.string<"male" | "female">().nullable().defined(),
 		gender: Yup.string().label("Gender").required(),
 	}),
@@ -305,7 +310,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 			phoneNumber: "",
 			password: "",
 			gender: "",
-			accountType: "",
+			accountType: "stationHq",
 			stationHQ: {
 				name: "",
 				email: "",
@@ -325,6 +330,8 @@ const AddNewHQ = (props: { close: () => void }) => {
 			}
 		},
 	});
+
+	console.log(Formik.errors, Formik.values.password);
 
 	const styles =
 		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
@@ -404,7 +411,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 		{
 			id: "password",
 			name: "Manager's password",
-			type: "text",
+			type: "password",
 			styles: `${styles} ${
 				Formik.errors.password && Formik.touched.password
 					? "border-red-500"
@@ -553,7 +560,9 @@ const AddNewHQ = (props: { close: () => void }) => {
 						data={["Male", "Female"]}
 						labelStyles={labelStyles}
 						name="Select gender"
-						onChange={Formik.handleChange}
+						onChange={(e) =>
+							Formik.setFieldValue("gender", e.target.value?.toLowerCase())
+						}
 						value={Formik.values.type}
 					/>
 				</div>
