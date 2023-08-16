@@ -83,7 +83,7 @@ export default function AttendantProfile(props: {
 				<>
 					{props.attendantData.length === 0 ? (
 						<div className="mt-24">
-							<h1>No Attendent Available</h1>
+							<h1>No Attendant(s) Available</h1>
 						</div>
 					) : (
 						<div className="w-full grid lg:grid-cols-3 md:grid-cols-2 gap-x-4 gap-y-4 mt-6">

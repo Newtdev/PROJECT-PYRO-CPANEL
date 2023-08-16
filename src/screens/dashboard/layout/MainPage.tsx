@@ -10,8 +10,9 @@ import { useAuth } from "src/hooks/useAuth";
 import { ReactNode } from "react";
 import { useAppDispatch } from "src/hooks/reduxhooks";
 import { logOut } from "src/features/auth/authSlice";
+import { ArrowBack } from "@mui/icons-material";
 
-const DashboardHeader = (props: { header: string }) => {
+const DashboardHeader = (props: { header: { name: string } }) => {
 	const { user } = useAuth();
 	const [expanded, setExpanded] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
@@ -39,8 +40,14 @@ const DashboardHeader = (props: { header: string }) => {
 
 	return (
 		<div className=" flex justify-between items-center mb-2 fixed w-[82vw] h-24 top-0 bg-white pr-10">
+			<div className="  text-start  text-white mx-2">
+				<ArrowBack
+					sx={{ height: 30, width: 30, color: "#002E66" }}
+					onClick={() => navigate(-1)}
+				/>
+			</div>
 			<h1 className="text-start text-[#002E66] text-base md:text-lg lg:text-[30px] font-[700] leading-[45px] w-full">
-				{props.header}
+				{props.header?.name}
 			</h1>
 			<div className="w-full flex items-center justify-end  gap-4">
 				<div className="flex items-center justify-between  relative ">

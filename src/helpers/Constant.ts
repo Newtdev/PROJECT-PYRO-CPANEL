@@ -20,6 +20,7 @@ export enum API_ROUTE {
 	RESEND_OTP = "auth/service-provider/resend-otp",
 	DASHBOARD_INFO = "system-admin/dashboard-summary",
 
+	ADD_HQ_BRANCH = "system-admin/station-branch",
 	HQ_ADMIN_LOGIN = "auth/station/login-email",
 }
 

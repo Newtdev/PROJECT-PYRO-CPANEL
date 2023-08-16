@@ -11,10 +11,12 @@ import { LoaderContainer } from "src/components/LoaderContainer";
 import HqBranch from "./HqBranch";
 
 export default function HQPage() {
-	const { slicedPath } = useCustomLocation();
+	const { routePath } = useCustomLocation();
+	console.log(routePath);
+	// console.log(slicedPath, routePath, path);
 	const [cardName, setCardName] = useState<string>("view profile");
 
-	const singleHqResult = useFetchSingleHQQuery(slicedPath[2]);
+	const singleHqResult = useFetchSingleHQQuery(routePath?.id);
 
 	const HQData: cardBtnType[] = [
 		{

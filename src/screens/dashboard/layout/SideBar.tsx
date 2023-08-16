@@ -159,9 +159,7 @@ const SideBar = () => {
 	return (
 		<aside className="h-screen flex flex-col justify-center basis-[18%]  max-w-[260px]">
 			<div className=" w-[217px] h-full my-4 rounded-[20px] bg-[#002E66] ml-2">
-				<div className="w-full pt-4 text-start px-7 text-white">
-					<ArrowBack color="inherit" onClick={() => navigate(-1)} />
-				</div>
+				<div className="w-full pt-6 text-start px-7 text-white"></div>
 				{handlePriviledge()}
 			</div>
 		</aside>

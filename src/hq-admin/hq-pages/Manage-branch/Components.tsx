@@ -8,30 +8,12 @@ import { AddbranchValidation } from "src/helpers/YupValidation";
 export const AddNewBranch = (props: {
 	makeApiRequest: (args: FormType) => void;
 	apiResult: { isLoading: boolean };
-	initalValue?: { [index: string]: string };
+	initalValue?: { [index: string]: string } | any;
 }) => {
 	const [step, setStep] = useState<number>(0);
 
-	console.log(props.initalValue);
 	const Formik = useFormik<FormType>({
-		initialValues: {
-			name: "",
-			phoneNumber: "",
-			location: {
-				lga: "",
-				state: "",
-				latitude: "",
-				longitude: "",
-				address: "",
-			},
-			branchManager: {
-				firstName: "",
-				lastName: "",
-				email: "",
-				phoneNumber: "",
-				password: "",
-			},
-		},
+		initialValues: { ...props.initalValue },
 		validateOnBlur: true,
 		validateOnChange: true,
 		validationSchema: AddbranchValidation[step],
@@ -273,8 +255,6 @@ export const AddNewBranch = (props: {
 			touched: Formik.touched.branchManager?.password,
 		},
 	];
-
-	console.log(Formik.errors);
 
 	return (
 		<form

@@ -122,7 +122,9 @@ const ManageHQ = () => {
 	];
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/manage-HQ/${data?.id}`, { state: data?.name });
+		navigate(`/manage-HQ/${data?.name}`, {
+			state: { name: data?.name, id: data?.id },
+		});
 	}
 	let dataToChildren: any = {
 		rows: handledAPIResponse || [],
@@ -239,9 +241,6 @@ const ManageHQ = () => {
 					)}
 
 					{showAddModal ? (
-						// <Modal>
-
-						// </Modal>
 						<FormModal
 							name="Create HQ"
 							onClick={() => setShowAddModal((prevState) => !prevState)}>
@@ -616,7 +615,6 @@ const AddNewHQ = (props: { close: () => void }) => {
 						type="button"
 						onClick={() => {
 							Formik.setFieldValue("password", generatePassword());
-							// Formik.setFieldValue("confirmPassword", generatePassword());
 						}}
 					/>
 					<SelectInput

@@ -1,17 +1,20 @@
 import { Flag } from "@mui/icons-material";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import EnhancedTable from "src/components/Table";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Button } from "src/components/Button";
-import { FlagModal, Modal } from "src/components/ModalComp";
-import { stringOrNumber } from "src/helpers/alias";
+import { FlagModal, FormModal, Modal } from "src/components/ModalComp";
+import { FormType, stringOrNumber } from "src/helpers/alias";
 import { useNavigate } from "react-router-dom";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
+import { AddNewBranch } from "src/hq-admin/hq-pages/Manage-branch/Components";
+import { useAddHqNewBranchMutation } from "src/hq-admin/hq-api/manageHqApiSlice";
+import useCustomLocation from "src/hooks/useCustomLocation";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -86,6 +89,7 @@ interface HqBranchType {
 // ADD NEW BRANCH COMPONENTS
 const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const [value, setValue] = React.useState<string>("one");
+	const { routePath } = useCustomLocation();
 
 	const handledAPIResponse = useMemo(() => {
 		// let neededData: HqBranchType[] = [];
@@ -114,6 +118,8 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
+	const [showAddModal, setShowNewModal] = useState(false);
+	const [AddHQBranch, addHqBranchResult] = useAddHqNewBranchMutation();
 
 	const navigate = useNavigate();
 
@@ -128,7 +134,9 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	];
 
 	function fn(data: { [index: string]: string | number }) {
-		navigate(`/manage-branch/${data?.id}`, { state: data.name });
+		navigate(`/manage-branch/${data?.name}`, {
+			state: { name: data.name, id: data.id },
+		});
 	}
 
 	// CONFIRMATION OF WHAT IS SELECTED
@@ -146,18 +154,61 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 		selected,
 	};
 
+	const initialValues = {
+		stationHQ: routePath?.id,
+		name: "null",
+		phoneNumber: "08157592156",
+		location: {
+			lga: "AMAC",
+			state: "Abuja",
+			latitude: "43412341234",
+			longitude: "42342342342",
+			address: "Maitama Abuja Nigeria",
+		},
+		branchManager: {
+			firstName: "Abu",
+			lastName: "Doe",
+			email: "abu@test2.com",
+			phoneNumber: "08157592152",
+			password: "Test@1234",
+		},
+	};
+
+	async function addNewBranchFunct(values: FormType) {
+		try {
+			const response = await AddHQBranch(values).unwrap();
+			if (response) {
+				// SuccessNotification(response?.data?.message);
+				// setShowAddModal(() => false);
+			}
+		} catch (error: any) {
+			// setShowAddModal(() => false);
+			// handleNotification(error);
+		}
+	}
+
 	return (
 		<section>
 			<article>
 				<div className="flex justify-between items-center mt-6 h-20">
-					<div className="w-fit flex items-center">
+					{/* <div className="w-full flex items-center"> */}
+					<div className="w-fit flex items-center ml-auto ">
+						<div className="w-[189px] h-11 mr-6">
+							<Button
+								text="Create Branch"
+								className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
+								type="button"
+								showIcon={true}
+								onClick={() => setShowNewModal(true)}
+							/>
+						</div>
 						<div className="w-[109px]  h-11">
 							<Button
 								text="Export"
 								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
 								type="button"
 								showIcon={false}
-								onClick={() => console.log("add branch")}
+								// onClick={() => console.log("add branch")}
 							/>
 						</div>
 					</div>
@@ -214,6 +265,15 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 					)}
 				</div>
 			</article>
+			{showAddModal ? (
+				<FormModal name="Create Branch" onClick={() => setShowNewModal(false)}>
+					<AddNewBranch
+						initalValue={initialValues}
+						apiResult={addHqBranchResult}
+						makeApiRequest={(data) => addNewBranchFunct(data)}
+					/>
+				</FormModal>
+			) : null}
 		</section>
 	);
 };
