@@ -95,8 +95,9 @@ export default function Feeds() {
 										<div className="h-56 w-full px-2 mt-4">
 											<Image
 												image={
-													_v?.media[1]?.url ||
-													"https://static.vecteezy.com/packs/media/photo/hero-800px-9fbe463f.jpg"
+													_v?.media[1]?.url
+														? _v?.media[1]?.url
+														: "https://static.vecteezy.com/packs/media/photo/hero-800px-9fbe463f.jpg"
 												}
 												width={100}
 												height={100}

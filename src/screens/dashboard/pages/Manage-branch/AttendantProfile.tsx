@@ -26,9 +26,6 @@ export default function AttendantProfile(props: {
 	const [showFlagModal, setShowFlagModal] = useState<boolean>(false);
 	const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 	const { isSelected } = useIsSelected(selected);
-	const navigate = useNavigate();
-
-	const { slicedPath } = useCustomLocation();
 
 	return (
 		<section className="w-full h-screen">

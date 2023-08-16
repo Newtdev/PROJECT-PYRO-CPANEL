@@ -29,8 +29,8 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: (result) => console.log("add new ....", result),
-			// providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
+			invalidatesTags: (result) =>
+				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),
 	}),
 });

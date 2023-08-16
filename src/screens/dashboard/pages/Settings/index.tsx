@@ -161,13 +161,7 @@ const AddbranchValidation = [
 			status: Yup.string().notRequired(),
 			reason: Yup.string().notRequired(),
 		}),
-		role: Yup.string<
-			| "super_admin"
-			| "sub_admin"
-			| "hQ_admin"
-			| "transaction_admin"
-			| "support_admin"
-		>().defined(),
+		role: Yup.string<"super_admin" | "sub_admin">().defined(),
 	}),
 ];
 
