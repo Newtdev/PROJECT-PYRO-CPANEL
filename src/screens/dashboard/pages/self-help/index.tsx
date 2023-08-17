@@ -15,6 +15,7 @@ import { handleDateFormat } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useFetchAllSelfHelpQuery } from "src/api/selfHelpApislice";
 import { APP_ROUTE } from "src/helpers/Constant";
+import { format } from "date-fns";
 
 interface SelfHelpType {
 	id: "title" | "description" | "likes" | "createdAt";
@@ -23,6 +24,11 @@ interface SelfHelpType {
 }
 
 const headCells: readonly SelfHelpType[] = [
+	{
+		id: "createdAt",
+		minWidth: 170,
+		label: "Date",
+	},
 	{
 		id: "title",
 		minWidth: 170,
@@ -37,11 +43,6 @@ const headCells: readonly SelfHelpType[] = [
 		id: "likes",
 		minWidth: 170,
 		label: "Likes",
-	},
-	{
-		id: "createdAt",
-		minWidth: 170,
-		label: "Date",
 	},
 ];
 
@@ -69,10 +70,10 @@ const SelfHelp = () => {
 				...acc,
 				{
 					id: cur?.id,
+					createdAt: format(new Date(cur.createdAt), "dd/mm/yyyy"),
 					title: cur?.title,
 					description: cur?.description,
 					likes: `${cur?.likes.length} reactions`,
-					createdAt: handleDateFormat(cur?.createdAt),
 				},
 			],
 			[]

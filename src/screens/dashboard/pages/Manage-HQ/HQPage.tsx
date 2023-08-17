@@ -12,12 +12,11 @@ import HqBranch from "./HqBranch";
 
 export default function HQPage() {
 	const { routePath } = useCustomLocation();
-	console.log(routePath);
-	// console.log(slicedPath, routePath, path);
+
 	const [cardName, setCardName] = useState<string>("view profile");
 
 	const singleHqResult = useFetchSingleHQQuery(routePath?.id);
-
+	console.log("single hq result", singleHqResult);
 	const HQData: cardBtnType[] = [
 		{
 			id: 1,

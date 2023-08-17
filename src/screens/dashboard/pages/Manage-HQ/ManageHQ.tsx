@@ -31,7 +31,8 @@ import {
 	SuccessNotification,
 } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
-import { customAlphabet, nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
+import { format } from "date-fns";
 
 interface HeadCell {
 	id: string;
@@ -40,6 +41,11 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
+	{
+		id: "createDate",
+		minWidth: 170,
+		label: "Reg date",
+	},
 	{
 		id: "name",
 		minWidth: 170,
@@ -80,17 +86,20 @@ const ManageHQ = () => {
 		query: debouncedValue,
 		page: pagination.newPage,
 	});
+
 	// hqQueryResult?.currentData?.hqProfile?.totalData;
 	const handledAPIResponse = useMemo(() => {
 		let neededData: ProfileType[] = [];
 		const hqProfile = hqQueryResult?.currentData?.hqProfile;
 		if (hqProfile) {
 			for (const iterator of hqProfile?.data) {
-				const { id, name, email, hqAddress, phoneNumber, state } = iterator;
+				const { id, name, email, hqAddress, phoneNumber, state, createdAt } =
+					iterator;
+				let createDate = format(new Date(createdAt), "dd/mm/yyyy");
 
 				neededData = [
 					...neededData,
-					{ id, name, email, hqAddress, phoneNumber, state },
+					{ createDate, id, name, email, hqAddress, phoneNumber, state },
 				];
 			}
 			return neededData;
@@ -189,39 +198,7 @@ const ManageHQ = () => {
 						data={hqQueryResult}
 						tableData={handledAPIResponse || []}>
 						<div className="h-full w-full">
-							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
-								<div>
-									<Box sx={{ width: "100%" }}>
-										<Tabs
-											value={value}
-											onChange={handleChange}
-											textColor="secondary"
-											indicatorColor="secondary"
-											className="px-4"
-											aria-label="secondary tabs example">
-											{tabData?.map((dt) => {
-												return (
-													<Tab
-														sx={{
-															fontSize: 14,
-														}}
-														key={dt.id}
-														value={dt.value}
-														label={dt.label}
-													/>
-												);
-											})}
-										</Tabs>
-									</Box>
-								</div>
-								<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
-									<Flag
-										color="error"
-										fontSize="large"
-										onClick={() => setShowModal(true)}
-									/>
-								</div>
-							</div>
+							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg "></div>
 
 							<div className="relative">
 								<EnhancedTable {...dataToChildren} />

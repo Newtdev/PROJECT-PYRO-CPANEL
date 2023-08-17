@@ -15,6 +15,7 @@ import useIsSelected from "src/hooks/useIsSelected";
 import { AddNewBranch } from "src/hq-admin/hq-pages/Manage-branch/Components";
 import { useAddHqNewBranchMutation } from "src/hq-admin/hq-api/manageHqApiSlice";
 import useCustomLocation from "src/hooks/useCustomLocation";
+import { format } from "date-fns";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -27,6 +28,11 @@ export interface HeadCellTypes {
 
 // TABLE HEADER DETAILS
 const headCells: readonly HeadCellTypes[] = [
+	{
+		id: "created",
+		minWidth: 170,
+		label: "Reg date",
+	},
 	{
 		id: "name",
 		minWidth: 170,
@@ -99,6 +105,7 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 				...acc,
 				{
 					id: cur._id,
+					created: format(new Date(cur.createdAt), "dd/mm/yyyy"),
 					name: cur.name,
 					phoneNumber: cur.phoneNumber,
 					status: cur.status,
@@ -156,21 +163,21 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 
 	const initialValues = {
 		stationHQ: routePath?.id,
-		name: "null",
-		phoneNumber: "08157592156",
+		name: "",
+		phoneNumber: "",
 		location: {
-			lga: "AMAC",
-			state: "Abuja",
-			latitude: "43412341234",
-			longitude: "42342342342",
-			address: "Maitama Abuja Nigeria",
+			lga: "",
+			state: "",
+			latitude: "",
+			longitude: "",
+			address: "",
 		},
 		branchManager: {
-			firstName: "Abu",
-			lastName: "Doe",
-			email: "abu@test2.com",
-			phoneNumber: "08157592152",
-			password: "Test@1234",
+			firstName: "",
+			lastName: "",
+			email: "",
+			phoneNumber: "",
+			password: "",
 		},
 	};
 

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetchAllUserQuery } from "src/api/manageUserApi";
 import { TableLoader } from "src/components/LoaderContainer";
 import { useDebounce } from "src/hooks/useDebounce";
+import { format } from "date-fns";
 
 interface HeadCellTypes {
 	id: string;
@@ -23,6 +24,11 @@ interface HeadCellTypes {
 }
 
 const headCells: readonly HeadCellTypes[] = [
+	{
+		id: "created",
+		minWidth: 170,
+		label: "Reg Date",
+	},
 	{
 		id: "firstName",
 		minWidth: 170,
@@ -106,6 +112,7 @@ const Transactions = () => {
 			email: string;
 			phoneNumber: string;
 			residentialAddress: string;
+			created: any;
 		}[] = [];
 		const { data } = userResult?.currentData?.users || {};
 
@@ -115,7 +122,7 @@ const Transactions = () => {
 					...neededData,
 					{
 						id: iterator.id,
-						// createdAt,
+						created: format(new Date(iterator.createdAt), "dd/mm/yyyy"),
 						firstName: iterator.firstName,
 						lastName: iterator.lastName,
 						gender: iterator.gender,

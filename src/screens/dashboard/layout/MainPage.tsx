@@ -12,7 +12,7 @@ import { useAppDispatch } from "src/hooks/reduxhooks";
 import { logOut } from "src/features/auth/authSlice";
 import { ArrowBack } from "@mui/icons-material";
 
-const DashboardHeader = (props: { header: { name: string } }) => {
+const DashboardHeader = (props: { header: any }) => {
 	const { user } = useAuth();
 	const [expanded, setExpanded] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
@@ -47,7 +47,7 @@ const DashboardHeader = (props: { header: { name: string } }) => {
 				/>
 			</div>
 			<h1 className="text-start text-[#002E66] text-base md:text-lg lg:text-[30px] font-[700] leading-[45px] w-full">
-				{props.header?.name}
+				{typeof props.header !== "object" ? props.header : props.header?.name}
 			</h1>
 			<div className="w-full flex items-center justify-end  gap-4">
 				<div className="flex items-center justify-between  relative ">

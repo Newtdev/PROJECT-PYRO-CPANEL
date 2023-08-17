@@ -35,18 +35,7 @@ export const AdminRoute = (host) => {
 			path: APP_ROUTE.DASHBOARD,
 			element: <Dashboard />,
 		},
-		// {
-		// 	path: APP_ROUTE.BRANCH,
-		// 	element: <ManageHQBranch />,
-		// },
-		// {
-		// 	path: APP_ROUTE.BRANCH,
-		// 	element: <ManageBranch />,
-		// },
-		{
-			path: APP_ROUTE.BRANCH,
-			element: <ManageBranch />,
-		},
+
 		{
 			path: APP_ROUTE.MANAGEHQ,
 			element: <ManageHQ />,

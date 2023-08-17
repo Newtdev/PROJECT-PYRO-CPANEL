@@ -14,6 +14,7 @@ import { SelectInput, SelectType } from "src/components/SelectInput";
 import { useGetAllTransactionsQuery } from "src/api/transactionsApiSlice";
 import { TableLoader } from "src/components/LoaderContainer";
 import { CustomTabs } from "src/components/CustomTab";
+import { format } from "date-fns";
 
 interface HeadCellTypes {
 	id: string;
@@ -28,6 +29,11 @@ interface HeadCellTypes {
 }
 
 const headCells: readonly HeadCellTypes[] = [
+	{
+		id: "created",
+		minWidth: 170,
+		label: "Transaction Date",
+	},
 	{
 		id: "name",
 		minWidth: 170,
@@ -129,6 +135,7 @@ const Transactions = () => {
 			(acc: { [index: string]: string }[], cur: TransactionsType) => [
 				...acc,
 				{
+					created: format(new Date(cur.createdAt), "dd/mm/yyyy hh:mm:ss"),
 					referenceId: cur.meta?.reference,
 					doneby: cur.meta?.payerName,
 					walletId: cur.meta.walletNumber,

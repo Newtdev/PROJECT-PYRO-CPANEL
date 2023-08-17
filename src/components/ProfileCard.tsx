@@ -14,8 +14,6 @@ interface ProfileType {
 	onClick?: () => void;
 }
 
-// const role = { super_admin: "Super admin", sub_admin: "Sub admin" };
-
 export default function ProfileCard(props: ProfileType) {
 	return (
 		<div className="w-full h-fit bg-white shadow-lg rounded-lg text-[14px] py-6">

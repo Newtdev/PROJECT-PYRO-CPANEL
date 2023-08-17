@@ -44,7 +44,6 @@ const BranchData: cardBtnType[] = [
 export default function SinglePage() {
 	const [tabName, setTabName] = useState<string>("branch profile");
 	const { routePath } = useCustomLocation();
-
 	const branchResult = useFetchBranchQuery(routePath.id);
 
 	const handledAPIResponse = useMemo(() => {
