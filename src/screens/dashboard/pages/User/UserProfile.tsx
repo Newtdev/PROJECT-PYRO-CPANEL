@@ -9,6 +9,7 @@ import { CardButton } from "src/components/Card";
 import { APP_ROUTE } from "src/helpers/Constant";
 import { useFetchUserQuery } from "src/api/manageUserApi";
 import { LoaderContainer } from "src/components/LoaderContainer";
+import { format } from "date-fns";
 
 export default function UserProfile() {
 	const { slicedPath } = useCustomLocation();
@@ -25,6 +26,8 @@ export default function UserProfile() {
 				email: result.email,
 				gender: result.gender,
 				phoneNumber: result.phoneNumber,
+				residentialAddress: result.residentialAddress,
+				createdAt: format(new Date(result.createdAt), "dd/mm/yyyy hh:mm:ss"),
 			},
 			profilePicture: result?.profilePicture?.url,
 		};
@@ -48,7 +51,7 @@ export default function UserProfile() {
 					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  py-3">
 						<>
 							{HQData.map((dt) => (
-								<Fragment>
+								<Fragment key={dt.id}>
 									<CardButton
 										name={dt.name}
 										icon={dt.icon}
