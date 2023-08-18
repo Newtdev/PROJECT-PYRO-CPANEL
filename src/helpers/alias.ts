@@ -16,7 +16,7 @@ export type cardType = {
 };
 
 export type cardBtnType = {
-	id?: number | string;
+	id?: number;
 	icon: string | any;
 	name: string;
 	link?: string;

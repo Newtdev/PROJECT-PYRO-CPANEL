@@ -25,9 +25,8 @@ export default function UserProfile() {
 				lastName: result.lastName,
 				email: result.email,
 				gender: result.gender,
-				phoneNumber: result.phoneNumber,
-				residentialAddress: result.residentialAddress,
-				createdAt: format(new Date(result.createdAt), "dd/mm/yyyy hh:mm:ss"),
+				phoneNumber: result?.phoneNumber,
+				residentialAddress: result?.residentialAddress,
 			},
 			profilePicture: result?.profilePicture?.url,
 		};

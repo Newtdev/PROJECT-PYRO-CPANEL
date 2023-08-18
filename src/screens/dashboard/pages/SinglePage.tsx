@@ -39,6 +39,16 @@ const BranchData: cardBtnType[] = [
 		icon: Rating,
 		name: "Wallet Info",
 	},
+	{
+		id: 6,
+		icon: Rating,
+		name: "Branch Main Products",
+	},
+	{
+		id: 7,
+		icon: Rating,
+		name: "Other Products",
+	},
 ];
 
 export default function SinglePage() {
@@ -48,6 +58,7 @@ export default function SinglePage() {
 
 	const handledAPIResponse = useMemo(() => {
 		const station = branchResult?.currentData?.station;
+		console.log(station);
 
 		return {
 			profileData: {
@@ -58,7 +69,12 @@ export default function SinglePage() {
 				latitude: station?.location?.latitude,
 				longitude: station?.location?.longitude,
 				state: station?.location?.state,
+				pumpCount: station?.config?.pumpCount,
+				status: station?.status,
+				openingTime: station?.config?.openTime?.from,
+				closingTime: station?.config?.openTime?.to,
 			},
+			config: station?.config,
 			pumpAttendants: station?.pumpAttendants,
 			rating: station?.ratings,
 			account: station?.wallets?.availableBalance,
@@ -69,7 +85,7 @@ export default function SinglePage() {
 			},
 		};
 	}, [branchResult]);
-
+	const tab_name = tabName.trim().toLowerCase();
 	return (
 		<section>
 			{/* <LoaderContainer /> */}
@@ -93,26 +109,29 @@ export default function SinglePage() {
 				</div>
 
 				<LoaderContainer data={branchResult}>
-					{tabName.toLowerCase() === "branch profile" ? (
+					{tab_name === "branch profile" ? (
 						<ProfileCard
 							data={handledAPIResponse.profileData || {}}
 							showImage={false}
 						/>
 					) : null}
-					{/* {tabName.toLowerCase() === "view wallet" ? <ViewWallet /> : null} */}
-					{tabName.toLowerCase() === "attendant profile" ? (
+					{/* {tab_name === "view wallet" ? <ViewWallet /> : null} */}
+					{tab_name === "attendant profile" ? (
 						<AttendantProfile
 							attendantData={handledAPIResponse?.pumpAttendants}
 						/>
 					) : null}
-					{tabName.toLowerCase() === "ratings and reviews" ? (
+					{tab_name === "ratings and reviews" ? (
 						<BranchReview ratings={handledAPIResponse.rating} />
 					) : null}
-					{tabName.toLowerCase() === "wallet info" ? (
+					{tab_name === "wallet info" ? (
 						<BranchAccountBalance
 							account={handledAPIResponse.account}
 							info={handledAPIResponse}
 						/>
+					) : null}
+					{tab_name === "branch main products" ? (
+						<ProductCard data={handledAPIResponse.config} />
 					) : null}
 				</LoaderContainer>
 			</article>
@@ -133,17 +152,44 @@ const BranchAccountBalance = (props: {
 				</h2>
 			</div>
 			<div className="w-full mt-4 grid grid-cols-3 my-6">
-				{Object.keys(props?.info.walletInfo)?.map((dt, i) => {
-					return (
-						<div key={i}>
-							<h2 className="text-black capitalize">{splitByUpperCase(dt)}</h2>
-							<h2 className="text-[#002E66] capitalize">
-								{props?.info?.walletInfo[dt]}
-							</h2>
-						</div>
-					);
-				})}
+				{Object.keys(props?.info.walletInfo)?.map((dt, i) => (
+					<div key={i + 1}>
+						<h2 className="text-black capitalize">{splitByUpperCase(dt)}</h2>
+						<h2 className="text-[#002E66] capitalize">
+							{props?.info?.walletInfo[dt]}
+						</h2>
+					</div>
+				))}
 			</div>
 		</div>
 	);
 };
+
+function ProductCard(props: any) {
+	return (
+		<div className="w-full h-fit bg-white shadow-lg rounded-lg text-[14px] py-6">
+			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-10 py-4 md:gap-x-2 text-start px-4 lg:px-16">
+				{Object.keys(props?.data)?.map((dt, i) => (
+					<Fragment key={i + 1}>
+						{i > 1 ? (
+							<div>
+								<h2 className="text-black capitalize">
+									{splitByUpperCase(dt)}
+								</h2>
+								<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg capitalize"></span>
+								<h2 className="text-[#002E66] capitalize">
+									{CurrencyFormatter(props?.data[dt]?.price ?? null)}
+								</h2>
+
+								<h2 className="text-[#002E66] capitalize">
+									Available:
+									{!props?.data[dt]?.isAvailable ? " NO" : " YES"}
+								</h2>
+							</div>
+						) : null}
+					</Fragment>
+				))}
+			</div>
+		</div>
+	);
+}
