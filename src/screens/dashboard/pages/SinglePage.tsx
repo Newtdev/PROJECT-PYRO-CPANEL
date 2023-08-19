@@ -58,7 +58,6 @@ export default function SinglePage() {
 
 	const handledAPIResponse = useMemo(() => {
 		const station = branchResult?.currentData?.station;
-		console.log(station);
 
 		return {
 			profileData: {

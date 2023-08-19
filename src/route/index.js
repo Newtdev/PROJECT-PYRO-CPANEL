@@ -20,6 +20,7 @@ import HQPage from "../screens/dashboard/pages/Manage-HQ/HQPage";
 import BranchReview from "../screens/dashboard/pages/Manage-branch/BranchReview";
 import Users from "../screens/dashboard/pages/User";
 import ManageHQ from "../screens/dashboard/pages/Manage-HQ/ManageHQ";
+import SingleSelfHelp from "src/screens/dashboard/pages/self-help/SingleSelfHelp";
 // const UserWallet = lazy(
 // 	() => import("./screens/dashboard/pages/User/UserWallet")
 // );
@@ -54,6 +55,10 @@ export const AdminRoute = (host) => {
 		{
 			path: APP_ROUTE.ADD_NEW_SELF_HELP,
 			element: <AddNewSelfHelp />,
+		},
+		{
+			path: APP_ROUTE.ADD_NEW_SELF_HELP_SINGLE,
+			element: <SingleSelfHelp />,
 		},
 		{
 			path: APP_ROUTE.VIEW_HQ_WALLET,

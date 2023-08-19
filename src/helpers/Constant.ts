@@ -55,6 +55,7 @@ export enum APP_ROUTE {
 	MANAGE_WEBSITE = "manage/website",
 	RESET_PASSWORD = "/reset-password",
 	ADD_NEW_SELF_HELP = "/add/new/self-help",
+	ADD_NEW_SELF_HELP_SINGLE = "/self-help/:name",
 	FEEDS = "/feeds",
 }
 

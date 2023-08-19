@@ -73,6 +73,8 @@ const SelfHelp = () => {
 					createdAt: format(new Date(cur.createdAt), "dd/mm/yyyy"),
 					title: cur?.title,
 					description: cur?.description,
+					media: cur?.media,
+					body: cur?.body,
 					likes: `${cur?.likes.length} reactions`,
 				},
 			],
@@ -100,7 +102,7 @@ const SelfHelp = () => {
 	// TABLE FILTER TAB
 
 	function fn(data: { [index: string]: string | number }) {
-		return;
+		navigate(`/self-help/${data.title}`, { state: data });
 	}
 	let dataToChildren: any = {
 		rows: handledAPIResponse?.neededData || [],
