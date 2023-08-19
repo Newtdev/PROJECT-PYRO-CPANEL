@@ -22,10 +22,12 @@ export const FlagModal = ({
 	info,
 	onClose,
 	onConfirmation,
+	showModal,
 }: {
 	onClose: React.MouseEventHandler<HTMLButtonElement>;
 	onConfirmation: React.MouseEventHandler<HTMLButtonElement>;
 	info: string;
+	showModal?: boolean;
 }) => {
 	return (
 		<div className="w-[322px] h-[125px] bg-white rounded-[12px]  shadow-2xl flex justify-center items-center flex-col">
@@ -43,6 +45,7 @@ export const FlagModal = ({
 					className="px-6 bg-[#00C000] text-white w-[119px] h-[41px] rounded-full ml-6"
 					showIcon={false}
 					type="button"
+					showModal={showModal}
 					onClick={onConfirmation}
 				/>
 			</div>

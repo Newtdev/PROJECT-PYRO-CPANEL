@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 export default function SingleSelfHelp() {
 	const location = useLocation();
 	const data = location?.state;
+
 	return (
 		<section>
 			<article className="flex gap-6 h-screen py-6 pr-6">

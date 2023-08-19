@@ -22,8 +22,19 @@ export const selfHelpAPISlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result) =>
 				InvalidateTag(result?.data?.id, RTKTAG.SELP_HELP) as any,
 		}),
+		deleteSelfHelp: builder.mutation({
+			query: (id): any => ({
+				url: `${API_ROUTE.SELF_HELP}/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: (result) =>
+				InvalidateTag(result?.data?.id, RTKTAG.SELP_HELP) as any,
+		}),
 	}),
 });
 
-export const { useFetchAllSelfHelpQuery, useAddNewSelfHelpMutation } =
-	selfHelpAPISlice;
+export const {
+	useFetchAllSelfHelpQuery,
+	useAddNewSelfHelpMutation,
+	useDeleteSelfHelpMutation,
+} = selfHelpAPISlice;

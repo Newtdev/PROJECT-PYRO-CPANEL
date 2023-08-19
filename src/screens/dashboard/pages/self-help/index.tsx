@@ -13,7 +13,10 @@ import useIsSelected from "src/hooks/useIsSelected";
 import { TableLoader } from "src/components/LoaderContainer";
 import { handleDateFormat } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
-import { useFetchAllSelfHelpQuery } from "src/api/selfHelpApislice";
+import {
+	useDeleteSelfHelpMutation,
+	useFetchAllSelfHelpQuery,
+} from "src/api/selfHelpApislice";
 import { APP_ROUTE } from "src/helpers/Constant";
 import { format } from "date-fns";
 
@@ -53,10 +56,23 @@ const SelfHelp = () => {
 	const [pagination, setPagination] = useState({ newPage: 1 });
 	const navigate = useNavigate();
 	// const { debouncedValue } = useDebounce(filteredValue, 700);
+	const [deleteSelfHelp, deleteSelfHelpResult] = useDeleteSelfHelpMutation();
 
 	const hqQueryResult = useFetchAllSelfHelpQuery({
 		page: pagination.newPage,
 	});
+
+	const handleDeleteSelfHelp = async (id: string) => {
+		try {
+			const result = await deleteSelfHelp(id);
+
+			if (result) {
+				setShowModal(false);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	// hqQueryResult?.currentData?.hqProfile?.totalData;
 	const handledAPIResponse = useMemo(() => {
@@ -174,8 +190,9 @@ const SelfHelp = () => {
 						<Modal styles="absolute right-10 top-56">
 							<FlagModal
 								info="Are you sure you want to Delete?"
+								showModal={deleteSelfHelpResult.isLoading}
 								onClose={() => setShowModal(false)}
-								onConfirmation={() => console.log(selected)}
+								onConfirmation={() => handleDeleteSelfHelp(selected.toString())}
 							/>
 						</Modal>
 					)}
