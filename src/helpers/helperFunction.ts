@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { toast } from "react-toastify";
 import { formatDistance } from "date-fns";
+import { customAlphabet } from "nanoid";
 
 export const CurrencyFormatter = (amount: number): string =>
 	new Intl.NumberFormat("NGN", {
@@ -155,4 +156,13 @@ interface CategoryType {
 export const Category: CategoryType | any = {
 	fuel_purchase: "Fuel purchase",
 	wallet_transfer: "Wallet transfer",
+};
+
+export const generatePassword = () => {
+	const characters =
+		"1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
+	const pwdCharacters = customAlphabet(characters, 14);
+	const pwd = pwdCharacters();
+	console.log(pwd);
+	return pwd;
 };

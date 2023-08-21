@@ -1,9 +1,11 @@
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useFormik } from "formik";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Button } from "src/components/Button";
-import { FormInput, SelectInput } from "src/components/inputs";
+import { FormInput, PasswordInput, SelectInput } from "src/components/inputs";
 import { FormType } from "src/helpers/alias";
+import { states } from "src/helpers/data";
+import { generatePassword } from "src/helpers/helperFunction";
 import { AddbranchValidation } from "src/helpers/YupValidation";
 
 const GoogleLocationInput = ({
@@ -17,7 +19,7 @@ const GoogleLocationInput = ({
 }) => {
 	const originRef = useRef();
 	const [result, setResult] = useState<any>(null);
-	const { isLoaded, loadError } = useJsApiLoader({
+	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: "AIzaSyCDfI1GOcaZ2W3xQZyWwN_d2ZUzMufGSS4",
 		libraries: ["places", "geometry"],
 	});
@@ -86,11 +88,11 @@ export const AddNewBranch = (props: {
 		Formik.setFieldValue("location.address", value);
 	};
 
-	useEffect(() => {
-		if (!props.initalValue) return;
+	// useEffect(() => {
+	// 	if (!props.initalValue) return;
 
-		// Formik.setValues({ ...props.initalValue });
-	}, []);
+	// 	// Formik.setValues({ ...props.initalValue });
+	// }, []);
 
 	const styles =
 		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
@@ -224,64 +226,6 @@ export const AddNewBranch = (props: {
 			error: Formik.errors.branchManager?.phoneNumber,
 			touched: Formik.touched.branchManager?.phoneNumber,
 		},
-		{
-			id: "branchManager.password",
-			name: "Branch manager's password",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.branchManager?.password &&
-				Formik.touched.branchManager?.password
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.branchManager?.password,
-			onBlur: Formik.handleBlur,
-			disabled: props.apiResult?.isLoading,
-			error: Formik.errors.branchManager?.password,
-			touched: Formik.touched.branchManager?.password,
-		},
-	];
-
-	const states = [
-		"Abuja",
-		"Abia",
-		"Adamawa",
-		"Akwa Ibom",
-		"Anambra",
-		"Bauchi",
-		"Bayelsa",
-		"Benue",
-		"Borno",
-		"Cross River",
-		"Delta",
-		"Ebonyi",
-		"Edo",
-		"Ekiti",
-		"Enugu",
-		"Gombe",
-		"Imo",
-		"Jigawa",
-		"Kaduna",
-		"Kano",
-		"Katsina",
-		"Kebbi",
-		"Kogi",
-		"Kwara",
-		"Lagos",
-		"Nasarawa",
-		"Niger",
-		"Ogun",
-		"Ondo",
-		"Osun",
-		"Oyo",
-		"Plateau",
-		"Rivers",
-		"Sokoto",
-		"Taraba",
-		"Yobe",
-		"Zamfara",
 	];
 
 	return (
@@ -330,7 +274,7 @@ export const AddNewBranch = (props: {
 			) : null}
 			{step === 1 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(-5).map((dt, i) => (
+					{FormData.slice(-4).map((dt, i) => (
 						<FormInput
 							id={dt.id}
 							name={dt.name}
@@ -345,6 +289,40 @@ export const AddNewBranch = (props: {
 							touched={dt.touched}
 						/>
 					))}
+
+					<PasswordInput
+						width="w-full"
+						id="password"
+						name={"Password"}
+						type={"text"}
+						styles={` ${
+							Formik.errors.branchManager?.password &&
+							Formik.touched.branchManager?.password
+								? "border-red-500"
+								: "border-gray-300"
+						}`}
+						labelStyles={labelStyles}
+						onChange={(e) => {
+							Formik.setFieldValue("branchManager.password", e.target.value);
+						}}
+						value={Formik.values.branchManager?.password}
+						onBlur={Formik.handleBlur}
+						disabled={props.apiResult.isLoading}
+						// error={Formik.errors.password}
+						// touched={Formik.touched.password}
+					/>
+					<Button
+						text="Generate password"
+						disabled={props.apiResult.isLoading}
+						className="h-[41px] mt-6 font-bold bg-white border border-[#002E66] rounded-[38px] w-full hover: text-[#002E66]"
+						type="button"
+						onClick={() => {
+							Formik.setFieldValue(
+								"branchManager.password",
+								generatePassword()
+							);
+						}}
+					/>
 				</div>
 			) : null}
 

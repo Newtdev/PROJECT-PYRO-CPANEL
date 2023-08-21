@@ -27,6 +27,7 @@ import {
 import { Data, ErrorType } from "src/helpers/alias";
 import { TableLoader } from "src/components/LoaderContainer";
 import {
+	generatePassword,
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
@@ -499,15 +500,6 @@ const AddNewHQ = (props: { close: () => void }) => {
 		"Yobe",
 		"Zamfara",
 	];
-
-	const generatePassword = () => {
-		const characters =
-			"1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
-		const pwdCharacters = customAlphabet(characters, 14);
-		const pwd = pwdCharacters();
-		console.log(pwd);
-		return pwd;
-	};
 
 	return (
 		<form
