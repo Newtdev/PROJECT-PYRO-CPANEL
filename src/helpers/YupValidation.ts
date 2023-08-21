@@ -9,15 +9,10 @@ export const AddbranchValidation = [
 			.required(),
 		location: Yup.object({
 			lga: Yup.string().label("LGA").required(),
-			latitude: Yup.string().label("Latitude").required(),
-			longitude: Yup.string().label("longitude").required(),
+			state: Yup.string().label("State").required(),
 		}),
 	}),
 	Yup.object({
-		location: Yup.object({
-			address: Yup.string().label("Address").required(),
-			state: Yup.string().label("State").required(),
-		}),
 		branchManager: Yup.object({
 			firstName: Yup.string().label("First name").required(),
 			lastName: Yup.string().label("Last name").required(),

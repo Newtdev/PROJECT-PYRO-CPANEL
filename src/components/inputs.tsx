@@ -12,6 +12,7 @@ import { inputType } from "src/helpers/alias";
 // };
 export function Label(props: { styles: string; name: string }) {
 	// const { styles  } = props;
+
 	return <label className={props.styles}>{props.name}</label>;
 }
 
@@ -31,6 +32,7 @@ export const FormInput = (props: inputType) => {
 		touched,
 		error,
 		value,
+		ref,
 		styles = `h-[54px] rounded-[38px] w-full border border-gray-300 px-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ${
 			props.error && props.touched ? "border-red-500" : "border-gray-300"
 		} bg-[#D9D9D9]`,
@@ -43,6 +45,7 @@ export const FormInput = (props: inputType) => {
 			<input
 				name={id}
 				id={id}
+				ref={ref}
 				type={type}
 				className={styles}
 				onChange={onChange}
@@ -186,6 +189,7 @@ interface SelectInputType {
 export const SelectInput = (props: SelectInputType) => (
 	<div className="w-full">
 		<Label name={props.name} styles={props.labelStyles} />
+
 		<select
 			className="mt-1 py-4 rounded-[38px] w-full border border-gray-300 px-4 text-[14px] bg-[#D9D9D9]"
 			name={props.id}

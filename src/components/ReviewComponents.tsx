@@ -10,7 +10,7 @@ export function ReviewComponents({
 	return (
 		<div className="">
 			{[1, 2, 3, 4, 5].map((d, id) => (
-				<div className="flex gap-4 items-center justify-between">
+				<div key={id + 1} className="flex gap-4 items-center justify-between">
 					<p>{d}</p>
 					<div key={id} className="w-full my-3">
 						<BorderLinearProgress

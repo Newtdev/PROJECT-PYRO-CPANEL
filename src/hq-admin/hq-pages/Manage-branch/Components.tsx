@@ -1,9 +1,56 @@
+import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "src/components/Button";
-import { FormInput } from "src/components/inputs";
+import { FormInput, SelectInput } from "src/components/inputs";
 import { FormType } from "src/helpers/alias";
 import { AddbranchValidation } from "src/helpers/YupValidation";
+
+const GoogleLocationInput = ({
+	getLat,
+	getLong,
+	getAddress,
+}: {
+	getLat: (arg: number) => void;
+	getLong: (arg: number) => void;
+	getAddress: (arg: string) => void;
+}) => {
+	const originRef = useRef();
+	const [result, setResult] = useState<any>(null);
+	const { isLoaded, loadError } = useJsApiLoader({
+		googleMapsApiKey: "AIzaSyCDfI1GOcaZ2W3xQZyWwN_d2ZUzMufGSS4",
+		libraries: ["places", "geometry"],
+	});
+	const onLoad = (autoComplete: any) => {
+		setResult(autoComplete);
+	};
+	const onLocationSelected = () => {
+		const place = result?.getPlace();
+
+		getAddress(place.formatted_address as any);
+		getLat(place.geometry.location.lat());
+		getLong(place.geometry.location.lng());
+	};
+
+	return (
+		<div>
+			{isLoaded ? (
+				<Autocomplete onLoad={onLoad} onPlaceChanged={onLocationSelected}>
+					<>
+						<label className="block mb-[6px] text-black text-start font-normal text-[14px]  ml-5 my-6">
+							Enter Address
+						</label>
+						<input
+							className="h-[54px] rounded-[38px] w-full border border-gray-300 px-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+							ref={originRef as any}
+							name="origin"
+						/>
+					</>
+				</Autocomplete>
+			) : null}
+		</div>
+	);
+};
 
 export const AddNewBranch = (props: {
 	makeApiRequest: (args: FormType) => void;
@@ -27,6 +74,17 @@ export const AddNewBranch = (props: {
 			}
 		},
 	});
+
+	const getLong = (value: number) => {
+		Formik.setFieldValue("location.longitude", value);
+	};
+	const getLat = (value: number) => {
+		Formik.setFieldValue("location.latitude", value);
+	};
+
+	const getAddress = (value: string) => {
+		Formik.setFieldValue("location.address", value);
+	};
 
 	useEffect(() => {
 		if (!props.initalValue) return;
@@ -75,23 +133,6 @@ export const AddNewBranch = (props: {
 			touched: Formik.touched.phoneNumber,
 		},
 		{
-			id: "location.address",
-			name: "Branch Address",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.address && Formik.touched.location?.address
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.address,
-			onBlur: Formik.handleBlur,
-			disabled: props.apiResult?.isLoading,
-			error: Formik.errors.location?.address,
-			touched: Formik.touched.location?.address,
-		},
-		{
 			id: "location.lga",
 			name: "Branch LGA",
 			type: "text",
@@ -109,60 +150,7 @@ export const AddNewBranch = (props: {
 			error: Formik.errors.location?.lga,
 			touched: Formik.touched.location?.lga,
 		},
-		{
-			id: "location.latitude",
-			name: "Branch Latitude",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.lga && Formik.touched.location?.latitude
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.latitude,
-			onBlur: Formik.handleBlur,
 
-			disabled: props.apiResult.isLoading,
-			error: Formik.errors.location?.latitude,
-			touched: Formik.touched.location?.latitude,
-		},
-		{
-			id: "location.longitude",
-			name: "Branch longitude",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.lga && Formik.touched.location?.longitude
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.longitude,
-			onBlur: Formik.handleBlur,
-
-			disabled: props.apiResult.isLoading,
-			error: Formik.errors.location?.longitude,
-			touched: Formik.touched.location?.longitude,
-		},
-
-		{
-			id: "location.state",
-			name: "Branch state",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.state && Formik.touched.location?.state
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location?.state,
-			onBlur: Formik.handleBlur,
-			disabled: props.apiResult?.isLoading,
-			error: Formik.errors.location?.state,
-			touched: Formik.touched.location?.state,
-		},
 		{
 			id: "branchManager.firstName",
 			name: "Branch manager first name",
@@ -256,26 +244,87 @@ export const AddNewBranch = (props: {
 		},
 	];
 
+	const states = [
+		"Abuja",
+		"Abia",
+		"Adamawa",
+		"Akwa Ibom",
+		"Anambra",
+		"Bauchi",
+		"Bayelsa",
+		"Benue",
+		"Borno",
+		"Cross River",
+		"Delta",
+		"Ebonyi",
+		"Edo",
+		"Ekiti",
+		"Enugu",
+		"Gombe",
+		"Imo",
+		"Jigawa",
+		"Kaduna",
+		"Kano",
+		"Katsina",
+		"Kebbi",
+		"Kogi",
+		"Kwara",
+		"Lagos",
+		"Nasarawa",
+		"Niger",
+		"Ogun",
+		"Ondo",
+		"Osun",
+		"Oyo",
+		"Plateau",
+		"Rivers",
+		"Sokoto",
+		"Taraba",
+		"Yobe",
+		"Zamfara",
+	];
+
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}
 			className="w-full flex flex-col justify-center items-center px-4 h-full">
 			{step === 0 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(0, 7).map((dt, i) => (
-						<FormInput
-							id={dt.id}
-							name={dt.name}
-							type={dt.type}
-							styles={dt.styles}
-							labelStyles={dt.labelStyles}
-							onChange={dt.onChange}
-							value={dt.value}
-							onBlur={dt.onBlur}
-							disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
-						/>
+					{FormData.slice(0, 3).map((dt, i) => (
+						<Fragment key={dt.id}>
+							<FormInput
+								id={dt.id}
+								name={dt.name}
+								type={dt.type}
+								styles={dt.styles}
+								labelStyles={dt.labelStyles}
+								onChange={dt.onChange}
+								value={dt.value}
+								onBlur={dt.onBlur}
+								disabled={dt.disabled}
+								error={dt.error}
+								touched={dt.touched}
+							/>
+							{i === 2 ? (
+								<GoogleLocationInput
+									getLat={getLat}
+									getLong={getLong}
+									getAddress={getAddress}
+								/>
+							) : null}
+							{i === 2 ? (
+								<SelectInput
+									id="location.state"
+									data={states}
+									labelStyles={labelStyles}
+									name="Select state"
+									onChange={(e) =>
+										Formik.setFieldValue("location.state", e.target.value)
+									}
+									value={Formik.values.location.state}
+								/>
+							) : null}
+						</Fragment>
 					))}
 				</div>
 			) : null}

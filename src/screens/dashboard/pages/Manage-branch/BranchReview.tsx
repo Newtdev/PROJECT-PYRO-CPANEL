@@ -35,6 +35,7 @@ export default function BranchReview(props: {
 			}, {});
 
 			let totalCalStar = Math.ceil((occurr[num] * num * RatingAverage) / 100);
+
 			return {
 				RatingAverage,
 				totalCalStar,

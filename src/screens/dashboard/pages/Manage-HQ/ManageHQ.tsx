@@ -499,6 +499,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 		"Yobe",
 		"Zamfara",
 	];
+
 	const generatePassword = () => {
 		const characters =
 			"1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
@@ -507,7 +508,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 		console.log(pwd);
 		return pwd;
 	};
-	console.log(Formik.errors);
+
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}

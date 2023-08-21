@@ -95,17 +95,18 @@ export type inputType = {
 	name: string;
 	styles?: string;
 	id: string | undefined;
-	type: string;
+	type?: string;
 	inputName?: string | undefined;
 	value?: stringOrNumber | undefined;
 	placeholder?: string;
-	onChange: ChangeEventHandler<HTMLInputElement> | undefined;
+	onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
 	onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
 	disabled?: boolean | undefined;
 	error?: string | undefined;
 	touched?: boolean | undefined;
 	labelStyles?: string | undefined;
 	width?: string;
+	ref?: any;
 };
 
 export interface ProfiledataType {

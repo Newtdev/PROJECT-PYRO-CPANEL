@@ -3,6 +3,9 @@ import { cardBtnType } from "src/helpers/alias";
 import User from "src/assets/img/User.svg";
 import Attendant from "src/assets/img/Attendanticon.svg";
 import Rating from "src/assets/img/Ratings.svg";
+import WalletSvg from "src/assets/img/walletbtn.svg";
+import MainProduct from "src/assets/img/MainProduct.svg";
+import OtherProduct from "src/assets/img/OtherProduct.svg";
 import { CardButton } from "src/components/Card";
 import { useMemo } from "react";
 import ProfileCard from "src/components/ProfileCard";
@@ -36,17 +39,17 @@ const BranchData: cardBtnType[] = [
 	},
 	{
 		id: 5,
-		icon: Rating,
+		icon: WalletSvg,
 		name: "Wallet Info",
 	},
 	{
 		id: 6,
-		icon: Rating,
+		icon: MainProduct,
 		name: "Branch Main Products",
 	},
 	{
 		id: 7,
-		icon: Rating,
+		icon: OtherProduct,
 		name: "Other Products",
 	},
 ];

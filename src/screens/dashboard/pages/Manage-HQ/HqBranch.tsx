@@ -16,6 +16,10 @@ import { AddNewBranch } from "src/hq-admin/hq-pages/Manage-branch/Components";
 import { useAddHqNewBranchMutation } from "src/hq-admin/hq-api/manageHqApiSlice";
 import useCustomLocation from "src/hooks/useCustomLocation";
 import { format } from "date-fns";
+import {
+	handleNotification,
+	SuccessNotification,
+} from "src/helpers/helperFunction";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -185,12 +189,12 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 		try {
 			const response = await AddHQBranch(values).unwrap();
 			if (response) {
-				// SuccessNotification(response?.data?.message);
-				// setShowAddModal(() => false);
+				SuccessNotification(response?.data?.message);
+				setShowNewModal(() => false);
 			}
 		} catch (error: any) {
-			// setShowAddModal(() => false);
-			// handleNotification(error);
+			setShowNewModal(() => false);
+			handleNotification(error);
 		}
 	}
 
