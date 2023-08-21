@@ -82,6 +82,12 @@ const filterData: SelectType[] = [
 	{ id: 2, value: "bank_transfer", label: "Bank transfer" },
 	{ id: 3, value: "card_deposit", label: "Card deposit " },
 	{ id: 4, value: "user_transfer", label: "User transfer" },
+	{ id: 5, value: "pending", label: "Pending" },
+	{ id: 6, value: "successful", label: "Successful" },
+	{ id: 7, value: "reversed", label: "Reversed" },
+	{ id: 8, value: "withdrawal", label: "Withdrawal" },
+	{ id: 9, value: "top_up", label: "Top up" },
+	{ id: 10, value: "remit", label: "Remit" },
 ];
 
 // TAB DATA FOR TABLE TAB
