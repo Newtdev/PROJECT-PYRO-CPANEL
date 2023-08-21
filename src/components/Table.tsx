@@ -196,24 +196,24 @@ export default function EnhancedTable({
 												);
 											}
 										)}
-										{showFlag ? (
+										{/* {showFlag ? (
 											<>
 												<TableCell
 													component="th"
 													id={labelId}
 													scope="row"
 													padding="normal"
-													onClick={(e) => handleRowClick(e, row.name)}
+													// onClick={(e) => handleRowClick(e, row.name)}
 													style={{
 														color: "#002E66",
 														fontFamily: "Poppins",
 														fontSize: "14px",
 														fontWeight: "400",
 													}}>
-													<Flag color="error" />
+													
 												</TableCell>
 											</>
-										) : null}
+										) : null} */}
 									</TableRow>
 								);
 							})}

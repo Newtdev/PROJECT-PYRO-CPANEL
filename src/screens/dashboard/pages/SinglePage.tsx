@@ -57,7 +57,12 @@ const BranchData: cardBtnType[] = [
 export default function SinglePage() {
 	const [tabName, setTabName] = useState<string>("branch profile");
 	const { routePath } = useCustomLocation();
+	const [status, setStatus] = useState<string>("available");
 	const branchResult = useFetchBranchQuery(routePath.id);
+
+	const handleStatus = () => {
+		setStatus("unavailable");
+	};
 
 	const handledAPIResponse = useMemo(() => {
 		const station = branchResult?.currentData?.station;
@@ -115,6 +120,9 @@ export default function SinglePage() {
 						<ProfileCard
 							data={handledAPIResponse.profileData || {}}
 							showImage={false}
+							status={status}
+							fn={handleStatus}
+							flag={true}
 						/>
 					) : null}
 					{/* {tab_name === "view wallet" ? <ViewWallet /> : null} */}

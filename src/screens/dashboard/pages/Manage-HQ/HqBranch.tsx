@@ -20,6 +20,7 @@ import {
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
+import { SelectInput } from "src/components/SelectInput";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -102,7 +103,6 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const { routePath } = useCustomLocation();
 
 	const handledAPIResponse = useMemo(() => {
-		// let neededData: HqBranchType[] = [];
 		const hqProfile = props?.branchInfo;
 		return hqProfile?.reduce(
 			(acc: HqBranchType[], cur: HqBranchType) => [
@@ -157,7 +157,6 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
-		showFlag: true,
 		showCheckBox: true,
 		isSelected,
 		handleClick,
@@ -263,17 +262,6 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 							<EnhancedTable {...dataToChildren} />
 						</div>
 					</div>
-
-					{/* FLAG A HQ */}
-					{showModal && (
-						<Modal styles="absolute right-10 top-56">
-							<FlagModal
-								info="Are you sure you want to flag?"
-								onClose={() => setShowModal(false)}
-								onConfirmation={() => console.log(selected)}
-							/>
-						</Modal>
-					)}
 				</div>
 			</article>
 			{showAddModal ? (

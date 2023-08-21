@@ -1,4 +1,3 @@
-import { Flag } from "@mui/icons-material";
 import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
 import {
@@ -8,9 +7,7 @@ import {
 	SelectInput,
 } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
+
 import { Button } from "src/components/Button";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
@@ -24,7 +21,6 @@ import {
 	useAddNewHQMutation,
 	useFetchAllHQQuery,
 } from "src/api/manageHQApiSlice";
-import { Data, ErrorType } from "src/helpers/alias";
 import { TableLoader } from "src/components/LoaderContainer";
 import {
 	generatePassword,
@@ -32,7 +28,6 @@ import {
 	SuccessNotification,
 } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
-import { customAlphabet } from "nanoid";
 import { format } from "date-fns";
 
 interface HeadCell {
@@ -92,6 +87,7 @@ const ManageHQ = () => {
 	const handledAPIResponse = useMemo(() => {
 		let neededData: ProfileType[] = [];
 		const hqProfile = hqQueryResult?.currentData?.hqProfile;
+		console.log(hqProfile);
 		if (hqProfile) {
 			for (const iterator of hqProfile?.data) {
 				const { id, name, email, hqAddress, phoneNumber, state, createdAt } =
@@ -116,10 +112,6 @@ const ManageHQ = () => {
 
 	// API TO GET ALL HQ INFORMATION
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue(newValue);
-	};
-
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setPagination((prev) => {
 			return { ...prev, newPage };
@@ -127,9 +119,6 @@ const ManageHQ = () => {
 	};
 
 	// TABLE FILTER TAB
-	const tabData: { id: string | number; value: string; label: string }[] = [
-		{ id: 1, value: "one", label: "All" },
-	];
 
 	function fn(data: { [index: string]: string | number }) {
 		navigate(`/manage-HQ/${data?.name}`, {
@@ -140,7 +129,6 @@ const ManageHQ = () => {
 		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
-		showFlag: true,
 		showCheckBox: true,
 		isSelected,
 		handleClick,
@@ -208,15 +196,6 @@ const ManageHQ = () => {
 					</TableLoader>
 
 					{/* FLAG A HQ */}
-					{showModal && (
-						<Modal styles="absolute right-10 top-56">
-							<FlagModal
-								info="Are you sure you want to flag?"
-								onClose={() => setShowModal(false)}
-								onConfirmation={() => console.log(selected)}
-							/>
-						</Modal>
-					)}
 
 					{showAddModal ? (
 						<FormModal
@@ -279,7 +258,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 				props.close();
 			}
 			SuccessNotification(response?.data?.message);
-		} catch (error: ErrorType | any) {
+		} catch (error: any) {
 			props.close();
 			handleNotification(error);
 		}

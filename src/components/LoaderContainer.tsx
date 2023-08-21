@@ -42,7 +42,6 @@ interface TableLoaderType extends LoadingType {
 
 export function TableLoader(props: TableLoaderType) {
 	const loading = props?.data?.isLoading || props?.data?.isFetching;
-	console.log(props.tableData);
 	return (
 		<>
 			<div className=" flex justify-center items-center z-10">

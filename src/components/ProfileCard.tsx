@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { splitByUpperCase } from "src/helpers/helperFunction";
 import { Button } from "./Button";
 import Image from "./Image";
+import { FlagModal, Modal } from "./ModalComp";
 
 interface ProfileType {
 	data: any;
@@ -10,11 +11,21 @@ interface ProfileType {
 	showBanner?: boolean | undefined;
 	showHeader?: boolean;
 	header?: string;
+	fn?: () => void;
+	flag?: boolean;
+	status?: string;
 	showButton?: boolean;
 	onClick?: () => void;
 }
 
+let showModal = false;
 export default function ProfileCard(props: ProfileType) {
+	const [showModal, setShowModal] = useState<boolean>(false);
+
+	const hanldeSuspendModal = () => {
+		// props.fn();
+		setShowModal(() => !showModal);
+	};
 	return (
 		<div className="w-full h-fit bg-white shadow-lg rounded-lg text-[14px] py-6">
 			{props.showHeader ? (
@@ -64,7 +75,7 @@ export default function ProfileCard(props: ProfileType) {
 			) : null}
 			{!!props.showImage ? (
 				<div>
-					<div className=" py-4 text-start px-4 lg:px-16">
+					<div className="py-4 text-start px-4 lg:px-16">
 						<h2 className="text-black">Profile Picture</h2>
 						<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg"></span>
 						<div className="w-36 h-36 rounded-full mt-6">
@@ -87,6 +98,27 @@ export default function ProfileCard(props: ProfileType) {
 					</div>
 				</div>
 			) : null}
+			{!!props.flag ? (
+				<div className=" px-10 py-4 mt-4">
+					<div className="w-[189px] h-11 ">
+						<Button
+							text="Suspend"
+							className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-center"
+							type="button"
+							onClick={hanldeSuspendModal}
+						/>
+					</div>
+				</div>
+			) : null}
+			{showModal && (
+				<Modal>
+					<FlagModal
+						info="Are you sure you want to flag?"
+						onClose={() => setShowModal(false)}
+						onConfirmation={() => console.log("")}
+					/>
+				</Modal>
+			)}
 		</div>
 	);
 }

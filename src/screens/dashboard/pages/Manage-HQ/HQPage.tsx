@@ -12,11 +12,11 @@ import HqBranch from "./HqBranch";
 
 export default function HQPage() {
 	const { routePath } = useCustomLocation();
-
 	const [cardName, setCardName] = useState<string>("view profile");
 
-	const singleHqResult = useFetchSingleHQQuery(routePath?.id);
-	console.log("single hq result", singleHqResult);
+	const singleHqResult = useFetchSingleHQQuery({
+		id: routePath?.id,
+	});
 	const HQData: cardBtnType[] = [
 		{
 			id: 1,
@@ -77,7 +77,7 @@ export default function HQPage() {
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  py-3">
 					<>
 						{HQData.map((dt) => (
-							<Fragment>
+							<Fragment key={dt.id}>
 								<CardButton
 									name={dt.name}
 									icon={dt.icon}
