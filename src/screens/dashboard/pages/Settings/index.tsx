@@ -40,38 +40,39 @@ import {
 import Image from "src/components/Image";
 import ManageWebsite from "./ManageWebsite";
 import { ShowVideoAndImage } from "src/components/RenderImagePreview";
+import { useAuth } from "src/hooks/useAuth";
 
+const HQData: cardBtnType[] = [
+	{
+		id: 1,
+		icon: AdminProfile,
+		name: "Profile",
+		link: APP_ROUTE.ADMIN_PROFILE,
+	},
+
+	{
+		id: 2,
+		icon: ManageAdmins,
+		name: "Manage Admin",
+		link: APP_ROUTE.MANAGE_ADMIN,
+	},
+	{
+		id: 3,
+		icon: ManageWebsites,
+		name: "Manage Website",
+		link: APP_ROUTE.MANAGE_WEBSITE,
+	},
+	{
+		id: 4,
+		icon: ResetPasword,
+		name: "Update Profile",
+		link: APP_ROUTE.RESET_PASSWORD,
+	},
+];
 const Settings = () => {
 	const [cardName, setName] = useState<string>("profile");
 	const [showModal, setShowAddModal] = useState<boolean>(false);
-	const HQData: cardBtnType[] = [
-		{
-			id: 1,
-			icon: AdminProfile,
-			name: "Profile",
-			link: APP_ROUTE.ADMIN_PROFILE,
-		},
-
-		{
-			id: 2,
-			icon: ManageAdmins,
-			name: "Manage Admin",
-			link: APP_ROUTE.MANAGE_ADMIN,
-		},
-		{
-			id: 3,
-			icon: ManageWebsites,
-			name: "Manage Website",
-			link: APP_ROUTE.MANAGE_WEBSITE,
-		},
-		{
-			id: 4,
-			icon: ResetPasword,
-			name: "Update Profile",
-			link: APP_ROUTE.RESET_PASSWORD,
-		},
-	];
-
+	const { user } = useAuth();
 	const adminResult = useGetAdminQuery("");
 
 	const handledAPIResponse = useMemo(() => {
@@ -79,11 +80,11 @@ const Settings = () => {
 
 		return {
 			profile: {
-				firstName: hqProfile?.firstName,
-				lastName: hqProfile?.lastName,
-				email: hqProfile?.email,
-				role: hqProfile?.role,
-				phoneNumber: hqProfile?.phoneNumber,
+				firstName: user?.firstName,
+				lastName: user?.lastName,
+				email: user?.email,
+				role: user?.role,
+				phoneNumber: user?.phoneNumber,
 			},
 			id: hqProfile?.id,
 			avatar: hqProfile?.avatar,

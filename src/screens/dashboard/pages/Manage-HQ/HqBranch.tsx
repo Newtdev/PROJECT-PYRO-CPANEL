@@ -20,7 +20,7 @@ import {
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -97,12 +97,6 @@ interface HqBranchType {
 	};
 }
 
-const csvData = [
-	["firstname", "lastname", "email"],
-	["Ahmed", "Tomi", "ah@smthing.co.com"],
-	["Raed", "Labes", "rl@smthing.co.com"],
-	["Yezzi", "Min l3b", "ymin@cocococo.com"],
-];
 // ADD NEW BRANCH COMPONENTS
 const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const [value, setValue] = React.useState<string>("one");
@@ -258,13 +252,6 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 										})}
 									</Tabs>
 								</Box>
-							</div>
-							<div className=" flex justify-end items-center h-11 text-sm pr-12 cursor-pointer">
-								<Flag
-									color="error"
-									fontSize="large"
-									onClick={() => setShowModal(true)}
-								/>
 							</div>
 						</div>
 						<div className="relative">

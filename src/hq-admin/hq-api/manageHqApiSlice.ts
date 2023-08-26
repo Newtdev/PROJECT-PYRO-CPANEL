@@ -27,6 +27,11 @@ export const hQManageBranchApiSlice = apiSlice.injectEndpoints({
 			providesTags: (result) =>
 				providesTagList(result?.hqProfile?.data, RTKTAG.HQ_BRANCH) as any,
 		}),
+		exportHQBranch: builder.query({
+			query: (params) => `${HQ_API_ENPOINTS.BRANCH}?stationHQ=${params.hqId}`,
+			providesTags: (result) =>
+				providesTagList(result?.hqProfile?.data, RTKTAG.HQ_BRANCH) as any,
+		}),
 		fetchSingleHQBranch: builder.query({
 			query: (id) => `${HQ_API_ENPOINTS.SINGLE_BRANCH}?branchId=${id}`,
 			providesTags: (result) =>
@@ -40,4 +45,5 @@ export const {
 	useFetchSingleHQBranchQuery,
 	useAddHqNewBranchMutation,
 	useUpdateHqBranchDetailsMutation,
+	useExportHQBranchQuery,
 } = hQManageBranchApiSlice;

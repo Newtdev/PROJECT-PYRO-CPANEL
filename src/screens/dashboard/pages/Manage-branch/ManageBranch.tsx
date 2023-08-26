@@ -10,10 +10,14 @@ import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
-import { useFetchAllBranchQuery } from "src/api/manageBranchAPISlice";
+import {
+	useExportAllBranchQuery,
+	useFetchAllBranchQuery,
+} from "src/api/manageBranchAPISlice";
 import { TableLoader } from "src/components/LoaderContainer";
 import { useDebounce } from "src/hooks/useDebounce";
 import { ManageBranchType } from "src/helpers/alias";
+import { CSVLink } from "react-csv";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -78,6 +82,8 @@ const ManageBranch = () => {
 		page: pagination.newPage,
 	});
 
+	const exportBranchResult = useExportAllBranchQuery({});
+
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setPagination((prev) => {
 			return { ...prev, newPage };
@@ -140,6 +146,13 @@ const ManageBranch = () => {
 		},
 	};
 
+	// HANDLE EXPORTING OF DATA
+
+	const handleExportData = useMemo(
+		() => exportBranchResult?.currentData,
+		[exportBranchResult]
+	);
+
 	return (
 		<section>
 			<article>
@@ -157,13 +170,15 @@ const ManageBranch = () => {
 					</div>
 					<div className="w-fit flex items-center">
 						<div className="w-[109px] h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
-							/>
+							<CSVLink filename="Branch_data.csv" data={handleExportData ?? []}>
+								<Button
+									text="Export"
+									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+									type="button"
+									showIcon={false}
+									onClick={() => console.log("add branch")}
+								/>
+							</CSVLink>
 						</div>
 					</div>
 				</div>

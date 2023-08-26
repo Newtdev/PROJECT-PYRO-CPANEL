@@ -23,8 +23,7 @@ export const manageHqAPISlice = apiSlice.injectEndpoints({
 				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
 		}),
 		fetchSingleHQ: builder.query({
-			query: ({ id, status }) =>
-				`${API_ROUTE.FETCH_SINGLE_HQ}/${id}?status=${status}`,
+			query: ({ id, status }) => `${API_ROUTE.FETCH_SINGLE_HQ}/${id}`,
 		}),
 	}),
 });

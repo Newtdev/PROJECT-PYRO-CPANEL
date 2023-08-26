@@ -17,6 +17,7 @@ export default function HQPage() {
 	const singleHqResult = useFetchSingleHQQuery({
 		id: routePath?.id,
 	});
+
 	const HQData: cardBtnType[] = [
 		{
 			id: 1,

@@ -9,6 +9,11 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 			providesTags: (result) =>
 				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),
+		exportAllBranch: builder.query({
+			query: (params) => API_ROUTE.GET_ALL_BRANCH,
+			providesTags: (result) =>
+				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
+		}),
 		fetchBranch: builder.query({
 			query: (id) => `${API_ROUTE.FETCH_BRANCH}/${id}`,
 			providesTags: (result) =>
@@ -39,4 +44,5 @@ export const {
 	useAddNewBranchMutation,
 	useFetchBranchQuery,
 	useAddNewHQBranchMutation,
+	useExportAllBranchQuery,
 } = manageBranAPISlice;

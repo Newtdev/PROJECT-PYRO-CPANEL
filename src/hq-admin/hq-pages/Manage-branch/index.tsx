@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { CSVLink } from "react-csv";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "src/components/Button";
@@ -20,6 +21,7 @@ import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useIsSelected from "src/hooks/useIsSelected";
 import {
 	useAddHqNewBranchMutation,
+	useExportHQBranchQuery,
 	useFetchHQBranchQuery,
 } from "src/hq-admin/hq-api/manageHqApiSlice";
 import { AddNewBranch } from "./Components";
@@ -92,6 +94,8 @@ export default function ManageHQBranch() {
 		},
 		{ skip: !hqId }
 	);
+
+	const exportBranchResult = useExportHQBranchQuery({});
 
 	async function addNewBranchFunct(values: FormType) {
 		try {
@@ -166,6 +170,12 @@ export default function ManageHQBranch() {
 		},
 	};
 
+	const handleExportData = useMemo(
+		() => exportBranchResult?.currentData,
+		[exportBranchResult]
+	);
+	console.log(handleExportData);
+
 	return (
 		<section>
 			<article>
@@ -192,13 +202,15 @@ export default function ManageHQBranch() {
 							/>
 						</div>
 						<div className="w-[109px] h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
-							/>
+							<CSVLink filename="branch_data" data={handleExportData ?? []}>
+								<Button
+									text="Export"
+									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+									type="button"
+									showIcon={false}
+									onClick={() => console.log("add branch")}
+								/>
+							</CSVLink>
 						</div>
 					</div>
 				</div>

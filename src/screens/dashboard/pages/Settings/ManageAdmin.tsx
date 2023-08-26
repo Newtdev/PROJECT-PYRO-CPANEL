@@ -8,9 +8,6 @@ import {
 	SelectInput,
 } from "src/components/inputs";
 import EnhancedTable from "src/components/Table";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
 import { Button } from "src/components/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
