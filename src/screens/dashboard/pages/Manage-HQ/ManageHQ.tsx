@@ -11,7 +11,7 @@ import EnhancedTable from "src/components/Table";
 import { Button } from "src/components/Button";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
-import { FlagModal, FormModal, Modal } from "src/components/ModalComp";
+import { FormModal } from "src/components/ModalComp";
 import { useNavigate } from "react-router-dom";
 import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
@@ -19,6 +19,7 @@ import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
 import {
 	useAddNewHQMutation,
+	useExportAllHQQuery,
 	useFetchAllHQQuery,
 } from "src/api/manageHQApiSlice";
 import { TableLoader } from "src/components/LoaderContainer";
@@ -29,6 +30,7 @@ import {
 } from "src/helpers/helperFunction";
 import { useDebounce } from "src/hooks/useDebounce";
 import { format } from "date-fns";
+import { CSVLink } from "react-csv";
 
 interface HeadCell {
 	id: string;
@@ -72,7 +74,7 @@ type ProfileType = { [index: string]: string };
 
 const ManageHQ = () => {
 	const [filteredValue, setFilteredValue] = useState<string>("");
-	const [value, setValue] = React.useState<string>("one");
+
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
 	const [pagination, setPagination] = useState({ newPage: 1 });
 	const navigate = useNavigate();
@@ -82,6 +84,8 @@ const ManageHQ = () => {
 		query: debouncedValue,
 		page: pagination.newPage,
 	});
+
+	const exportHqResult = useExportAllHQQuery("");
 
 	// hqQueryResult?.currentData?.hqProfile?.totalData;
 	const handledAPIResponse = useMemo(() => {
@@ -146,6 +150,13 @@ const ManageHQ = () => {
 		setShowAddModal((prev) => !prev);
 	}
 
+	// HANDLE DATA EXPORT TO CSV
+
+	const handleExportToCSV = useMemo(
+		() => exportHqResult?.currentData?.hqProfile?.data,
+		[exportHqResult]
+	);
+
 	return (
 		<section>
 			<article>
@@ -172,13 +183,15 @@ const ManageHQ = () => {
 							/>
 						</div>
 						<div className="w-[109px]  h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
-							/>
+							<CSVLink filename="HQ_data.csv" data={handleExportToCSV ?? []}>
+								<Button
+									text="Export"
+									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+									type="button"
+									showIcon={false}
+									onClick={() => console.log("add branch")}
+								/>
+							</CSVLink>
 						</div>
 					</div>
 				</div>

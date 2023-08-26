@@ -233,7 +233,9 @@ const Transactions = () => {
 							/>
 						</div>
 						<div className="w-[109px]  h-11">
-							<CSVLink data={handleExportToCSV ?? []}>
+							<CSVLink
+								filename="transaction_data.csv"
+								data={handleExportToCSV ?? []}>
 								<Button
 									text="Export"
 									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"

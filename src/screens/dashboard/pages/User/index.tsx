@@ -4,12 +4,16 @@ import { Button } from "src/components/Button";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import ViewWalletComp from "src/components/ViewWalletComponent";
 import { SearchInput } from "src/components/inputs";
-import { FilterList } from "@mui/icons-material";
+import { CompressOutlined, FilterList } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useFetchAllUserQuery } from "src/api/manageUserApi";
+import {
+	useExportAllUserQuery,
+	useFetchAllUserQuery,
+} from "src/api/manageUserApi";
 import { TableLoader } from "src/components/LoaderContainer";
 import { useDebounce } from "src/hooks/useDebounce";
 import { format } from "date-fns";
+import { CSVLink } from "react-csv";
 
 interface HeadCellTypes {
 	id: string;
@@ -102,6 +106,8 @@ const Transactions = () => {
 		page: pagination.newPage,
 	});
 
+	const exportUserResult = useExportAllUserQuery("");
+
 	const handledAPIResponse = useMemo(() => {
 		let neededData: {
 			id: string;
@@ -167,43 +173,44 @@ const Transactions = () => {
 			amountOut: 0,
 		},
 	};
+
+	// HANDLE EXPORT ALL USER DATA
+
+	const handleUserData = useMemo(
+		() => exportUserResult.currentData?.users?.data,
+		[exportUserResult]
+	);
+
 	return (
 		<section>
 			<article>
 				<div className=" mt-6">
-					<div className="w-fit flex items-center">
-						<div className="w-[109px] h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
+					<div className="w-full flex items-center justify-between">
+						<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
+							<SearchInput
+								name="branch-search"
+								placeholder="Search"
+								value={searchValue}
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+									const target = e.target;
+									setSearchValue(target.value);
+								}}
 							/>
+						</div>
+						<div className="w-[109px] h-11">
+							<CSVLink filename="Users_list.csv" data={handleUserData ?? []}>
+								<Button
+									text="Export"
+									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+									type="button"
+									showIcon={false}
+									onClick={() => console.log("add branch")}
+								/>
+							</CSVLink>
 						</div>
 					</div>
 					<div className="h-fit w-full bg-white mt-6 shadow-lg rounded-t-lg">
-						<div className="h-full w-full bg-white flex justify-between items-center py-6 px-6">
-							{/* <div>
-									<SelectInput
-									tabData={tabData}
-									filteredValue={filteredValue}
-									onChange={handleSelectChange}
-									/>
-								</div> */}
-
-							<div className="flex w-[30%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
-								<SearchInput
-									name="branch-search"
-									placeholder="Search"
-									value={searchValue}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-										const target = e.target;
-										setSearchValue(target.value);
-									}}
-								/>
-							</div>
-						</div>
+						<div className="h-full w-full bg-white flex justify-between items-center py-6 px-6"></div>
 						<TableLoader data={userResult} tableData={handledAPIResponse || []}>
 							<ViewWalletComp {...props} />
 						</TableLoader>

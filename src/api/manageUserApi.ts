@@ -9,10 +9,17 @@ export const manageUserAPISlice = apiSlice.injectEndpoints({
 			query: (params) =>
 				`${API_ROUTE.FETCH_ALL_USERS}?search=${params?.query}&page=${params?.page}&limit=8`,
 		}),
+		exportAllUser: builder.query({
+			query: () => API_ROUTE.FETCH_ALL_USERS,
+		}),
 		fetchUser: builder.query({
 			query: (id) => `${API_ROUTE.FETCH_ALL_USER}/${id}`,
 		}),
 	}),
 });
 
-export const { useFetchAllUserQuery, useFetchUserQuery } = manageUserAPISlice;
+export const {
+	useFetchAllUserQuery,
+	useFetchUserQuery,
+	useExportAllUserQuery,
+} = manageUserAPISlice;

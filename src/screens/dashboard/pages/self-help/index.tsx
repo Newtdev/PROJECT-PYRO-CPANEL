@@ -160,15 +160,6 @@ const SelfHelp = () => {
 								}
 							/>
 						</div>
-						<div className="w-[109px]  h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
-							/>
-						</div>
 					</div>
 				</div>
 				<div className="h-fit w-full bg-white">
