@@ -11,10 +11,16 @@ import {
 import { TransactionsType } from "src/helpers/alias";
 import ReceiptCard from "src/components/ReceiptCard";
 import { SelectInput, SelectType } from "src/components/SelectInput";
-import { useGetAllTransactionsQuery } from "src/api/transactionsApiSlice";
+import {
+	useExportAllTransactionsQuery,
+	useGetAllTransactionsQuery,
+} from "src/api/transactionsApiSlice";
 import { TableLoader } from "src/components/LoaderContainer";
 import { CustomTabs } from "src/components/CustomTab";
 import { format } from "date-fns";
+import { CSVLink } from "react-csv";
+import { SearchInput } from "src/components/inputs";
+import { useDebounce } from "src/hooks/useDebounce";
 
 interface HeadCellTypes {
 	id: string;
@@ -98,13 +104,20 @@ const tabData: { id: number; value: string; label: string }[] = [
 
 const Transactions = () => {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
-	const [info, setInfo] = useState({ page: 1, source: "user_transfer" });
+	const [filterValue, setFilterValue] = useState<string>("");
+	const { debouncedValue } = useDebounce(filterValue, 700);
+
+	const [info, setInfo] = useState({
+		page: 1,
+		source: "user_transfer",
+	});
 	const [value, setValue] = useState({
 		tab: "one",
 		who: "stations",
 		for: "station_branch",
 		populate: "stationBranch",
 	});
+
 	const [transactionData, setTransactionData] = useState<{}>({});
 
 	function fn(data: { [index: string]: string | number }) {
@@ -119,6 +132,9 @@ const Transactions = () => {
 		});
 	};
 	const allTransactionsResult = useGetAllTransactionsQuery({
+		...{ ...info, ...value, debouncedValue },
+	});
+	const exportTransactionResult = useExportAllTransactionsQuery({
 		...{ ...info, ...value },
 	});
 
@@ -192,19 +208,40 @@ const Transactions = () => {
 			page: allTransactionsResult?.currentData?.transactions?.page,
 		},
 	};
+
+	// HANDLE DATA EXPORT TO CSV
+
+	const handleExportToCSV = useMemo(
+		() => exportTransactionResult?.currentData?.transactions?.data,
+		[exportTransactionResult]
+	);
 	return (
 		<section>
 			<article>
 				<div className=" mt-6 ">
-					<div className="w-fit flex items-center">
-						<div className="w-[109px]  h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
+					<div className="w-full flex justify-between items-center">
+						<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
+							<SearchInput
+								name="branch-search"
+								placeholder="Search"
+								value={filterValue}
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+									const target = e.target;
+
+									setFilterValue(() => target.value);
+								}}
 							/>
+						</div>
+						<div className="w-[109px]  h-11">
+							<CSVLink data={handleExportToCSV ?? []}>
+								<Button
+									text="Export"
+									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+									type="button"
+									showIcon={false}
+									onClick={() => console.log("add branch")}
+								/>
+							</CSVLink>
 						</div>
 					</div>
 					<div className="h-full  w-full bg-white mt-6 shadow-lg rounded-t-lg">

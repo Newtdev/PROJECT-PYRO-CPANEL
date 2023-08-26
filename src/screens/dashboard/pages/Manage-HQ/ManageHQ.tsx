@@ -87,7 +87,7 @@ const ManageHQ = () => {
 	const handledAPIResponse = useMemo(() => {
 		let neededData: ProfileType[] = [];
 		const hqProfile = hqQueryResult?.currentData?.hqProfile;
-		console.log(hqProfile);
+
 		if (hqProfile) {
 			for (const iterator of hqProfile?.data) {
 				const { id, name, email, hqAddress, phoneNumber, state, createdAt } =
@@ -107,7 +107,7 @@ const ManageHQ = () => {
 		useHandleSelectAllClick(handledAPIResponse);
 
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
-	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
+	const { handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
 
 	// API TO GET ALL HQ INFORMATION

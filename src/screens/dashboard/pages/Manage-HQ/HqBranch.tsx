@@ -20,7 +20,7 @@ import {
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
-import { SelectInput } from "src/components/SelectInput";
+import { CSVLink, CSVDownload } from "react-csv";
 
 // TABLE HEADER TYPES
 export interface HeadCellTypes {
@@ -97,6 +97,12 @@ interface HqBranchType {
 	};
 }
 
+const csvData = [
+	["firstname", "lastname", "email"],
+	["Ahmed", "Tomi", "ah@smthing.co.com"],
+	["Raed", "Labes", "rl@smthing.co.com"],
+	["Yezzi", "Min l3b", "ymin@cocococo.com"],
+];
 // ADD NEW BRANCH COMPONENTS
 const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const [value, setValue] = React.useState<string>("one");
@@ -212,14 +218,17 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 								onClick={() => setShowNewModal(true)}
 							/>
 						</div>
+
 						<div className="w-[109px]  h-11">
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								// onClick={() => console.log("add branch")}
-							/>
+							<CSVLink data={handledAPIResponse}>
+								<Button
+									text="Export"
+									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
+									type="button"
+									showIcon={false}
+									// onClick={() => console.log("add branch")}
+								/>
+							</CSVLink>
 						</div>
 					</div>
 				</div>
