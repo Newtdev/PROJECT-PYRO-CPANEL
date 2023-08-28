@@ -145,7 +145,17 @@ const SelfHelp = () => {
 		<section>
 			<article>
 				<div className="flex justify-between items-center mt-6 h-20 ">
-					<div className=" flex items-center justify-end w-full">
+					<div className=" flex items-center justify-between w-full">
+						<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
+							<SearchInput
+								name="branch-search"
+								placeholder="Search"
+								value={""}
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+									const target = e.target;
+								}}
+							/>
+						</div>
 						<div className="w-[189px] h-11 mr-6">
 							<Button
 								text="Add Self Help"

@@ -127,7 +127,7 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 	const { handleSelectAllClick, selected, setSelected } =
 		useHandleSelectAllClick(handledAPIResponse);
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
-	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
+	const { handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
 	const [showAddModal, setShowNewModal] = useState(false);
 	const [AddHQBranch, addHqBranchResult] = useAddHqNewBranchMutation();
@@ -146,7 +146,7 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 
 	function fn(data: { [index: string]: string | number }) {
 		navigate(`/manage-branch/${data?.name}`, {
-			state: { name: data.name, id: data.id },
+			state: { name: data.name, id: data.id, status: data?.status },
 		});
 	}
 

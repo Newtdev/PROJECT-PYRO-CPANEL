@@ -22,6 +22,8 @@ export enum API_ROUTE {
 
 	ADD_HQ_BRANCH = "system-admin/station-branch",
 	HQ_ADMIN_LOGIN = "auth/station/login-email",
+	// station/branch/646def63111438d2777c5d06
+	STATION_BRANCH_CHANGE = "station/branch",
 }
 
 export enum APP_ROUTE {

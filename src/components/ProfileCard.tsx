@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { splitByUpperCase } from "src/helpers/helperFunction";
+import { useChangeStatusMutation } from "src/api/manageBranchAPISlice";
+import {
+	handleNotification,
+	splitByUpperCase,
+	SuccessNotification,
+} from "src/helpers/helperFunction";
+import useCustomLocation from "src/hooks/useCustomLocation";
 import { Button } from "./Button";
 import Image from "./Image";
 import { FlagModal, Modal } from "./ModalComp";
@@ -18,14 +24,30 @@ interface ProfileType {
 	onClick?: () => void;
 }
 
-let showModal = false;
 export default function ProfileCard(props: ProfileType) {
+	const { routePath } = useCustomLocation();
 	const [showModal, setShowModal] = useState<boolean>(false);
 
-	const hanldeSuspendModal = () => {
-		// props.fn();
-		setShowModal(() => !showModal);
+	const [changeStatus, changeStatusResult] = useChangeStatusMutation();
+	const handleModal = () => setShowModal(() => !showModal);
+
+	const handleSuspendModal = async () => {
+		try {
+			const response = await changeStatus({
+				status:
+					props?.data.status === "available" ? "unavailable" : "available",
+				id: routePath.id,
+			}).unwrap();
+			if (response) {
+				SuccessNotification(response?.data?.message);
+				setShowModal(() => false);
+			}
+		} catch (error: any) {
+			setShowModal(() => false);
+			handleNotification(error);
+		}
 	};
+
 	return (
 		<div className="w-full h-fit bg-white shadow-lg rounded-lg text-[14px] py-6">
 			{props.showHeader ? (
@@ -102,10 +124,12 @@ export default function ProfileCard(props: ProfileType) {
 				<div className=" px-10 py-4 mt-4">
 					<div className="w-[189px] h-11 ">
 						<Button
-							text="Suspend"
+							text={
+								props?.data.status === "available" ? "Suspend" : "Unsuspend"
+							}
 							className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-center"
 							type="button"
-							onClick={hanldeSuspendModal}
+							onClick={handleModal}
 						/>
 					</div>
 				</div>
@@ -113,9 +137,12 @@ export default function ProfileCard(props: ProfileType) {
 			{showModal && (
 				<Modal>
 					<FlagModal
-						info="Are you sure you want to flag?"
-						onClose={() => setShowModal(false)}
-						onConfirmation={() => console.log("")}
+						info={`Are you sure you want to ${
+							props?.data.status === "available" ? "Suspend" : "Unsuspend"
+						}?`}
+						onClose={handleModal}
+						onConfirmation={handleSuspendModal}
+						showModal={changeStatusResult?.isLoading}
 					/>
 				</Modal>
 			)}

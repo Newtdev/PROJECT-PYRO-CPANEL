@@ -37,6 +37,15 @@ export const manageBranAPISlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result) =>
 				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
 		}),
+		changeStatus: builder.mutation({
+			query: ({ id, ...body }): any => ({
+				url: `${API_ROUTE.ADD_NEW_BRANCH}/${id}`,
+				method: "PATCH",
+				body: { ...body },
+			}),
+			invalidatesTags: (result) =>
+				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGER_BRANCH) as any,
+		}),
 	}),
 });
 export const {
@@ -45,4 +54,5 @@ export const {
 	useFetchBranchQuery,
 	useAddNewHQBranchMutation,
 	useExportAllBranchQuery,
+	useChangeStatusMutation,
 } = manageBranAPISlice;

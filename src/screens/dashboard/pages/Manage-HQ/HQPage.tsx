@@ -9,11 +9,11 @@ import useCustomLocation from "src/hooks/useCustomLocation";
 import { useFetchSingleHQQuery } from "src/api/manageHQApiSlice";
 import { LoaderContainer } from "src/components/LoaderContainer";
 import HqBranch from "./HqBranch";
+import { useChangeStatusMutation } from "src/api/manageBranchAPISlice";
 
 export default function HQPage() {
 	const { routePath } = useCustomLocation();
 	const [cardName, setCardName] = useState<string>("view profile");
-
 	const singleHqResult = useFetchSingleHQQuery({
 		id: routePath?.id,
 	});
