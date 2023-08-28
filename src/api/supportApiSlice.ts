@@ -8,7 +8,7 @@ import { apiSlice } from "./apiSlice";
 export const supportApislice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllTicket: builder.query({
-			query: (params) => `${API_ROUTE.TICKET}`,
+			query: (params) => `${API_ROUTE.TICKET}?orderBy=createdAt:desc`,
 			// providesTags: (result) =>
 			// 	providesTagList(result.selfHelps.data, RTKTAG.SELP_HELP) as any,
 		}),

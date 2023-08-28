@@ -7,7 +7,7 @@ import { apiSlice } from "./apiSlice";
 export const feedsAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllFeeds: builder.query({
-			query: (params) => `${API_ROUTE.FEEDS}`,
+			query: (params) => `${API_ROUTE.FEEDS}?orderBy=createdAt:desc`,
 			providesTags: (result) =>
 				providesTagList(result.feeds.data, RTKTAG.FEEDS) as any,
 		}),

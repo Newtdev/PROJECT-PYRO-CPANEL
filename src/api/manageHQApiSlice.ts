@@ -6,7 +6,7 @@ export const manageHqAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllHQ: builder.query({
 			query: (params) =>
-				`${API_ROUTE.GET_ALL_HQ}?search=${params?.query}&page=${params?.page}`,
+				`${API_ROUTE.GET_ALL_HQ}?search=${params?.query}&page=${params?.page}&orderBy=createdAt:desc`,
 			providesTags: (result) =>
 				providesTagList(result?.hqProfile?.data, RTKTAG.MANAGE_HQ) as any,
 		}),

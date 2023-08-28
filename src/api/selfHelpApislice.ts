@@ -8,7 +8,8 @@ import { apiSlice } from "./apiSlice";
 export const selfHelpAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllSelfHelp: builder.query({
-			query: (params) => `${API_ROUTE.SELF_HELP}?page=${params?.page}`,
+			query: (params) =>
+				`${API_ROUTE.SELF_HELP}?page=${params?.page}&orderBy=createdAt:desc`,
 			providesTags: (result) =>
 				providesTagList(result.selfHelps.data, RTKTAG.SELP_HELP) as any,
 		}),
