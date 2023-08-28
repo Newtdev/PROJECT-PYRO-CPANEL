@@ -100,6 +100,7 @@ const filterData: SelectType[] = [
 const tabData: { id: number; value: string; label: string }[] = [
 	{ id: 1, value: "one", label: "Station branch" },
 	{ id: 2, value: "two", label: "Users" },
+	{ id: 3, value: "three", label: "HQ" },
 ];
 
 const Transactions = () => {

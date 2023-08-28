@@ -12,6 +12,7 @@ import {
 	Settings,
 	Support,
 	Transactions,
+	Users,
 } from "src/components/Icons";
 import { APP_ROUTE, HQ_APP_ROUTE, PERMISSION } from "src/helpers/Constant";
 import { useAuth } from "src/hooks/useAuth";
@@ -56,7 +57,7 @@ const linksData = [
 		name: "Users",
 		route: "Users",
 		priviledges: [PERMISSION.SYSTEM_ADMIN],
-		Icon: <Transactions />,
+		Icon: <Users />,
 		link: APP_ROUTE.USER,
 	},
 	{
