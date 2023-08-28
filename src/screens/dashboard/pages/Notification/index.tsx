@@ -1,5 +1,5 @@
 import { HighlightOffOutlined } from "@mui/icons-material";
-import React, { ReactElement, useMemo, useState } from "react";
+import React, { Fragment, ReactElement, useMemo, useState } from "react";
 import {
 	useFetchAllNotificationQuery,
 	useSendNotificationMutation,
@@ -9,6 +9,7 @@ import { TableLoader } from "src/components/LoaderContainer";
 import { Modal } from "src/components/ModalComp";
 import EnhancedTable from "src/components/Table";
 import {
+	forEnums,
 	handleDateFormat,
 	handleNotification,
 	SuccessNotification,
@@ -101,17 +102,20 @@ export default function Notification() {
 
 	const handledAPIResponse = useMemo(() => {
 		const hqProfile = notificationResult?.currentData?.data || [];
+
 		return hqProfile?.data?.reduce(
 			(
 				acc: { [index: string]: string }[],
-				cur: { [index: string]: string }
+				cur: {
+					[index: string]: string;
+				}
 			) => [
 				...acc,
 				{
 					id: cur?.id,
 					title: cur?.title,
 					message: cur?.message,
-					for: cur.for,
+					for: forEnums[cur?.for],
 					createdAt: handleDateFormat(cur?.createdAt),
 				},
 			],
@@ -142,26 +146,28 @@ export default function Notification() {
 			<article>
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  py-3">
 					{HQData.map((dt) => (
-						<CardButton
-							name={dt.name}
-							icon={dt.icon}
-							link={dt.link}
-							height={"98px"}
-							onClick={() => {
-								setShowAddModal(true);
-								switch (dt.name.trim().toLowerCase()) {
-									case "send to hqs":
-										setCardName("stationHQ");
-										break;
-									case "send to branch":
-										setCardName("stationBranch");
-										break;
-									default:
-										setCardName("user");
-										break;
-								}
-							}}
-						/>
+						<Fragment key={dt.id}>
+							<CardButton
+								name={dt.name}
+								icon={dt.icon}
+								link={dt.link}
+								height={"98px"}
+								onClick={() => {
+									setShowAddModal(true);
+									switch (dt.name.trim().toLowerCase()) {
+										case "send to hqs":
+											setCardName("stationHQ");
+											break;
+										case "send to branch":
+											setCardName("stationBranch");
+											break;
+										default:
+											setCardName("user");
+											break;
+									}
+								}}
+							/>
+						</Fragment>
 					))}
 				</div>
 

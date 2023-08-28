@@ -158,6 +158,18 @@ export const Category: CategoryType | any = {
 	wallet_transfer: "Wallet transfer",
 };
 
+interface ForEnumsType {
+	stationBranch: string;
+	stationHq: string;
+	user: string;
+}
+
+export const forEnums: ForEnumsType | any = {
+	stationBranch: "Station Branch",
+	stationHq: "Station HQ",
+	user: "User",
+};
+
 export const generatePassword = () => {
 	const characters =
 		"1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
