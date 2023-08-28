@@ -62,6 +62,7 @@ const Dashboard = () => {
 			name: "Users",
 		},
 	];
+
 	return (
 		<LoaderContainer data={response}>
 			<section>

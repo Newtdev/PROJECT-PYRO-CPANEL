@@ -70,6 +70,7 @@ export default function UserProfile() {
 							data={handleApiResponse?.profile || {}}
 							imageURL={handleApiResponse?.profilePicture || ""}
 							showImage={true}
+							flag={true}
 						/>
 					) : null}
 				</LoaderContainer>

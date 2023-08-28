@@ -39,6 +39,9 @@ const ForgotPassword = (props: { host: string }) => {
 	const handleRequest = async (values: ForgotValidationtype) => {
 		try {
 			const response = await ForgetPassword(values);
+			if (!response) {
+				navigate(APP_ROUTE.RESET_PASSWORD);
+			}
 			handleNotification(response);
 		} catch (error: any) {
 			handleNotification(error);
