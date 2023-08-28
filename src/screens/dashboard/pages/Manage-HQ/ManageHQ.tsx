@@ -133,7 +133,7 @@ const ManageHQ = () => {
 		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
-		showCheckBox: true,
+
 		isSelected,
 		handleClick,
 		handleSelectAllClick,

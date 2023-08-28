@@ -133,7 +133,6 @@ const ManageBranch = () => {
 		headCells,
 		handleRowClick,
 		showFlag: true,
-		showCheckBox: true,
 		isSelected,
 		handleClick,
 		handleSelectAllClick,

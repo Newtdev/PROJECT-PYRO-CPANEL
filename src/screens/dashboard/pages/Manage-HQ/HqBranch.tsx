@@ -157,7 +157,6 @@ const HqBranch = (props: { branchInfo: HqBranchType[] }) => {
 		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
-		showCheckBox: true,
 		isSelected,
 		handleClick,
 		handleSelectAllClick,

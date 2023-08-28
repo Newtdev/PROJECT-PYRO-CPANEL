@@ -19,6 +19,7 @@ const UploadIcon = () => (
 export const Upload = (props: {
 	name: string;
 	onChange: ChangeEventHandler<HTMLInputElement>;
+	text?: string;
 }) => {
 	return (
 		<div className="flex h-full w-full items-center justify-center rounded-xl border  shadow-sm">
@@ -27,9 +28,7 @@ export const Upload = (props: {
 					<div>
 						<UploadIcon />
 					</div>
-					<span className="text-bold text-sm mt-4">
-						Click to upload Image or videos
-					</span>
+					<span className="text-bold text-sm mt-4">{props.text}</span>
 				</div>
 				<input
 					id="files"

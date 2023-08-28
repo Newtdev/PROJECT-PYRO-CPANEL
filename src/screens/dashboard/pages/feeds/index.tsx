@@ -80,7 +80,9 @@ export default function Feeds() {
 								i: Key
 							) => {
 								return (
-									<div className="h-fit mt-6 border px-2 py-4 border-[#636685] rounded-xl">
+									<div
+										key={_v.id}
+										className="h-fit mt-6 border px-2 py-4 border-[#636685] rounded-xl">
 										<div className="flex justify-end w-full pr-2 capitalize text-sm">
 											{formatDateToSocialMediaStandard(_v?.createdAt)}
 										</div>
@@ -295,6 +297,7 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 					<div className="w-full h-24 mt-4">
 						<Upload
 							name="avatar"
+							text="Click to upload Image or videos"
 							onChange={(e: ChangeEvent<HTMLInputElement>) => {
 								uploadSelfImage(e);
 							}}
