@@ -297,7 +297,7 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 					<div className="w-full h-24 mt-4">
 						<Upload
 							name="avatar"
-							text="Click to upload Image or videos"
+							text="Click to upload image "
 							onChange={(e: ChangeEvent<HTMLInputElement>) => {
 								uploadSelfImage(e);
 							}}

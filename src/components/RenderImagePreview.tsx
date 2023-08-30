@@ -46,7 +46,7 @@ export const ShowVideoAndImage = ({
 									onClick={() => removeImage(i)}>
 									<Close fontSize="small" />
 								</div>
-								<video width={"100%"} src={_v} controls></video>
+								<video width="100%" src={_v} controls></video>
 							</div>
 						);
 					})}
