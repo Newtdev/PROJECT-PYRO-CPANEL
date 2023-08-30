@@ -21,6 +21,7 @@ import BranchReview from "../screens/dashboard/pages/Manage-branch/BranchReview"
 import Users from "../screens/dashboard/pages/User";
 import ManageHQ from "../screens/dashboard/pages/Manage-HQ/ManageHQ";
 import SingleSelfHelp from "src/screens/dashboard/pages/self-help/SingleSelfHelp";
+import SingleAdmin from "src/screens/dashboard/pages/Settings/SingleAdmin";
 // const UserWallet = lazy(
 // 	() => import("./screens/dashboard/pages/User/UserWallet")
 // );
@@ -78,6 +79,7 @@ export const AdminRoute = (host) => {
 		{ path: APP_ROUTE.NOTIFICATION, element: <Notification /> },
 		{ path: APP_ROUTE.USER, element: <Users /> },
 		{ path: APP_ROUTE.USER_PROFILE, element: <UserProfile /> },
+		{ path: APP_ROUTE.SINGLE_ADMIN, element: <SingleAdmin /> },
 	].map((route, i) => (
 		<Route path={route.path} index element={route.element} />
 	));

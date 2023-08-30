@@ -114,7 +114,7 @@ const ResetPassword = (props: { host: string }) => {
 
 				<div className="w-[70%] mt-10">
 					<Button
-						text="LOG IN"
+						text="RESET"
 						disabled={
 							resetPasswordResult.isLoading || hqResetPasswordResult.isLoading
 						}
@@ -128,7 +128,7 @@ const ResetPassword = (props: { host: string }) => {
 				<div className="flex justify-between w-[70%] items-center text-[16px] font-normal">
 					<div className="flex items-center">
 						<Button
-							text="Resend me OTP again"
+							text="Resend OTP"
 							// disabled={
 							// 	resetPasswordResult.isLoading ||
 							// 	hqResetPasswordResult.isLoading

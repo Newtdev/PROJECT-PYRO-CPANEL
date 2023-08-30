@@ -64,7 +64,7 @@ const ForgotPassword = (props: { host: string }) => {
 		<AuthWrapper name="Enter the email associated to your account">
 			<form
 				onSubmit={Formik.handleSubmit}
-				className="w-full flex flex-col justify-around items-center mt-10">
+				className="w-full flex flex-col justify-around  items-center mt-10">
 				<FormInput
 					width="70%"
 					id="email"
@@ -82,7 +82,7 @@ const ForgotPassword = (props: { host: string }) => {
 
 				<div className="w-[70%] mt-10">
 					<Button
-						text="LOG IN"
+						text="SUBMIT"
 						disabled={
 							forgotPasswordResult.isLoading || hqForgotPasswordResult.isLoading
 						}

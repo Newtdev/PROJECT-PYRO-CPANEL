@@ -7,6 +7,7 @@ import { RootState } from "src/store/store";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: process.env.REACT_APP_API_URL,
+	// timeout: 12000,
 	prepareHeaders: (headers, { getState }) => {
 		const appState = getState() as RootState;
 		const token = appState?.authSlice?.token?.accessToken;

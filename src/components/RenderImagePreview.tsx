@@ -14,7 +14,7 @@ export const ShowVideoAndImage = ({
 	return (
 		<>
 			{type.toLowerCase() === "image" && media.length > 0 ? (
-				<div className="w-full flex items-center overflow-x-auto py-2 h-fit">
+				<div className="w-full flex items-center overflow-x-auto py-2 h-40">
 					{media?.map((_v: string, i: React.Key) => {
 						return (
 							<div className="p-2 relative" key={i}>

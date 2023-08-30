@@ -68,6 +68,7 @@ export default function Feeds() {
 				</div>
 				<LoaderContainer data={feedsResult || deleteFeedsResult}>
 					<div className="w-full h-fit grid grid-cols-2 mt-10 gap-6 px-10">
+						{console.log(handleApiResponse?.data)}
 						{handleApiResponse?.data?.map(
 							(
 								_v: {
@@ -97,8 +98,8 @@ export default function Feeds() {
 										<div className="h-56 w-full px-2 mt-4">
 											<Image
 												image={
-													_v?.media[1]?.url
-														? _v?.media[1]?.url
+													_v?.media[0]?.url
+														? _v?.media[0]?.url
 														: "https://static.vecteezy.com/packs/media/photo/hero-800px-9fbe463f.jpg"
 												}
 												width={100}
@@ -131,9 +132,10 @@ export default function Feeds() {
 					</div>
 				</LoaderContainer>
 				{showDeleteModal.action && (
-					<Modal styles="absolute top-0 left-0  h-full w-full flex justify-center pt-4">
+					<Modal>
 						<FlagModal
 							info="Are you sure you want to delete?"
+							showModal={deleteFeedsResult.isLoading}
 							onClose={() =>
 								setShowDeleteModal((prevState) => {
 									return { ...prevState, action: false };
@@ -250,8 +252,6 @@ const AddNewSelfHelp = ({ close }: { close: () => void }) => {
 
 	const removeImage = useCallback(
 		(id: number | string) => {
-			if (Formik.values.media?.length === 1) return;
-
 			const data = Formik.values.media?.filter(
 				(_, i: string | number) => i !== id
 			);

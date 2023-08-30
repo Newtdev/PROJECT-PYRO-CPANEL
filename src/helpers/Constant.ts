@@ -59,6 +59,7 @@ export enum APP_ROUTE {
 	ADD_NEW_SELF_HELP = "/add/new/self-help",
 	ADD_NEW_SELF_HELP_SINGLE = "/self-help/:name",
 	FEEDS = "/feeds",
+	SINGLE_ADMIN = "/settings/manage-admin/:id",
 }
 
 export enum HQ_APP_ROUTE {

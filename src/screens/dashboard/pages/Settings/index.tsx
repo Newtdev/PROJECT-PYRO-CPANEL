@@ -19,7 +19,7 @@ import {
 import ProfileCard from "src/components/ProfileCard";
 import ManageAdmin from "./ManageAdmin";
 import { LoaderContainer } from "src/components/LoaderContainer";
-import { Modal } from "src/components/ModalComp";
+import { FormModal, Modal } from "src/components/ModalComp";
 import { HighlightOffOutlined } from "@mui/icons-material";
 import { Lines } from "src/components/Icons";
 import { Button } from "src/components/Button";
@@ -39,7 +39,6 @@ import {
 } from "src/helpers/helperFunction";
 import Image from "src/components/Image";
 import ManageWebsite from "./ManageWebsite";
-import { ShowVideoAndImage } from "src/components/RenderImagePreview";
 import { useAuth } from "src/hooks/useAuth";
 
 const HQData: cardBtnType[] = [
@@ -153,9 +152,9 @@ const AddbranchValidation = [
 		email: Yup.string().label("email").email().required(),
 	}),
 	Yup.object({
-		oldPassword: Yup.string().label("Old password").required(),
-		password: Yup.string().label("Password").required(),
-		confirmPassword: Yup.string().label("Password"),
+		// oldPassword: Yup.string().label("Old password").required(),
+		// password: Yup.string().label("Password").required(),
+		// confirmPassword: Yup.string().label("Password"),
 		avatar: Yup.string().notRequired(),
 		id: Yup.string().notRequired(),
 		accountStatus: Yup.object({
@@ -200,7 +199,7 @@ const ResetPassword = (props: {
 			id: props.data?.id,
 			accountStatus: {
 				status: "confirmed",
-				reason: "",
+				reason: "...",
 			},
 		},
 		validateOnBlur: true,
@@ -367,137 +366,108 @@ const ResetPassword = (props: {
 	}, [props]);
 
 	return (
-		<Modal>
-			<div className="absolute w-full h-full right-0 top-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center">
-				<div className="w-[50%] max-w-[511px] h-fit flex flex-col justify-center rounded-[20px] pb-10  bg-white">
-					<div className="w-full h-16 px-10 pt-2 pb-2 mt-2 font-bold text-xl text-[#002E66] flex justify-between items-center">
-						<h1>Update Admin Info</h1>
-						<button onClick={props.close} disabled={false}>
-							<HighlightOffOutlined
-								fontSize="large"
-								className="text-black cursor-pointer"
+		<FormModal name="Update Admin Info" onClick={props.close}>
+			<form
+				onSubmit={Formik.handleSubmit}
+				className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto">
+				{step === 0 ? (
+					<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+						{FormData.slice(0, 4).map((_v, i) => (
+							<FormInput
+								width="w-full"
+								id={_v.id}
+								name={_v.name}
+								type={"text"}
+								styles={_v.styles}
+								labelStyles={_v.labelStyles}
+								onChange={_v.onChange}
+								value={_v.value}
+								onBlur={_v.onBlur}
+								disabled={_v.disabled}
+								// error={_v.error}
+								// touched={_v.touched}
 							/>
-						</button>
+						))}
+						<SelectInput
+							labelStyles={labelStyles}
+							data={[
+								"super_admin",
+								"sub_admin",
+								"HQ_admin",
+								"transaction_admin",
+								"support_admin",
+							]}
+							disabled={addNewResult.isLoading}
+							value={Formik.values.role}
+							onChange={Formik.handleChange}
+							name="Select role"
+							id="role"
+						/>
 					</div>
-					<div className="w-full">
-						<Lines />
-					</div>
-					<form
-						onSubmit={Formik.handleSubmit}
-						className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto">
-						{step === 0 ? (
-							<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-								{FormData.slice(0, 4).map((_v, i) => (
-									<FormInput
-										width="w-full"
-										id={_v.id}
-										name={_v.name}
-										type={"text"}
-										styles={_v.styles}
-										labelStyles={_v.labelStyles}
-										onChange={_v.onChange}
-										value={_v.value}
-										onBlur={_v.onBlur}
-										disabled={_v.disabled}
-										// error={_v.error}
-										// touched={_v.touched}
-									/>
-								))}
-								<SelectInput
-									labelStyles={labelStyles}
-									data={[
-										"super_admin",
-										"sub_admin",
-										"HQ_admin",
-										"transaction_admin",
-										"support_admin",
-									]}
-									disabled={addNewResult.isLoading}
-									value={Formik.values.role}
-									onChange={Formik.handleChange}
-									name="Select role"
-									id="role"
+				) : null}
+				{step === 1 ? (
+					<div className="grid grid-cols-1 w-full gap-x-2 content-center pt-4">
+						{FormData.slice(-3).map((_v, i) => (
+							<PasswordInput
+								width="w-full"
+								id={_v.id}
+								name={_v.name}
+								type={"text"}
+								styles={_v.styles}
+								labelStyles={_v.labelStyles}
+								onChange={_v.onChange}
+								value={_v.value}
+								onBlur={_v.onBlur}
+								disabled={_v.disabled}
+								// error={_v.error}
+								// touched={_v.touched}
+							/>
+						))}
+
+						{Formik.values.avatar ? (
+							<div>
+								<Image
+									image={Formik.values.avatar || ""}
+									width={100}
+									height={100}
+									styles="mx-auto object-fit"
 								/>
 							</div>
 						) : null}
-						{step === 1 ? (
-							<div className="grid grid-cols-1 w-full gap-x-2 content-center pt-4">
-								{FormData.slice(-3).map((_v, i) => (
-									<PasswordInput
-										width="w-full"
-										id={_v.id}
-										name={_v.name}
-										type={"text"}
-										styles={_v.styles}
-										labelStyles={_v.labelStyles}
-										onChange={_v.onChange}
-										value={_v.value}
-										onBlur={_v.onBlur}
-										disabled={_v.disabled}
-										// error={_v.error}
-										// touched={_v.touched}
-									/>
-								))}
 
-								<div className="w-full h-full">
-									<TextArea
-										labelStyles={labelStyles}
-										name="Reason"
-										id="accountStatus.reason"
-										onChange={(e) => {
-											Formik.setFieldValue(
-												"accountStatus.reason",
-												e.target.value
-											);
-											Formik.setFieldValue("accountStatus.status", "confirmed");
-										}}
-										value={Formik.values?.accountStatus?.reason || ""}
-										disabled={false}
-									/>
-								</div>
-								{Formik.values.avatar ? (
-									<div>
-										<Image
-											image={Formik.values.avatar || ""}
-											width={100}
-											height={100}
-											styles="mx-auto object-fit"
-										/>
-									</div>
-								) : null}
-
-								<div className="w-full h-24 mt-4">
-									<Upload
-										name="avatar"
-										onChange={(e: ChangeEvent<HTMLInputElement>) => {
-											uploadAvatar(e);
-										}}
-									/>
-								</div>
-							</div>
-						) : null}
-
-						<div className="w-full">
-							{step === 0 ? (
-								<Button
-									text="Back"
-									disabled={addNewResult?.isLoading}
-									onClick={() => setStep(() => 0)}
-									className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-									type="button"
-								/>
-							) : null}
-							<Button
-								text={step === 1 ? "Submit" : "Next"}
-								disabled={addNewResult?.isLoading}
-								showModal={addNewResult?.isLoading}
-								className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-								type="submit"
+						<div className="w-full h-24 mt-4">
+							<Upload
+								name="avatar"
+								text="Profile picture"
+								onChange={(e: ChangeEvent<HTMLInputElement>) => {
+									uploadAvatar(e);
+								}}
 							/>
 						</div>
-					</form>
+					</div>
+				) : null}
+
+				<div className="w-full">
+					{step === 1 ? (
+						<Button
+							text="Back"
+							disabled={addNewResult?.isLoading}
+							onClick={() => setStep(() => 0)}
+							className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
+							type="button"
+						/>
+					) : null}
+					<Button
+						text={step === 1 ? "Submit" : "Next"}
+						disabled={addNewResult?.isLoading}
+						showModal={addNewResult?.isLoading}
+						className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
+						type="submit"
+					/>
 				</div>
-			</div>
-		</Modal>
+			</form>
+			{/* </div>
+			</div> */}
+		</FormModal>
 	);
 };

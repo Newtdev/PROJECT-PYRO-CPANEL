@@ -1,4 +1,3 @@
-import { Flag } from "@mui/icons-material";
 import React, { useState, useMemo } from "react";
 import { ReactElement } from "react";
 import {
@@ -11,7 +10,7 @@ import EnhancedTable from "src/components/Table";
 import { Button } from "src/components/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FlagModal, Modal } from "src/components/ModalComp";
+import { Modal } from "src/components/ModalComp";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { Lines } from "src/components/Icons";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +18,6 @@ import useHandleSelectAllClick from "src/hooks/useHandleSelectAllClick";
 import useHandleSingleSelect from "src/hooks/useHandleSingleSelect";
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import useIsSelected from "src/hooks/useIsSelected";
-import { ErrorType } from "src/helpers/alias";
 import { TableLoader } from "src/components/LoaderContainer";
 import {
 	handleDateFormat,
@@ -29,7 +27,6 @@ import {
 import { useDebounce } from "src/hooks/useDebounce";
 import {
 	useAddAdminMutation,
-	useGetAdminQuery,
 	useGetAllAdminQuery,
 } from "src/api/setttingsApislice";
 import { nanoid } from "nanoid";
@@ -102,7 +99,7 @@ const AddNewHQ = (props: { close: () => void }) => {
 				props.close();
 			}
 			SuccessNotification(response?.data?.message);
-		} catch (error: ErrorType | any) {
+		} catch (error: any) {
 			props.close();
 			handleNotification(error);
 		}
@@ -348,7 +345,7 @@ const ManageAdmin = () => {
 		useHandleSelectAllClick(handledAPIResponse);
 
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
-	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
+	const { handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
 
 	// API TO GET ALL HQ INFORMATION
@@ -360,17 +357,16 @@ const ManageAdmin = () => {
 	};
 
 	// TABLE FILTER TAB
-
 	function fn(data: { [index: string]: string | number }) {
-		return;
+		navigate(`/settings/manage-admin/${data?.firstName}`, {
+			state: { name: data?.firstName, data },
+		});
 	}
 
 	let dataToChildren: any = {
 		rows: handledAPIResponse || [],
 		headCells,
 		handleRowClick,
-		showFlag: true,
-		showCheckBox: true,
 		isSelected,
 		handleClick,
 		handleSelectAllClick,
@@ -394,7 +390,7 @@ const ManageAdmin = () => {
 					<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
 						<SearchInput
 							name="branch-search"
-							placeholder="Search for names, branches, category"
+							placeholder="Search for names"
 							value={filteredValue}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								const target = e.target;
@@ -419,15 +415,7 @@ const ManageAdmin = () => {
 						data={adminListQueryResult}
 						tableData={handledAPIResponse || []}>
 						<div className="h-full w-full">
-							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg ">
-								<div className="flex justify-end items-center h-11 text-sm pr-12 cursor-pointer w-full">
-									<Flag
-										color="error"
-										fontSize="large"
-										onClick={() => setShowModal(true)}
-									/>
-								</div>
-							</div>
+							<div className="h-full w-full flex justify-between items-center py-6 shadow-lg rounded-t-lg "></div>
 
 							<div className="relative">
 								<EnhancedTable {...dataToChildren} />
@@ -436,15 +424,6 @@ const ManageAdmin = () => {
 					</TableLoader>
 
 					{/* FLAG A HQ */}
-					{showModal && (
-						<Modal styles="absolute right-10 top-56">
-							<FlagModal
-								info="Are you sure you want to flag?"
-								onClose={() => setShowModal(false)}
-								onConfirmation={() => console.log(selected)}
-							/>
-						</Modal>
-					)}
 
 					{showAddModal ? (
 						<Modal>
