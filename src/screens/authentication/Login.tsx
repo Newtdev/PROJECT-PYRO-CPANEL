@@ -36,13 +36,9 @@ const Login = (props: { host: string }) => {
 
 	const Login = useCallback(
 		async (values: LoginValidationtype) => {
-			if (props.host === "hq") {
-				return hqLogin(values).unwrap();
-			} else {
-				return login(values).unwrap();
-			}
+			return hqLogin(values).unwrap();
 		},
-		[hqLogin, login, props.host]
+		[hqLogin]
 	);
 
 	const rememberedLoginDetails = useMemo(() => {

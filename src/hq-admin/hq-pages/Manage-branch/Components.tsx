@@ -78,10 +78,10 @@ export const AddNewBranch = (props: {
 	});
 
 	const getLong = (value: number) => {
-		Formik.setFieldValue("location.longitude", value);
+		Formik.setFieldValue("location.longitude", String(value));
 	};
 	const getLat = (value: number) => {
-		Formik.setFieldValue("location.latitude", value);
+		Formik.setFieldValue("location.latitude", String(value));
 	};
 
 	const getAddress = (value: string) => {

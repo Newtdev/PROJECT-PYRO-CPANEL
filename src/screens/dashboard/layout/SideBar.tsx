@@ -42,6 +42,15 @@ const linksData = [
 		priviledges: [PERMISSION.SYSTEM_ADMIN],
 		link: APP_ROUTE.MANAGEHQ,
 	},
+	{
+		id: 2,
+		name: "Manage Branch",
+		route: "Manage Branch",
+		priviledges: [PERMISSION.HQ],
+		Icon: <Branch />,
+		link: APP_ROUTE.BRANCH,
+		hq_link: HQ_APP_ROUTE.BRANCH,
+	},
 
 	{
 		id: 3,

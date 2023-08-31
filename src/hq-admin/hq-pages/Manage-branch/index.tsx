@@ -77,6 +77,25 @@ const headCells: readonly HeadCellTypes[] = [
 	},
 ];
 
+const initialValues = {
+	// stationHQ: routePath?.id,
+	name: "",
+	phoneNumber: "",
+	location: {
+		state: "",
+		latitude: "",
+		longitude: "",
+		address: "",
+	},
+	branchManager: {
+		firstName: "",
+		lastName: "",
+		email: "",
+		phoneNumber: "",
+		password: "",
+	},
+};
+
 export default function ManageHQBranch() {
 	const { user } = useAuth();
 	const hqId = user?.stationHQ;
@@ -98,6 +117,7 @@ export default function ManageHQBranch() {
 	const exportBranchResult = useExportHQBranchQuery({});
 
 	async function addNewBranchFunct(values: FormType) {
+		console.log(values);
 		try {
 			const response = await AddNewBranchRequest(values).unwrap();
 			if (response) {
@@ -156,8 +176,6 @@ export default function ManageHQBranch() {
 		rows: handledAPIResponse?.normalizedAPIResponse || [],
 		headCells,
 		handleRowClick,
-		showFlag: false,
-		showCheckBox: true,
 		isSelected,
 		handleClick,
 		handleSelectAllClick,
@@ -174,7 +192,6 @@ export default function ManageHQBranch() {
 		() => exportBranchResult?.currentData,
 		[exportBranchResult]
 	);
-	console.log(handleExportData);
 
 	return (
 		<section>
@@ -183,7 +200,7 @@ export default function ManageHQBranch() {
 					<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
 						<SearchInput
 							name="branch-search"
-							placeholder="Search for names, branches, category"
+							placeholder="Search for name"
 							value={filteredValue}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								const target = e.target;
@@ -240,6 +257,7 @@ export default function ManageHQBranch() {
 							name="Add branch"
 							onClick={() => setShowAddModal((prevState) => !prevState)}>
 							<AddNewBranch
+								initalValue={initialValues}
 								makeApiRequest={(values: FormType) => addNewBranchFunct(values)}
 								apiResult={addNewBranchResult}
 							/>

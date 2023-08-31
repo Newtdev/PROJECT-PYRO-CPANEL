@@ -39,7 +39,6 @@ import HqSetting from "../hq-pages/Settings";
 // );
 
 export const HQ_Route = (host: string) => {
-	console.log("hQ");
 	return [
 		{
 			path: APP_ROUTE.DASHBOARD,

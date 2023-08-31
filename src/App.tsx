@@ -60,7 +60,8 @@ function App() {
 						element={<ResetPassword host={domainHost} />}
 					/>
 					<Route path={APP_ROUTE.DASHBOARD} element={<Entry />}>
-						{AdminRoute(domainHost)}
+						{/* {AdminRoute(domainHost)} */}
+						{HQ_Route(domainHost)}
 						{/* {domainHost === SUB_DOMAIN.SYSTEM_ADMIN
 							? AdminRoute(domainHost)
 							: HQ_Route(domainHost)} */}
