@@ -63,7 +63,7 @@ export default function ProfileCard(props: ProfileType) {
 						<div className=" text-start ">
 							<h2 className="text-black">Profile Picture</h2>
 							<span className="block bg-[#737587] h-0.5 w-20 my-1.5 rounded-lg"></span>
-							<div className="h-20 w-20 mt-6 ">
+							<div className="h-20 w-20 mt-6">
 								<Image
 									image={props.imageURL || ""}
 									width={"100%"}
@@ -121,8 +121,8 @@ export default function ProfileCard(props: ProfileType) {
 				</div>
 			) : null}
 			{!!props.flag ? (
-				<div className=" px-10 py-4 mt-4">
-					<div className="w-[189px] h-11 ">
+				<div className=" px-10">
+					<div className="w-[189px] h-11">
 						<Button
 							text={
 								props?.data.status === "available" ? "Suspend" : "Unsuspend"
