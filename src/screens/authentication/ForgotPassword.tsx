@@ -27,13 +27,9 @@ const ForgotPassword = (props: { host: string }) => {
 
 	const ForgetPassword = useCallback(
 		async (values: ForgotValidationtype) => {
-			if (props.host === "hq") {
-				return hqForgotPassword(values).unwrap();
-			} else {
-				return forgotPassword(values).unwrap();
-			}
+			return hqForgotPassword(values).unwrap();
 		},
-		[forgotPassword, hqForgotPassword, props.host]
+		[hqForgotPassword]
 	);
 
 	const handleRequest = async (values: ForgotValidationtype) => {

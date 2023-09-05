@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { CSVLink } from "react-csv";
 import { useNavigate } from "react-router-dom";
-
 import { Button } from "src/components/Button";
 import { SearchInput } from "src/components/inputs";
 import { TableLoader } from "src/components/LoaderContainer";
@@ -9,6 +8,7 @@ import { FlagModal, FormModal, Modal } from "src/components/ModalComp";
 import EnhancedTable from "src/components/Table";
 import { FormType, ManageBranchType } from "src/helpers/alias";
 import {
+	CurrencyFormatter,
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
@@ -25,6 +25,7 @@ import {
 	useFetchHQBranchQuery,
 } from "src/hq-admin/hq-api/manageHqApiSlice";
 import { AddNewBranch } from "./Components";
+import Wallet from "src/assets/img/walletbtn.svg";
 
 export interface HeadCellTypes {
 	id: string;
@@ -102,7 +103,9 @@ export default function ManageHQBranch() {
 	const [filteredValue, setFilteredValue] = useState<string>("");
 	const { debouncedValue } = useDebounce(filteredValue, 700);
 	const [pagination, setPagination] = useState({ newPage: 1 });
-	const [showAddModal, setShowAddModal] = useState(false);
+	const [showAddModal, setShowAddModal] = useState<boolean>(false);
+	const [showNotification, setShowNotification] = useState<boolean>(false);
+	const [showPremiumModal, setShowPremiumModal] = useState<boolean>(false);
 	const [AddNewBranchRequest, addNewBranchResult] = useAddHqNewBranchMutation();
 
 	const fetchAllBranchResult = useFetchHQBranchQuery(
@@ -117,7 +120,6 @@ export default function ManageHQBranch() {
 	const exportBranchResult = useExportHQBranchQuery({});
 
 	async function addNewBranchFunct(values: FormType) {
-		console.log(values);
 		try {
 			const response = await AddNewBranchRequest(values).unwrap();
 			if (response) {
@@ -161,7 +163,7 @@ export default function ManageHQBranch() {
 	const { handleSelectAllClick, selected, setSelected } =
 		useHandleSelectAllClick(handledAPIResponse);
 	const { handleClick } = useHandleSingleSelect(selected, setSelected);
-	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
+	const { handleRowClick } = useHandleRowClick(fn);
 	const { isSelected } = useIsSelected(selected);
 
 	const navigate = useNavigate();
@@ -193,9 +195,27 @@ export default function ManageHQBranch() {
 		[exportBranchResult]
 	);
 
+	//BRANCH REGISTERED IS MORE THAN FIVE(5)
+	const handleAddMoreBranch = () => {
+		if (handledAPIResponse?.normalizedAPIResponse?.length <= 5) {
+			setShowAddModal(true);
+		} else {
+			setShowPremiumModal((prevState) => !prevState);
+		}
+	};
+
+	const handleWidthDrawal = () =>
+		setShowNotification((prevState) => !prevState);
 	return (
 		<section>
 			<article>
+				<button
+					onClick={handleWidthDrawal}
+					className="w-full h-[74px] mt-3 shadow-lg bg-white rounded-lg flex items-center gap-10 px-6 font-bold text-primary text-sm">
+					<img src={Wallet} alt="wallet" />
+					<p>Bakkah Oil, Gwagwalada II is requesting a withdrawal</p>
+					<span className="h-6 w-6 rounded-full bg-red-600 ml-auto"></span>
+				</button>
 				<div className="flex justify-between items-center mt-6 h-20">
 					<div className="flex w-[50%] h-11  max-w-[562px] items-center gap-2 rounded-[15px] border-2 border-[#D0D5DD] bg-[#D9D9D9] px-[18px]">
 						<SearchInput
@@ -215,7 +235,7 @@ export default function ManageHQBranch() {
 								className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-start pl-4"
 								type="button"
 								showIcon={true}
-								onClick={() => setShowAddModal(true)}
+								onClick={handleAddMoreBranch}
 							/>
 						</div>
 						<div className="w-[109px] h-11">
@@ -225,7 +245,6 @@ export default function ManageHQBranch() {
 									className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
 									type="button"
 									showIcon={false}
-									onClick={() => console.log("add branch")}
 								/>
 							</CSVLink>
 						</div>
@@ -243,15 +262,20 @@ export default function ManageHQBranch() {
 					</TableLoader>
 
 					{/* FLAG A HQ */}
-					{showModal && (
-						<Modal styles="absolute right-10 top-56">
+					{showPremiumModal && (
+						<Modal>
 							<FlagModal
-								info="Are you sure you want to flag?"
-								onClose={() => setShowModal(false)}
+								info="Sorry You have exceeded the number of branches you can add on the free mode!"
+								onClose={() => setShowPremiumModal(false)}
 								onConfirmation={() => console.log(selected)}
 							/>
 						</Modal>
 					)}
+					{showNotification ? (
+						<FormModal name="Withdrawal request" onClick={handleWidthDrawal}>
+							<WidthDrawModal toggleState={handleWidthDrawal} />
+						</FormModal>
+					) : null}
 					{showAddModal ? (
 						<FormModal
 							name="Add branch"
@@ -268,6 +292,50 @@ export default function ManageHQBranch() {
 		</section>
 	);
 }
+
+// REQUEST TO WITHDRAW MODAL
+
+const WidthDrawModal = ({ toggleState }: { toggleState: () => void }) => {
+	return (
+		<div className="w-full flex flex-col justify-center py-4 px-6 h-full text-sm gap-6">
+			<div>
+				<h1 className="text-lightgray">Branch Name</h1>
+				<p>Gwarrimpa AV filling Branch</p>
+			</div>
+			<div>
+				<h1 className="text-lightgray">Description</h1>
+				<p>
+					Hey boss, I know you won’t like this reason, but i really need that
+					money to fund my girlfriend’s birthday, I love her so much and I would
+					love to not mess with her, I hope you understand Boss
+				</p>
+			</div>
+			<div>
+				<h1 className="text-lightgray">Amount</h1>
+				<p>{CurrencyFormatter(200000)}</p>
+			</div>
+			<div>
+				<div className="w-full h-[41px] mb-[19px]">
+					<Button
+						text="Approve"
+						className="h-full w-full font-bold  bg-primary rounded-full text-white flex items-center justify-center"
+						type="button"
+						showIcon={false}
+					/>
+				</div>
+				<div className="w-full h-[41px]">
+					<Button
+						text="Decline"
+						className="h-full w-full font-bold bg-white border border-red-600 text-red-600  rounded-full  flex items-center justify-center"
+						type="button"
+						showIcon={false}
+						onClick={toggleState}
+					/>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 // export const AddNewBranch = (props: { close: () => void }) => {
 // 	const [step, setStep] = useState<number>(0);
