@@ -157,13 +157,13 @@ export interface FormType {
 
 export interface UpdateFormType {
 	name: string;
-	phoneNumber: string;
-	location: {
-		lga: string;
-		latitude: string;
-		longitude: string;
-		address: string;
-		state: string;
+	phoneNumber?: string;
+	location?: {
+		lga?: string;
+		latitude?: string;
+		longitude?: string;
+		address?: string;
+		state?: string;
 	};
 }
 

@@ -222,14 +222,14 @@ export const AddNewBranch = (props: any) => {
 	const Formik = useFormik<UpdateFormType>({
 		initialValues: {
 			name: initValue.name,
-			phoneNumber: initValue.phoneNumber,
-			location: {
-				lga: initValue.location.latitude,
-				latitude: initValue.location.latitude,
-				longitude: initValue.location.longitude,
-				address: initValue.location.address,
-				state: initValue.location.state,
-			},
+			// phoneNumber: initValue.phoneNumber,
+			// location: {
+			// 	lga: initValue.location.latitude,
+			// 	latitude: initValue.location.latitude,
+			// 	longitude: initValue.location.longitude,
+			// 	address: initValue.location.address,
+			// 	state: initValue.location.state,
+			// },
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
@@ -262,112 +262,112 @@ export const AddNewBranch = (props: any) => {
 			error: Formik.errors.name,
 			touched: Formik.touched.name,
 		},
-		{
-			id: "phoneNumber",
-			name: "Branch contact info",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.phoneNumber && Formik.touched.phoneNumber
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.phoneNumber,
-			onBlur: Formik.handleBlur,
-			// disabled: addNewBranchResult?.isLoading,
-			error: Formik.errors.phoneNumber,
-			touched: Formik.touched.phoneNumber,
-		},
-		{
-			id: "location.address",
-			name: "Branch Address",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.address && Formik.touched.location?.address
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.address,
-			onBlur: Formik.handleBlur,
-			// disabled: addNewBranchResult?.isLoading,
-			error: Formik.errors.location?.address,
-			touched: Formik.touched.location?.address,
-		},
-		{
-			id: "location.lga",
-			name: "Branch LGA",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.lga && Formik.touched.location?.lga
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.lga,
-			onBlur: Formik.handleBlur,
+		// {
+		// 	id: "phoneNumber",
+		// 	name: "Branch contact info",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.phoneNumber && Formik.touched.phoneNumber
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.phoneNumber,
+		// 	onBlur: Formik.handleBlur,
+		// 	// disabled: addNewBranchResult?.isLoading,
+		// 	error: Formik.errors.phoneNumber,
+		// 	touched: Formik.touched.phoneNumber,
+		// },
+		// {
+		// 	id: "location.address",
+		// 	name: "Branch Address",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.location?.address && Formik.touched.location?.address
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.location.address,
+		// 	onBlur: Formik.handleBlur,
+		// 	// disabled: addNewBranchResult?.isLoading,
+		// 	error: Formik.errors.location?.address,
+		// 	touched: Formik.touched.location?.address,
+		// },
+		// {
+		// 	id: "location.lga",
+		// 	name: "Branch LGA",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.location?.lga && Formik.touched.location?.lga
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.location.lga,
+		// 	onBlur: Formik.handleBlur,
 
-			// disabled: addNewBranchResult.isLoading,
-			error: Formik.errors.location?.lga,
-			touched: Formik.touched.location?.lga,
-		},
-		{
-			id: "location.latitude",
-			name: "Branch Latitude",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.lga && Formik.touched.location?.latitude
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.latitude,
-			onBlur: Formik.handleBlur,
+		// 	// disabled: addNewBranchResult.isLoading,
+		// 	error: Formik.errors.location?.lga,
+		// 	touched: Formik.touched.location?.lga,
+		// },
+		// {
+		// 	id: "location.latitude",
+		// 	name: "Branch Latitude",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.location?.lga && Formik.touched.location?.latitude
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.location.latitude,
+		// 	onBlur: Formik.handleBlur,
 
-			// disabled: addNewBranchResult.isLoading,
-			error: Formik.errors.location?.latitude,
-			touched: Formik.touched.location?.latitude,
-		},
-		{
-			id: "location.longitude",
-			name: "Branch longitude",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.lga && Formik.touched.location?.longitude
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location.longitude,
-			onBlur: Formik.handleBlur,
+		// 	// disabled: addNewBranchResult.isLoading,
+		// 	error: Formik.errors.location?.latitude,
+		// 	touched: Formik.touched.location?.latitude,
+		// },
+		// {
+		// 	id: "location.longitude",
+		// 	name: "Branch longitude",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.location?.lga && Formik.touched.location?.longitude
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.location.longitude,
+		// 	onBlur: Formik.handleBlur,
 
-			// disabled: addNewBranchResult.isLoading,
-			error: Formik.errors.location?.longitude,
-			touched: Formik.touched.location?.longitude,
-		},
+		// 	// disabled: addNewBranchResult.isLoading,
+		// 	error: Formik.errors.location?.longitude,
+		// 	touched: Formik.touched.location?.longitude,
+		// },
 
-		{
-			id: "location.state",
-			name: "Branch state",
-			type: "text",
-			styles: `${styles} ${
-				Formik.errors.location?.state && Formik.touched.location?.state
-					? "border-red-500"
-					: "border-gray-300"
-			}`,
-			labelStyles: labelStyles,
-			onChange: Formik.handleChange,
-			value: Formik.values.location?.state,
-			onBlur: Formik.handleBlur,
-			// disabled: addNewBranchResult?.isLoading,
-			error: Formik.errors.location?.state,
-			touched: Formik.touched.location?.state,
-		},
+		// {
+		// 	id: "location.state",
+		// 	name: "Branch state",
+		// 	type: "text",
+		// 	styles: `${styles} ${
+		// 		Formik.errors.location?.state && Formik.touched.location?.state
+		// 			? "border-red-500"
+		// 			: "border-gray-300"
+		// 	}`,
+		// 	labelStyles: labelStyles,
+		// 	onChange: Formik.handleChange,
+		// 	value: Formik.values.location?.state,
+		// 	onBlur: Formik.handleBlur,
+		// 	// disabled: addNewBranchResult?.isLoading,
+		// 	error: Formik.errors.location?.state,
+		// 	touched: Formik.touched.location?.state,
+		// },
 		// {
 		// 	id: "branchManager.firstName",
 		// 	name: "Branch manager first name",
@@ -465,26 +465,6 @@ export const AddNewBranch = (props: any) => {
 				))}
 			</div>
 
-			{/* {step === 1 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(-5).map((dt, i) => (
-						<FormInput
-							id={dt.id}
-							name={dt.name}
-							type={dt.type}
-							styles={dt.styles}
-							labelStyles={dt.labelStyles}
-							onChange={dt.onChange}
-							value={dt.value}
-							onBlur={dt.onBlur}
-							// disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
-						/>
-					))}
-				</div>
-			) : null} */}
-
 			<div className="w-full">
 				<Button
 					text="Add New Branch"
@@ -493,16 +473,6 @@ export const AddNewBranch = (props: any) => {
 					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
 					type="submit"
 				/>
-				{/* {step > 0 ? (
-					<Button
-						text="Back"
-						// disabled={addNewBranchResult.isLoading}
-						// showModal={addNewBranchResult.isLoading}
-						className="h-[41px] mt-6 font-bold bg-white border border-[#002E66] rounded-[38px] w-full hover: text-[#002E66]"
-						type="button"
-						onClick={() => setStep((prev) => prev - 1)}
-					/>
-				) : null} */}
 			</div>
 		</form>
 	);
