@@ -117,7 +117,6 @@ export default function Transaction({ id }: { id: string }) {
 				<div className=" mt-6 ">
 					<div className="w-fit flex items-center">
 						<div className="w-[109px]  h-11">
-<<<<<<< HEAD
 							{handledAPIResponse > 0 ? (
 								<Button
 									text="Export"
@@ -127,15 +126,6 @@ export default function Transaction({ id }: { id: string }) {
 									onClick={() => console.log("add branch")}
 								/>
 							) : null}
-=======
-							<Button
-								text="Export"
-								className="h-full w-full font-bold bg-[#D0D5DD] rounded-lg hover: text-[#002E66] flex items-center justify-center"
-								type="button"
-								showIcon={false}
-								onClick={() => console.log("add branch")}
-							/>
->>>>>>> 49c8e47f8a141688383019fdee5a98069e2dd878
 						</div>
 					</div>
 					<div className="h-full  w-full bg-white mt-6 shadow-lg rounded-t-lg">
