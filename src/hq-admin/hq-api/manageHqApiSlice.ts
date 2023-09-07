@@ -14,10 +14,10 @@ export const hQManageBranchApiSlice = apiSlice.injectEndpoints({
 				InvalidateTag(result?.data?.id, RTKTAG.HQ_BRANCH) as any,
 		}),
 		updateHqBranchDetails: builder.mutation({
-			query: (body): any => ({
-				url: `${HQ_API_ENPOINTS.SINGLE_BRANCH}`,
+			query: ({ id, ...value }): any => ({
+				url: `${HQ_API_ENPOINTS.SINGLE_BRANCH}/${id}`,
 				method: "PATCH",
-				body,
+				body: { ...value },
 			}),
 			invalidatesTags: (result) =>
 				InvalidateTag(result?.data?.id, RTKTAG.HQ_BRANCH) as any,

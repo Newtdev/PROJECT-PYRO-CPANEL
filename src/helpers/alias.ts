@@ -155,21 +155,36 @@ export interface FormType {
 	};
 }
 
+export interface UpdateFormType {
+	name: string;
+	phoneNumber: string;
+	location: {
+		lga: string;
+		latitude: string;
+		longitude: string;
+		address: string;
+		state: string;
+	};
+}
+
 export interface UpdateHQAdminType {
 	firstName?: string;
 	lastName: string;
 	email: string;
 	phoneNumber: string;
 	role?: "hq_admin";
-	oldPassword?: string;
-	password?: string;
-	confirmPassword?: string;
+
 	avatar: string;
 	id: string;
 	accountStatus?: {
 		status: string;
-		reason: string;
 	};
+}
+export interface UpdateHQPasswordType {
+	oldPassword?: string;
+	password?: string;
+	confirmPassword?: string;
+	id: string;
 }
 
 // type ReadOnlyProps<T> = {

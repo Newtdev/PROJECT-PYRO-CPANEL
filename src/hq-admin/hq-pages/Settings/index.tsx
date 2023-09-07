@@ -5,9 +5,8 @@ import AdminProfile from "src/assets/img/AdminProfile.svg";
 import ResetPasword from "src/assets/img/ResetPasword.svg";
 import { CardButton } from "src/components/Card";
 import ProfileCard from "src/components/ProfileCard";
-import { ResetPassword } from "./Component";
+import { ResetAdminInfo, ResetPassword } from "./Component";
 import { FormModal } from "src/components/ModalComp";
-import { profile } from "console";
 
 export default function HqSetting() {
 	const { user } = useAuth();
@@ -24,6 +23,11 @@ export default function HqSetting() {
 			id: 4,
 			icon: ResetPasword,
 			name: "Update Profile",
+		},
+		{
+			id: 4,
+			icon: ResetPasword,
+			name: "Update Password",
 		},
 	];
 
@@ -70,6 +74,14 @@ export default function HqSetting() {
 					/>
 				) : null}
 				{cardName.toLowerCase() === "update profile" ? (
+					<FormModal name="Update Settings" onClick={() => setName("profile")}>
+						<ResetAdminInfo
+							data={handledAPIResponse}
+							close={() => setName("profile")}
+						/>
+					</FormModal>
+				) : null}
+				{cardName.toLowerCase() === "update password" ? (
 					<FormModal name="Update Settings" onClick={() => setName("profile")}>
 						<ResetPassword
 							data={handledAPIResponse}

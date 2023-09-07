@@ -4,16 +4,19 @@ import { Button } from "src/components/Button";
 import Image from "src/components/Image";
 import { FormInput, PasswordInput, TextArea } from "src/components/inputs";
 import { Upload } from "src/components/Upload";
-import { UpdateHQAdminType } from "src/helpers/alias";
+import { UpdateHQAdminType, UpdateHQPasswordType } from "src/helpers/alias";
 import {
 	convert2base64,
 	handleNotification,
 	SuccessNotification,
 } from "src/helpers/helperFunction";
-import { UpdateHQAdminInfoValidation } from "src/helpers/YupValidation";
+import {
+	UpdateHQAdminInfoValidation,
+	UpdateHQPasswordInfoValidation,
+} from "src/helpers/YupValidation";
 import { useUpdateHqAdminProfileMutation } from "src/hq-admin/hq-api/settingsApiSlice";
 
-export const ResetPassword = (props: { close: () => void; data: any }) => {
+export const ResetAdminInfo = (props: { close: () => void; data: any }) => {
 	const [updateAdmin, addNewResult] = useUpdateHqAdminProfileMutation();
 	const [step, setStep] = useState(0);
 
@@ -37,14 +40,10 @@ export const ResetPassword = (props: { close: () => void; data: any }) => {
 			email: "",
 			phoneNumber: "",
 			role: "hq_admin",
-			oldPassword: "",
-			password: "",
-			confirmPassword: "",
 			avatar: "",
 			id: props.data?.id,
 			accountStatus: {
 				status: "confirmed",
-				reason: "",
 			},
 		},
 		validateOnBlur: true,
@@ -133,6 +132,124 @@ export const ResetPassword = (props: { close: () => void; data: any }) => {
 			error: Formik.errors.phoneNumber,
 			touched: Formik.touched.phoneNumber,
 		},
+	];
+
+	// HANDLE IMAGE UPLOAD TO BASE 64
+	async function uploadAvatar(e: { [index: string]: string | any }) {
+		Formik.setFieldValue("avatar", await convert2base64(e.target.files[0]));
+	}
+
+	// Populate input with previous data
+	useEffect(() => {
+		if (!props.data) {
+			return;
+		}
+
+		Formik.setValues({
+			...props.data.profile,
+			avatar: props.data.avatar,
+			id: props.data.id,
+		});
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props]);
+
+	return (
+		<form
+			onSubmit={Formik.handleSubmit}
+			className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto">
+			<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+				{FormData.slice(0, 4).map((_v, i) => (
+					<FormInput
+						width="w-full"
+						id={_v.id}
+						name={_v.name}
+						type={"text"}
+						styles={_v.styles}
+						labelStyles={_v.labelStyles}
+						onChange={_v.onChange}
+						value={_v.value}
+						onBlur={_v.onBlur}
+						disabled={_v.disabled}
+						// error={_v.error}
+						// touched={_v.touched}
+					/>
+				))}
+			</div>
+
+			<div className="grid grid-cols-1 w-full gap-x-2 content-center pt-4">
+				{Formik.values.avatar ? (
+					<div>
+						<Image
+							image={Formik.values.avatar || ""}
+							width={100}
+							height={100}
+							styles="mx-auto object-fit"
+						/>
+					</div>
+				) : null}
+
+				<div className="w-full h-24 mt-4">
+					<Upload
+						text="Upload profile image"
+						name="avatar"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							uploadAvatar(e);
+						}}
+					/>
+				</div>
+			</div>
+
+			<div className="w-full">
+				<Button
+					text="Submit"
+					disabled={addNewResult?.isLoading}
+					showModal={addNewResult?.isLoading}
+					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
+					type="submit"
+				/>
+			</div>
+		</form>
+	);
+};
+
+export const ResetPassword = (props: { close: () => void; data: any }) => {
+	const [updateAdmin, addNewResult] = useUpdateHqAdminProfileMutation();
+
+	async function addNewAdmin(values: UpdateHQPasswordType) {
+		try {
+			const response = await updateAdmin(values).unwrap();
+			if (response) {
+				props.close();
+			}
+			SuccessNotification(response?.status);
+		} catch (error: any) {
+			props.close();
+			handleNotification(error);
+		}
+	}
+
+	const Formik = useFormik<UpdateHQPasswordType>({
+		initialValues: {
+			oldPassword: "",
+			password: "",
+			confirmPassword: "",
+
+			id: props.data?.id,
+		},
+		validateOnBlur: true,
+		validateOnChange: true,
+		validationSchema: UpdateHQPasswordInfoValidation,
+		onSubmit: (values: UpdateHQPasswordType) => {
+			addNewAdmin(values);
+		},
+	});
+	const styles =
+		"h-[38px] py-6 rounded-[38px] w-full border border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 text-[14px] bg-[#D9D9D9]";
+	const labelStyles =
+		"block mb-[6px] text-black text-start font-normal text-[14px] text-black ml-5 my-6";
+
+	const FormData = [
 		{
 			id: "oldPassword",
 			name: "Old password",
@@ -187,116 +304,32 @@ export const ResetPassword = (props: { close: () => void; data: any }) => {
 		},
 	];
 
-	// HANDLE IMAGE UPLOAD TO BASE 64
-	async function uploadAvatar(e: { [index: string]: string | any }) {
-		Formik.setFieldValue("avatar", await convert2base64(e.target.files[0]));
-	}
-
-	// Populate input with previous data
-	useEffect(() => {
-		if (!props.data) {
-			return;
-		}
-
-		Formik.setValues({
-			...props.data.profile,
-			avatar: props.data.avatar,
-			id: props.data.id,
-		});
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props]);
-
 	return (
 		<form
 			onSubmit={Formik.handleSubmit}
 			className="w-full flex flex-col justify-center items-center px-4 h-full overflow-y-auto">
-			{step === 0 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(0, 4).map((_v, i) => (
-						<FormInput
-							width="w-full"
-							id={_v.id}
-							name={_v.name}
-							type={"text"}
-							styles={_v.styles}
-							labelStyles={_v.labelStyles}
-							onChange={_v.onChange}
-							value={_v.value}
-							onBlur={_v.onBlur}
-							disabled={_v.disabled}
-							// error={_v.error}
-							// touched={_v.touched}
-						/>
-					))}
-				</div>
-			) : null}
-			{step === 1 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center pt-4">
-					{FormData.slice(-3).map((_v, i) => (
-						<PasswordInput
-							width="w-full"
-							id={_v.id}
-							name={_v.name}
-							type={"text"}
-							styles={_v.styles}
-							labelStyles={_v.labelStyles}
-							onChange={_v.onChange}
-							value={_v.value}
-							onBlur={_v.onBlur}
-							disabled={_v.disabled}
-							// error={_v.error}
-							// touched={_v.touched}
-						/>
-					))}
-
-					<div className="w-full h-full">
-						<TextArea
-							labelStyles={labelStyles}
-							name="Reason"
-							id="accountStatus.reason"
-							onChange={(e) => {
-								Formik.setFieldValue("accountStatus.reason", e.target.value);
-								Formik.setFieldValue("accountStatus.status", "confirmed");
-							}}
-							value={Formik.values?.accountStatus?.reason || ""}
-							disabled={false}
-						/>
-					</div>
-					{Formik.values.avatar ? (
-						<div>
-							<Image
-								image={Formik.values.avatar || ""}
-								width={100}
-								height={100}
-								styles="mx-auto object-fit"
-							/>
-						</div>
-					) : null}
-
-					<div className="w-full h-24 mt-4">
-						<Upload
-							name="avatar"
-							onChange={(e: ChangeEvent<HTMLInputElement>) => {
-								uploadAvatar(e);
-							}}
-						/>
-					</div>
-				</div>
-			) : null}
+			<div className="grid grid-cols-1 w-full gap-x-2 content-center pt-4">
+				{FormData.slice(-3).map((_v, i) => (
+					<PasswordInput
+						width="w-full"
+						id={_v.id}
+						name={_v.name}
+						type={"text"}
+						styles={_v.styles}
+						labelStyles={_v.labelStyles}
+						onChange={_v.onChange}
+						value={_v.value}
+						onBlur={_v.onBlur}
+						disabled={_v.disabled}
+						// error={_v.error}
+						// touched={_v.touched}
+					/>
+				))}
+			</div>
 
 			<div className="w-full">
-				{step === 1 ? (
-					<Button
-						text="Back"
-						disabled={addNewResult?.isLoading}
-						onClick={() => setStep(() => 0)}
-						className="h-[41px] mt-6 font-bold border border-[#002E66] text-[#002E66] rounded-[38px] w-full bg-white"
-						type="button"
-					/>
-				) : null}
 				<Button
-					text={step === 1 ? "Submit" : "Next"}
+					text="Submit"
 					disabled={addNewResult?.isLoading}
 					showModal={addNewResult?.isLoading}
 					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"

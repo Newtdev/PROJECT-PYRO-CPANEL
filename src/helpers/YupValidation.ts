@@ -33,9 +33,11 @@ export const UpdateHQAdminInfoValidation = [
 		email: Yup.string().label("Last name").email().required(),
 		phoneNumber: Yup.string()
 			.label("phone number")
-			.length(11, "invalid")
+			// .length(11, "invalid")
 			.required(),
 	}),
+];
+export const UpdateHQPasswordInfoValidation = [
 	Yup.object({
 		oldPassword: Yup.string().label("oldPassword").required(),
 		password: Yup.string().label("New Password").required(),

@@ -58,14 +58,14 @@ export const HQ_Route = (host: string) => {
 			path: HQ_APP_ROUTE.SETTINGS,
 			element: <HqSetting />,
 		},
+		{
+			path: HQ_APP_ROUTE.WIDTHDRAWAL,
+			element: <WithDrawal />,
+		},
 
 		{
 			path: HQ_APP_ROUTE.NOTIFICATION,
 			element: <Notification />,
-		},
-		{
-			path: HQ_APP_ROUTE.WIDTHDRAWAL,
-			element: <WithDrawal />,
 		},
 	].map((route, i) => (
 		<Route

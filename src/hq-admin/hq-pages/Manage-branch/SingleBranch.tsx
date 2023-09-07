@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { cardBtnType, FormType } from "src/helpers/alias";
+import { cardBtnType, FormType, UpdateFormType } from "src/helpers/alias";
 import User from "src/assets/img/User.svg";
 import Attendant from "src/assets/img/Attendanticon.svg";
 import MainProduct from "src/assets/img/MainProduct.svg";
@@ -74,6 +74,7 @@ export default function SingleBranch() {
 	const [showModal, setShowModal] = useState(false);
 	const { slicedPath } = useCustomLocation();
 	const branchResult = useFetchSingleHQBranchQuery(slicedPath[2]);
+
 	const station = branchResult?.currentData?.station;
 
 	const [updateBranchDetails, updateBranchDetailsResult] =
@@ -81,12 +82,16 @@ export default function SingleBranch() {
 
 	async function updateBranch(values: FormType) {
 		try {
-			const response = await updateBranchDetails(values).unwrap();
+			const response = await updateBranchDetails({
+				id: slicedPath[2],
+				...values,
+			}).unwrap();
 			if (response) {
 				SuccessNotification(response?.data?.message);
 				setShowModal(() => false);
 			}
 		} catch (error: any) {
+			setShowModal(() => false);
 			handleNotification(error);
 		}
 	}
@@ -213,24 +218,17 @@ const BranchAccountBalance = (props: {
 
 export const AddNewBranch = (props: any) => {
 	const [step, setStep] = useState<number>(0);
-
-	const Formik = useFormik<FormType>({
+	const initValue = props.initalValue;
+	const Formik = useFormik<UpdateFormType>({
 		initialValues: {
-			name: "",
-			phoneNumber: "",
+			name: initValue.name,
+			phoneNumber: initValue.phoneNumber,
 			location: {
-				lga: "",
-				state: "",
-				latitude: "",
-				longitude: "",
-				address: "",
-			},
-			branchManager: {
-				firstName: "",
-				lastName: "",
-				email: "",
-				phoneNumber: "",
-				password: "",
+				lga: initValue.location.latitude,
+				latitude: initValue.location.latitude,
+				longitude: initValue.location.longitude,
+				address: initValue.location.address,
+				state: initValue.location.state,
 			},
 		},
 		validateOnBlur: true,
@@ -449,26 +447,25 @@ export const AddNewBranch = (props: any) => {
 		<form
 			onSubmit={Formik.handleSubmit}
 			className="w-full flex flex-col justify-center items-center px-4 h-full">
-			{step === 0 ? (
-				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
-					{FormData.slice(0, 6).map((dt, i) => (
-						<FormInput
-							id={dt.id}
-							name={dt.name}
-							type={dt.type}
-							styles={dt.styles}
-							labelStyles={dt.labelStyles}
-							onChange={dt.onChange}
-							value={dt.value}
-							onBlur={dt.onBlur}
-							// disabled={dt.disabled}
-							error={dt.error}
-							touched={dt.touched}
-						/>
-					))}
-				</div>
-			) : null}
-			{step === 1 ? (
+			<div className="grid grid-cols-1 w-full gap-x-2 content-center">
+				{FormData.slice(0, 6).map((dt, i) => (
+					<FormInput
+						id={dt.id}
+						name={dt.name}
+						type={dt.type}
+						styles={dt.styles}
+						labelStyles={dt.labelStyles}
+						onChange={dt.onChange}
+						value={dt.value}
+						onBlur={dt.onBlur}
+						// disabled={dt.disabled}
+						error={dt.error}
+						touched={dt.touched}
+					/>
+				))}
+			</div>
+
+			{/* {step === 1 ? (
 				<div className="grid grid-cols-1 w-full gap-x-2 content-center">
 					{FormData.slice(-5).map((dt, i) => (
 						<FormInput
@@ -486,10 +483,17 @@ export const AddNewBranch = (props: any) => {
 						/>
 					))}
 				</div>
-			) : null}
+			) : null} */}
 
 			<div className="w-full">
-				{step > 0 ? (
+				<Button
+					text="Add New Branch"
+					// disabled={addNewBranchResult?.isLoading}
+					showModal={props.apiResult?.isLoading}
+					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
+					type="submit"
+				/>
+				{/* {step > 0 ? (
 					<Button
 						text="Back"
 						// disabled={addNewBranchResult.isLoading}
@@ -498,15 +502,7 @@ export const AddNewBranch = (props: any) => {
 						type="button"
 						onClick={() => setStep((prev) => prev - 1)}
 					/>
-				) : null}
-
-				<Button
-					text={step < 1 ? "Next" : "Add New Branch"}
-					// disabled={addNewBranchResult?.isLoading}
-					// showModal={addNewBranchResult?.isLoading}
-					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"
-					type="submit"
-				/>
+				) : null} */}
 			</div>
 		</form>
 	);

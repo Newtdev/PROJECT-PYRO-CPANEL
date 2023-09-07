@@ -103,15 +103,6 @@ const linksData = [
 		link: APP_ROUTE.FEEDS,
 	},
 	{
-		id: 7,
-		name: "Settings",
-		route: "Settings",
-		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
-		Icon: <Settings />,
-		link: APP_ROUTE.SETTINGS,
-		hq_link: HQ_APP_ROUTE.SETTINGS,
-	},
-	{
 		id: 8,
 		name: "Withdrawal",
 		route: "withdrawal",
@@ -119,6 +110,15 @@ const linksData = [
 		Icon: <Notification />,
 		link: APP_ROUTE.WITHDRAWAL,
 		hq_link: HQ_APP_ROUTE.WIDTHDRAWAL,
+	},
+	{
+		id: 7,
+		name: "Settings",
+		route: "Settings",
+		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
+		Icon: <Settings />,
+		link: APP_ROUTE.SETTINGS,
+		hq_link: HQ_APP_ROUTE.SETTINGS,
 	},
 ];
 const DashboardLink = ({ name, link, Icon, route }: linkTypes) => {
