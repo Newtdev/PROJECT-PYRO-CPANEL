@@ -260,7 +260,6 @@ export default function ManageHQBranch() {
 							/>
 						</Modal>
 					)}
-
 					{showAddModal ? (
 						<FormModal
 							name="Add branch"

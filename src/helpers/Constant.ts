@@ -60,7 +60,10 @@ export enum APP_ROUTE {
 	ADD_NEW_SELF_HELP_SINGLE = "/self-help/:name",
 	FEEDS = "/feeds",
 	SINGLE_ADMIN = "/settings/manage-admin/:id",
+<<<<<<< HEAD
 	WITHDRAWAL = "/withdrawal",
+=======
+>>>>>>> 49c8e47f8a141688383019fdee5a98069e2dd878
 }
 
 export enum HQ_APP_ROUTE {
@@ -70,7 +73,10 @@ export enum HQ_APP_ROUTE {
 	SUPPORT = "/support",
 	NOTIFICATION = "/notification",
 	SETTINGS = "/settings",
+<<<<<<< HEAD
 	WIDTHDRAWAL = "/withdrawal",
+=======
+>>>>>>> 49c8e47f8a141688383019fdee5a98069e2dd878
 }
 
 export enum HQ_API_ENPOINTS {

@@ -135,7 +135,6 @@ const DashboardLink = ({ name, link, Icon, route }: linkTypes) => {
 	}, [firstRoute, route, nextRoute]);
 
 	const activeLink = active ? "font-[600]" : "font-normal";
-
 	return (
 		<div className=" flex items-center ">
 			{active ? <Indicator /> : false}
