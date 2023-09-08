@@ -467,7 +467,7 @@ export const AddNewBranch = (props: any) => {
 
 			<div className="w-full">
 				<Button
-					text="Add New Branch"
+					text="Update Branch Details"
 					// disabled={addNewBranchResult?.isLoading}
 					showModal={props.apiResult?.isLoading}
 					className="h-[41px] mt-6 font-bold text-white rounded-[38px] w-full hover: bg-[#002E66]"

@@ -48,7 +48,7 @@ export const ResetAdminInfo = (props: { close: () => void; data: any }) => {
 		},
 		validateOnBlur: true,
 		validateOnChange: true,
-		validationSchema: UpdateHQAdminInfoValidation[step],
+		validationSchema: UpdateHQAdminInfoValidation,
 		onSubmit: (values: UpdateHQAdminType) => {
 			if (step === 1) {
 				addNewAdmin(values);
@@ -234,7 +234,6 @@ export const ResetPassword = (props: { close: () => void; data: any }) => {
 			oldPassword: "",
 			password: "",
 			confirmPassword: "",
-
 			id: props.data?.id,
 		},
 		validateOnBlur: true,

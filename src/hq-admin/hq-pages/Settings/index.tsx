@@ -82,7 +82,7 @@ export default function HqSetting() {
 					</FormModal>
 				) : null}
 				{cardName.toLowerCase() === "update password" ? (
-					<FormModal name="Update Settings" onClick={() => setName("profile")}>
+					<FormModal name="Update Password" onClick={() => setName("profile")}>
 						<ResetPassword
 							data={handledAPIResponse}
 							close={() => setName("profile")}

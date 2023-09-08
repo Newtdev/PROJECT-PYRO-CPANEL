@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import React, { useMemo, useState } from "react";
 import { CSVLink } from "react-csv";
 import { useNavigate } from "react-router-dom";
@@ -35,6 +36,11 @@ export interface HeadCellTypes {
 
 // TABLE HEADER DETAILS
 const headCells: readonly HeadCellTypes[] = [
+	{
+		id: "date",
+		minWidth: 170,
+		label: "Date",
+	},
 	{
 		id: "name",
 		minWidth: 170,
@@ -143,6 +149,7 @@ export default function ManageHQBranch() {
 				...acc,
 				{
 					id: cur?.id,
+					created: format(new Date(cur.createdAt), "d/MM/yyyy"),
 					name: cur?.name,
 					phoneNumber: cur?.phoneNumber,
 					status: cur?.status,

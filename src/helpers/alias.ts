@@ -125,6 +125,7 @@ export type ReviewDataType = {
 export interface ManageBranchType {
 	id: string;
 	name: string;
+	createdAt: string;
 	phoneNumber: string;
 	status: string;
 	location: {
