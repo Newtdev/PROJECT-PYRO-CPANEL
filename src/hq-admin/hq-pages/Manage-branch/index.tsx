@@ -149,7 +149,7 @@ export default function ManageHQBranch() {
 				...acc,
 				{
 					id: cur?.id,
-					created: format(new Date(cur.createdAt), "d/MM/yyyy"),
+					date: format(new Date(cur.createdAt), "d/MM/yyyy"),
 					name: cur?.name,
 					phoneNumber: cur?.phoneNumber,
 					status: cur?.status,
