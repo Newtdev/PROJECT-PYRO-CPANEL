@@ -24,6 +24,9 @@ export enum API_ROUTE {
 	HQ_ADMIN_LOGIN = "auth/station/login-email",
 	// station/branch/646def63111438d2777c5d06
 	STATION_BRANCH_CHANGE = "station/branch",
+	DEPOT = "system-admin/depot",
+	DEPOT_ORDER = "depot/orders",
+	DEPOT_INVOICE_LIST = "depot/orders/invoice",
 }
 
 export enum APP_ROUTE {
@@ -47,6 +50,7 @@ export enum APP_ROUTE {
 	MANAGE_SINGLE_BRANCH = "manage-branch/:id",
 	BRANCHES = "/branches",
 	VIEW_WALLET = "/view/wallet",
+	DEPOT = "/depot",
 	ATTENDANT_PROFILE = "branch/:id/attendant",
 	ATTENDANT_PROFILE_INFO = "branch/:id/attendant/:name",
 	ATTENDANT_REVIEW = "branch/:id/reviews",
@@ -67,10 +71,14 @@ export enum HQ_APP_ROUTE {
 	BRANCH = "/manage-branch",
 	SINGLE_BRANCH = "/manage-branch/:id",
 	TRANSACTIONS = "/transactions",
+	DEPOT = "/depot",
+	SINGLE_DEPOT = "/depot/:name",
 	SUPPORT = "/support",
 	NOTIFICATION = "/notification",
 	SETTINGS = "/settings",
 	WIDTHDRAWAL = "/withdrawal",
+	REQUEST_LIST = "/request/list",
+	INVOICE_LIST = "/invoice/list",
 }
 
 export enum HQ_API_ENPOINTS {
@@ -78,6 +86,8 @@ export enum HQ_API_ENPOINTS {
 	SINGLE_BRANCH = "station/branch",
 
 	TRANSACTIONS = "station/transactions",
+	WALLET = "station/wallet",
+	WALLET_REQUEST = "station/branch/withdraw-request",
 	// SUPPORT = "/support",
 	NOTIFICATION = "station/notification",
 	SETTINGS = "station/update-user",
@@ -104,6 +114,7 @@ export enum RTKTAG {
 	SELP_HELP = "SELF_HELP",
 	FEEDS = "FEEDS",
 	HQ_BRANCH = "BRANCH",
+	DEPOT = "DEPOT",
 }
 
 export enum KEYS {

@@ -6,7 +6,10 @@ export const hqNotificationAPISlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		fetchAllHQNotification: builder.query({
 			query: (params) =>
-				`${HQ_API_ENPOINTS.NOTIFICATION}?page=${params?.page}&limit=7&orderBy=createdAt:desc`,
+				({
+					url: `${HQ_API_ENPOINTS.NOTIFICATION}/?limit=7&orderBy=createdAt:desc`,
+					params,
+				} as any),
 			providesTags: (result) =>
 				providesTagList(result?.data?.data, RTKTAG.NOTIFICATION) as any,
 		}),

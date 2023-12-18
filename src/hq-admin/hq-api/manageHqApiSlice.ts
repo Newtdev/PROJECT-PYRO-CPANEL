@@ -10,8 +10,7 @@ export const hQManageBranchApiSlice = apiSlice.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: (result) =>
-				InvalidateTag(result?.data?.id, RTKTAG.HQ_BRANCH) as any,
+			invalidatesTags: [{ type: RTKTAG.HQ_BRANCH }] as any,
 		}),
 		updateHqBranchDetails: builder.mutation({
 			query: ({ id, ...value }): any => ({
@@ -19,23 +18,20 @@ export const hQManageBranchApiSlice = apiSlice.injectEndpoints({
 				method: "PATCH",
 				body: { ...value },
 			}),
-			invalidatesTags: (result) =>
-				InvalidateTag(result?.data?.id, RTKTAG.HQ_BRANCH) as any,
+			invalidatesTags: [{ type: RTKTAG.HQ_BRANCH }] as any,
 		}),
 		fetchHQBranch: builder.query({
-			query: (params) => `${HQ_API_ENPOINTS.BRANCH}?stationHQ=${params.hqId}`,
-			providesTags: (result) =>
-				providesTagList(result?.hqProfile?.data, RTKTAG.HQ_BRANCH) as any,
+			query: (params) =>
+				`${HQ_API_ENPOINTS.BRANCH}?orderBy=createdAt:desc&stationHQ=${params.hqId}`,
+			providesTags: [{ type: RTKTAG.HQ_BRANCH }] as any,
 		}),
 		exportHQBranch: builder.query({
 			query: (params) => `${HQ_API_ENPOINTS.BRANCH}?stationHQ=${params.hqId}`,
-			providesTags: (result) =>
-				providesTagList(result?.hqProfile?.data, RTKTAG.HQ_BRANCH) as any,
+			providesTags: [{ type: RTKTAG.HQ_BRANCH }] as any,
 		}),
 		fetchSingleHQBranch: builder.query({
 			query: (id) => `${HQ_API_ENPOINTS.SINGLE_BRANCH}?branchId=${id}`,
-			providesTags: (result) =>
-				providesTagList(result?.hqProfile?.data, RTKTAG.HQ_BRANCH) as any,
+			providesTags: [{ type: RTKTAG.HQ_BRANCH }] as any,
 		}),
 	}),
 });

@@ -13,6 +13,7 @@ export type cardType = {
 	amount?: string;
 	name: string;
 	link?: string | undefined;
+	children?: ReactElement;
 };
 
 export type cardBtnType = {
@@ -29,6 +30,7 @@ export type cardBtnType = {
 };
 export type loginResponseType = {
 	user: any;
+	products: any;
 	systemAdmin: {
 		id: any;
 		email: any;

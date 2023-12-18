@@ -25,7 +25,8 @@ interface ProfileType {
 }
 
 export default function ProfileCard(props: ProfileType) {
-	const { routePath } = useCustomLocation();
+	const { slicedPath } = useCustomLocation();
+
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const [changeStatus, changeStatusResult] = useChangeStatusMutation();
@@ -34,9 +35,9 @@ export default function ProfileCard(props: ProfileType) {
 	const handleSuspendModal = async () => {
 		try {
 			const response = await changeStatus({
+				id: slicedPath[2],
 				status:
 					props?.data.status === "available" ? "unavailable" : "available",
-				id: routePath.id,
 			}).unwrap();
 			if (response) {
 				SuccessNotification(response?.data?.message);
@@ -85,14 +86,34 @@ export default function ProfileCard(props: ProfileType) {
 				})}
 			</div>
 			{props.showButton ? (
-				<div className="h-11 ml-14 mt-4">
-					<Button
-						text="Update branch details"
-						className="h-full font-bold text-white rounded-[38px] px-6 hover: bg-[#002E66] flex items-center justify-center"
-						type="button"
-						showIcon={false}
-						onClick={props.onClick}
-					/>
+				<div className="flex mt-6 items-center">
+					<div className="h-11 ml-14">
+						<Button
+							text="Update branch details"
+							className="h-full font-bold text-white rounded-[38px] px-6 hover: bg-[#002E66] flex items-center justify-center"
+							type="button"
+							showIcon={false}
+							onClick={props.onClick}
+						/>
+					</div>
+					{!!props.flag ? (
+						<div className=" px-10">
+							<div className="w-[189px] h-11">
+								<Button
+									text={
+										props?.data?.status === "pending"
+											? "Activate"
+											: props?.data?.status === "available"
+											? "Suspend"
+											: "Unsuspend"
+									}
+									className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-center"
+									type="button"
+									onClick={handleModal}
+								/>
+							</div>
+						</div>
+					) : null}
 				</div>
 			) : null}
 			{!!props.showImage ? (
@@ -120,25 +141,16 @@ export default function ProfileCard(props: ProfileType) {
 					</div>
 				</div>
 			) : null}
-			{!!props.flag ? (
-				<div className=" px-10">
-					<div className="w-[189px] h-11">
-						<Button
-							text={
-								props?.data.status === "available" ? "Suspend" : "Unsuspend"
-							}
-							className="h-full font-bold text-white rounded-[38px] w-full hover: bg-[#002E66] flex items-center justify-center"
-							type="button"
-							onClick={handleModal}
-						/>
-					</div>
-				</div>
-			) : null}
+
 			{showModal && (
 				<Modal>
 					<FlagModal
 						info={`Are you sure you want to ${
-							props?.data.status === "available" ? "Suspend" : "Unsuspend"
+							props?.data?.status === "available"
+								? `Suspend ${props?.data?.name}`
+								: props?.data?.status === "deactivated"
+								? `activate ${props?.data?.name}`
+								: `Unsuspend ${props?.data?.name}`
 						}?`}
 						onClose={handleModal}
 						onConfirmation={handleSuspendModal}

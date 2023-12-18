@@ -5,6 +5,7 @@ import { TableLoader } from "src/components/LoaderContainer";
 import { FormModal, Modal } from "src/components/ModalComp";
 import EnhancedTable from "src/components/Table";
 import {
+	forEnums,
 	handleDateFormat,
 	handleNotification,
 	SuccessNotification,
@@ -24,6 +25,7 @@ import {
 	useFetchAllHQNotificationQuery,
 	useSendHQNotificationMutation,
 } from "src/hq-admin/hq-api/notificationApiSlice";
+import { useAuth } from "src/hooks/useAuth";
 
 const HQData: cardBtnType[] = [
 	{
@@ -32,11 +34,102 @@ const HQData: cardBtnType[] = [
 		name: "Send to Branch",
 	},
 ];
+const headCells: readonly any[] = [
+	{
+		id: "title",
+		minWidth: 170,
+		label: "Title",
+	},
+	{
+		id: "message",
+		minWidth: 170,
+		label: "Message",
+	},
+	{
+		id: "for",
+		minWidth: 170,
+		label: "For",
+	},
+	{
+		id: "createdAt",
+		minWidth: 170,
+		label: "Date",
+	},
+];
 
 export default function Notification() {
 	//, stationHq, user
+
+	const { user } = useAuth();
+
 	const [cardName, setCardName] = useState("");
 	const [showAddModal, setShowAddModal] = useState<boolean>(false);
+
+	const { handleSelectAllClick, selected, setSelected } =
+		useHandleSelectAllClick([]);
+	const [page, setPagination] = useState({ newPage: 1 });
+	const { isSelected } = useIsSelected(selected);
+
+	const { handleClick } = useHandleSingleSelect(selected, setSelected);
+	const { handleRowClick } = useHandleRowClick();
+	const notificationResult = useFetchAllHQNotificationQuery({
+		stationHQ: user?.stationHQ,
+		page: page.newPage,
+	});
+	// const notificationResult = useFetchAllNotificationQuery({
+	// 	page: page.newPage,
+	// });
+
+	// API TO GET ALL HQ INFORMATION
+
+	// console.log(notificationResult);
+
+	const handleChangePage = (event: unknown, newPage: number) => {
+		setPagination((prev) => {
+			return { ...prev, newPage };
+		});
+	};
+
+	const handledAPIResponse = useMemo(() => {
+		const hqProfile = notificationResult?.currentData?.data || [];
+
+		return hqProfile?.data?.reduce(
+			(
+				acc: { [index: string]: string }[],
+				cur: {
+					[index: string]: string;
+				}
+			) => [
+				...acc,
+				{
+					id: cur?.id,
+					title: cur?.title,
+					message: cur?.message,
+					for: forEnums[cur?.for],
+					createdAt: handleDateFormat(cur?.createdAt),
+				},
+			],
+			[]
+		);
+	}, [notificationResult]);
+
+	let dataToChildren: any = {
+		rows: handledAPIResponse || [],
+		headCells,
+		handleRowClick,
+		showFlag: false,
+		showCheckBox: false,
+		isSelected,
+		handleClick,
+		handleSelectAllClick,
+		selected,
+		handleChangePage,
+		paginationData: {
+			totalPage: notificationResult?.currentData?.data.totalPages,
+			limit: notificationResult?.currentData?.data.limit,
+			page: notificationResult?.currentData?.data.page,
+		},
+	};
 
 	return (
 		<section>
@@ -55,6 +148,18 @@ export default function Notification() {
 					))}
 				</div>
 
+				<div className="h-fit w-full bg-white">
+					<TableLoader
+						data={notificationResult || {}}
+						tableData={handledAPIResponse || []}>
+						<div className="h-full w-full">
+							<div className="relative">
+								<EnhancedTable {...dataToChildren} />
+							</div>
+						</div>
+					</TableLoader>
+				</div>
+
 				{showAddModal ? (
 					<FormModal
 						name="Send Notification"
@@ -69,6 +174,7 @@ export default function Notification() {
 		</section>
 	);
 }
+
 
 const SendNotificationValidation = Yup.object({
 	title: Yup.string().label("Title").required(),

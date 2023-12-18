@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 import { createSlice } from "@reduxjs/toolkit";
 import { authAPISlice } from "src/api/authApiSlice";
+import { manageBranAPISlice } from "src/api/manageBranchAPISlice";
+import { manageHqAPISlice } from "src/api/manageHQApiSlice";
 import { settingsAPISlice } from "src/api/setttingsApislice";
 import { loginResponseType } from "src/helpers/alias";
 import { KEYS } from "src/helpers/Constant";
@@ -18,6 +20,7 @@ const authSlice = createSlice({
 			avatar: { url: "" },
 		},
 		token: { accessToken: null },
+		products: [],
 	} as loginResponseType,
 
 	reducers: {
@@ -70,14 +73,17 @@ const authSlice = createSlice({
 				);
 			}
 		);
+
 		builder.addMatcher(
 			settingsAPISlice.endpoints.updateAdmin.matchFulfilled,
 			(state, action) => {
 				state.systemAdmin = action.payload?.data.systemAdmin;
-				// state.token.accessToken = action.payload?.data.token.accessToken;
-				// state.token.refreshToken = action.payload?.data.token.refreshToken;
-				// state.systemAdmin.role = action.payload?.data.systemAdmin.role;
-				// state.systemAdmin.avatar.url = action.payload?.data.avatar.url;
+			}
+		);
+		builder.addMatcher(
+			manageBranAPISlice.endpoints.singleDepot.matchFulfilled,
+			(state, action) => {
+				state.products = action.payload?.depot[0]?.products;
 			}
 		);
 	},
@@ -93,3 +99,6 @@ export const selectCurrentLoginToken = (state: RootState) =>
 	state.authSlice.token;
 export const selectRefreshToken = (state: RootState) =>
 	state.authSlice.token.refreshToken;
+export const depotProducts = (state: RootState) => state.authSlice.products;
+
+console.log(depotProducts);

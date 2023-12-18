@@ -12,6 +12,7 @@ import {
 import useHandleRowClick from "src/hooks/useHandleRowClick";
 import { useGetAllHQTransactionsQuery } from "src/hq-admin/hq-api/hqTransactionApiSlice";
 import { HeadCellTypes } from "../Manage-branch";
+import { format } from "date-fns";
 
 const headCells: readonly HeadCellTypes[] = [
 	{
@@ -57,33 +58,34 @@ export default function Transaction({ id }: { id: string }) {
 	const { showModal, setShowModal, handleRowClick } = useHandleRowClick(fn);
 
 	const handledAPIResponse = useMemo(() => {
-		const transactions = allTransactionsResult?.currentData || [];
+		const transactions = allTransactionsResult?.currentData?.transactions || [];
 
 		return transactions?.data?.reduce(
-			(acc: { [index: string]: string }[], cur: TransactionsType) => [
+			(acc: { [index: string]: string }[], cur: TransactionsType | any) => [
 				...acc,
 				{
-					referenceId: cur.meta?.reference,
-					doneby: cur.meta?.payerName,
-					walletId: cur.meta.walletNumber,
-					type: cur.type,
-					category: Category[cur.category],
+					created: format(new Date(cur.createdAt), "d/MM/yyyy hh:mm:ss"),
+					referenceId: cur?.meta?.reference || "----------",
+					doneby: cur?.meta?.payerName || "----------",
+					walletId: cur?.meta?.walletNumber || "----------",
+					type: cur?.type || "----------",
+					category: Category[cur?.category] || "----------",
 					amount: CurrencyFormatter(Number(cur?.amount)),
-					name: cur?.stationBranch.name,
+					name: cur?.stationBranch?.name || "----------",
 
 					status: (
 						<p
 							className={`${
-								cur.status.toString().toLowerCase() === "pending"
+								cur?.status?.toString().toLowerCase() === "pending"
 									? "text-yellow-500"
 									: cur.status.toString().toLowerCase() === "successful"
 									? "text-green-500"
 									: "text-red-500"
 							}`}>
-							{cur.status}
+							{cur?.status}
 						</p>
 					),
-					createdAt: handleDateFormat(cur?.createdAt),
+					// createdAt: handleDateFormat(cur?.createdAt),
 				},
 			],
 			[]

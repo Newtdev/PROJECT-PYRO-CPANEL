@@ -13,6 +13,7 @@ import {
 	Support,
 	Transactions,
 	Users,
+	Depot,
 } from "src/components/Icons";
 import { APP_ROUTE, HQ_APP_ROUTE, PERMISSION } from "src/helpers/Constant";
 import { useAuth } from "src/hooks/useAuth";
@@ -29,13 +30,13 @@ const linksData = [
 	{
 		id: 1,
 		name: "Dashboard",
-		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
+		priviledges: [PERMISSION.HQ],
 		route: "Dashboard",
 		Icon: <Home />,
 		link: APP_ROUTE.DASHBOARD,
 	},
 	{
-		id: 1,
+		id: 2,
 		name: "Manage HQ",
 		route: "Manage HQ",
 		Icon: <HQIcon />,
@@ -43,7 +44,7 @@ const linksData = [
 		link: APP_ROUTE.MANAGEHQ,
 	},
 	{
-		id: 2,
+		id: 3,
 		name: "Manage Branch",
 		route: "Manage Branch",
 		priviledges: [PERMISSION.HQ],
@@ -53,7 +54,7 @@ const linksData = [
 	},
 
 	{
-		id: 3,
+		id: 4,
 		name: "Transactions",
 		route: "Transactions",
 		priviledges: [PERMISSION.SYSTEM_ADMIN],
@@ -62,7 +63,7 @@ const linksData = [
 		hq_link: HQ_APP_ROUTE.TRANSACTIONS,
 	},
 	{
-		id: 8,
+		id: 5,
 		name: "Users",
 		route: "Users",
 		priviledges: [PERMISSION.SYSTEM_ADMIN],
@@ -70,7 +71,7 @@ const linksData = [
 		link: APP_ROUTE.USER,
 	},
 	{
-		id: 4,
+		id: 6,
 		name: "Support",
 		route: "Support",
 		priviledges: [PERMISSION.SYSTEM_ADMIN],
@@ -78,7 +79,7 @@ const linksData = [
 		link: APP_ROUTE.SUPPORT,
 	},
 	{
-		id: 5,
+		id: 7,
 		name: "Notification",
 		route: "Notification",
 		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
@@ -86,8 +87,9 @@ const linksData = [
 		link: APP_ROUTE.NOTIFICATION,
 		hq_link: HQ_APP_ROUTE.NOTIFICATION,
 	},
+
 	{
-		id: 6,
+		id: 8,
 		name: "Self Help",
 		route: "self Help",
 		priviledges: [PERMISSION.SYSTEM_ADMIN],
@@ -95,7 +97,7 @@ const linksData = [
 		link: APP_ROUTE.SELF_HELP,
 	},
 	{
-		id: 7,
+		id: 9,
 		name: "Feeds",
 		route: "Feeds",
 		Icon: <Help />,
@@ -103,7 +105,7 @@ const linksData = [
 		link: APP_ROUTE.FEEDS,
 	},
 	{
-		id: 8,
+		id: 10,
 		name: "Withdrawal",
 		route: "withdrawal",
 		priviledges: [PERMISSION.HQ],
@@ -112,7 +114,16 @@ const linksData = [
 		hq_link: HQ_APP_ROUTE.WIDTHDRAWAL,
 	},
 	{
-		id: 7,
+		id: 11,
+		name: "Depot",
+		route: "Depot",
+		priviledges: [PERMISSION.HQ],
+		Icon: <Depot />,
+		link: APP_ROUTE.DEPOT,
+		hq_link: HQ_APP_ROUTE.DEPOT,
+	},
+	{
+		id: 12,
 		name: "Settings",
 		route: "Settings",
 		priviledges: [PERMISSION.HQ, PERMISSION.SYSTEM_ADMIN],
@@ -154,16 +165,16 @@ const SideBar = () => {
 	const { user } = useAuth();
 
 	const handlePriviledge = () => {
-		return linksData?.map((dt, i) =>
-			dt.priviledges.filter((_v) => _v === user?.role).length > 0 ? (
+		return linksData?.map((dt, i) => (
+			<PermissionRestrictor permissions={dt.priviledges} userRole={user?.role}>
 				<DashboardLink
 					name={dt?.name}
 					link={user?.role !== "hq_admin" ? dt?.link : dt?.hq_link || ""}
 					Icon={dt.Icon}
 					route={dt.route}
 				/>
-			) : null
-		);
+			</PermissionRestrictor>
+		));
 	};
 
 	return (
@@ -177,3 +188,23 @@ const SideBar = () => {
 };
 
 export default SideBar;
+
+type PermissionTypes = {
+	permissions: any[];
+	userRole: string | null;
+	children: ReactElement;
+};
+
+export const PermissionRestrictor = ({
+	permissions,
+	userRole,
+	children,
+}: PermissionTypes) => {
+	const permissionResponse = permissions.filter((permission) =>
+		permission.includes(userRole)
+	);
+	if (permissionResponse.length > 0) {
+		return children;
+	}
+	return null;
+};

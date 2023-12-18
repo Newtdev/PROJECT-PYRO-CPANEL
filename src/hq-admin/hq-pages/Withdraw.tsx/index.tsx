@@ -3,9 +3,19 @@ import { Button } from "src/components/Button";
 import { FormModal } from "src/components/ModalComp";
 import { CurrencyFormatter } from "src/helpers/helperFunction";
 import Wallet from "src/assets/img/walletbtn.svg";
+import { useAuth } from "src/hooks/useAuth";
+import { useGetAllWalletRequestQuery } from "src/hq-admin/hq-api/hqTransactionApiSlice";
 
 const WithDrawal = () => {
+	const { user } = useAuth();
 	const [showNotification, setShowNotification] = useState<boolean>(false);
+	// console.log("sdihfosid", user?.stationHQ);
+	const allTransactionsResult = useGetAllWalletRequestQuery(
+		{ stationBranch: user?.stationHQ },
+		{ skip: !user?.stationHQ }
+	);
+
+	// console.log("all result", allTransactionsResult);
 
 	const handleWidthDrawal = () =>
 		setShowNotification((prevState) => !prevState);
